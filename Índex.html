@@ -1,0 +1,577 @@
+<!DOCTYPE html><html lang="ca"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Suplències d'Urgència</title><script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script><script src="https://cdn.tailwindcss.com"></script><style>*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}body{margin:0;padding:0;background:#f1f5f9;}</style></head><body><div id="root"></div><script>
+const {
+  useState,
+  useCallback,
+  useRef,
+  useEffect
+} = React;
+
+// ─── CONSTANTS BASE ───────────────────────────────────────────────────────────
+const DIES = ["Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres"];
+const DIES_CURTS = ["Dl", "Dm", "Dc", "Dj", "Dv"];
+
+// Franges per defecte (es poden sobreescriure des de la UI)
+const FRANGES_DEFAULT = [{
+  id: "9h",
+  label: "9:00–10:00",
+  inici: "9:00",
+  fi: "10:00"
+}, {
+  id: "10h",
+  label: "10:00–11:00",
+  inici: "10:00",
+  fi: "11:00"
+}, {
+  id: "11:30h",
+  label: "11:30–12:35",
+  inici: "11:30",
+  fi: "12:35"
+}, {
+  id: "14:30h",
+  label: "14:30–15:15",
+  inici: "14:30",
+  fi: "15:15"
+}, {
+  id: "15:15h",
+  label: "15:15–16:05",
+  inici: "15:15",
+  fi: "16:05"
+}];
+
+// ─── HORARIS PER DEFECTE ─────────────────────────────────────────────────────
+// Buit — cada escola carrega els seus propis horaris des de 📂 Horaris
+const HORARIS_ESCOLA = ``;
+
+// ─── STORAGE (localStorage) ───────────────────────────────────────────────────
+const SK = {
+  horaris: "sup_horaris_v1",
+  criteris: "sup_criteris_v1",
+  regles: "sup_regles_v1",
+  registre: "sup_registre_v1",
+  franges: "sup_franges_v1"
+};
+function storageGet(k) {
+  try {
+    const v = localStorage.getItem(k);
+    return v ? JSON.parse(v) : null;
+  } catch {
+    return null;
+  }
+}
+function storageSet(k, v) {
+  try {
+    localStorage.setItem(k, JSON.stringify(v));
+  } catch {}
+}
+
+// ─── CODIFICACIÓ (privacitat) ─────────────────────────────────────────────────
+function buildCodeMap(m) {
+  const noms = Object.keys(m).sort();
+  const codeMap = {},
+    decodeMap = {};
+  noms.forEach((n, i) => {
+    const c = `M${String(i + 1).padStart(2, "0")}`;
+    codeMap[n] = c;
+    decodeMap[c] = n;
+  });
+  return {
+    codeMap,
+    decodeMap
+  };
+}
+function encodeText(text, codeMap) {
+  let r = text;
+  Object.entries(codeMap).sort((a, b) => b[0].length - a[0].length).forEach(([n, c]) => {
+    r = r.split(n).join(c);
+    r = r.split(n.charAt(0) + n.slice(1).toLowerCase()).join(c);
+  });
+  return r;
+}
+function decodeText(text, decodeMap) {
+  let r = text;
+  Object.entries(decodeMap).forEach(([c, n]) => {
+    r = r.split(c).join(cap(n));
+  });
+  return r;
+}
+
+// ─── PARSER ──────────────────────────────────────────────────────────────────
+const isTableRow = l => l.trim().startsWith("|");
+const cleanCell = s => s.replace(/\\\*/g, "*").replace(/\\/g, "").trim();
+function canonFranja(s, franges) {
+  const t = s.replace(/\s/g, "");
+  // Intentem fer matching amb les franges configurades
+  for (const f of franges) {
+    const inici = f.inici.replace(":", "").replace(/^0/, "");
+    if (t.startsWith(f.inici.replace(":", ":")) || t.startsWith(inici)) return f.id;
+  }
+  // Fallback hardcoded
+  if (t.startsWith("9-10") || t.startsWith("9–10")) return "9h";
+  if (t.startsWith("10-11") || t.startsWith("10–11")) return "10h";
+  if (t.startsWith("11:30") || t.startsWith("11.30")) return "11:30h";
+  if (t.startsWith("14:30") || t.startsWith("14.30")) return "14:30h";
+  if (t.startsWith("15:15") || t.startsWith("15.15")) return "15:15h";
+  return null;
+}
+const SOROLL = ["ESBARJO", "ESPAI MIGDIA", "CLAUSTRES", "COMISSIONS", "FORMACIÓ", "PERFER", "PER FER", "REUNIONS", ":-:", "16:0", "17H", "8:30"];
+function isSoroll(s) {
+  const u = s.toUpperCase().replace(/\s/g, "");
+  return SOROLL.some(k => u.includes(k.replace(/\s/g, "")));
+}
+function parseHoraris(text, franges = FRANGES_DEFAULT) {
+  const m = {};
+  const blocks = text.trim().split(/\n\s*\n/);
+  for (const block of blocks) {
+    const lines = block.trim().split("\n").filter(Boolean);
+    if (!lines.length) continue;
+    const tableLines = lines.filter(l => isTableRow(l));
+    if (tableLines.length >= 3) {
+      const nomLine = lines.find(l => !isTableRow(l) && l.trim().length > 2) || "";
+      const nomMatch = nomLine.match(/([A-ZÀÁÂÄÃÈÉÊËÌÍÎÏÒÓÔÖÕÙÚÛÜÇÑ][a-zàáâäãèéêëìíîïòóôöõùúûüçñ]+(?:\s+[A-ZÀÁÂÄÃÈÉÊËÌÍÎÏÒÓÔÖÕÙÚÛÜÇÑ][a-zàáâäãèéêëìíîïòóôöõùúûüçñ]+)+)/);
+      if (!nomMatch) continue;
+      const nom = nomMatch[1].toUpperCase();
+      if (m[nom]) continue;
+      m[nom] = {};
+      const headerIdx = tableLines.findIndex(l => {
+        const upper = l.toUpperCase();
+        return upper.includes("DILLUNS") || upper.includes("DIMARTS");
+      });
+      if (headerIdx < 0) continue;
+      const headerCells = tableLines[headerIdx].split("|").map(cleanCell);
+      const colDia = {};
+      headerCells.forEach((c, i) => {
+        const d = DIES.find(dia => c.toUpperCase().includes(dia.toUpperCase()));
+        if (d) colDia[i] = d;
+      });
+      let franjaActual = null;
+      const diaActFranja = {};
+      const dataLines = tableLines.slice(headerIdx + 2);
+      for (const row of dataLines) {
+        if (isSoroll(row)) continue;
+        const cells = row.split("|").map(cleanCell);
+        const col0 = cells[0] || "";
+        const franja = canonFranja(col0, franges);
+        if (franja) {
+          if (franjaActual) {
+            for (const [dia, actes] of Object.entries(diaActFranja)) {
+              if (!m[nom][dia]) m[nom][dia] = {};
+              if (actes.length === 1) m[nom][dia][franjaActual] = actes[0];else if (actes.length > 1) m[nom][dia][franjaActual] = "DOBLE:" + actes.join(" / ");
+            }
+          }
+          franjaActual = franja;
+          Object.keys(colDia).forEach(i => {
+            diaActFranja[colDia[i]] = [];
+          });
+          cells.forEach((c, i) => {
+            if (colDia[i] && c && !isSoroll(c)) diaActFranja[colDia[i]] = [c];
+          });
+        } else if (franjaActual) {
+          cells.forEach((c, i) => {
+            if (colDia[i] && c && !isSoroll(c)) {
+              if (!diaActFranja[colDia[i]]) diaActFranja[colDia[i]] = [];
+              diaActFranja[colDia[i]].push(c);
+            }
+          });
+        }
+      }
+      if (franjaActual) {
+        for (const [dia, actes] of Object.entries(diaActFranja)) {
+          if (!m[nom][dia]) m[nom][dia] = {};
+          if (actes.length === 1) m[nom][dia][franjaActual] = actes[0];else if (actes.length > 1) m[nom][dia][franjaActual] = "DOBLE:" + actes.join(" / ");
+        }
+      }
+      continue;
+    }
+    // Format text pla
+    const nom = lines[0].trim().toUpperCase();
+    if (!nom || nom.length < 2) continue;
+    if (m[nom]) continue;
+    m[nom] = {};
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      const dia = DIES.find(d => line.startsWith(d));
+      if (!dia) continue;
+      const after = line.slice(dia.length).replace(/^:/, "").trim();
+      if (!m[nom][dia]) m[nom][dia] = {};
+      for (const slot of after.split("|").map(s => s.trim())) {
+        // Prova les franges en ordre de longitud descendent
+        const franjaIds = [...franges].map(f => f.id).sort((a, b) => b.length - a.length);
+        const franja = franjaIds.find(f => slot.startsWith(f));
+        if (franja) m[nom][dia][franja] = slot.slice(franja.length).trim();
+      }
+    }
+  }
+  return m;
+}
+
+// ─── CLASSIFICACIÓ (regles definitives) ──────────────────────────────────────
+//
+// NO CAL SUPLIR si l'absent tenia:
+//   T.P. / T.P. Nivell / CAEI / Esbarjo / Suport / +Nom / Coordinació / Reunió / Càrrec
+//   (Piscina SÍ cal suplir — la classe queda sola)
+//
+// POT SUPLIR si el suplent té:
+//   P1: consta com +Nom a l'horari de l'absent (ja era dins l'aula)
+//   P2: té "Suport a X" explícit (sense +Nom propi) — es sacrifica un suport
+//   P3 (últim recurs): té T.P. o T.P. Nivell
+//
+// NO DISPONIBLE per suplir si el suplent té:
+//   Classe normal / CAEI / Esbarjo / Coordinació / Reunió / Càrrec / Doble activitat / Piscina
+
+function normalitza(s) {
+  return s.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+}
+
+// Paraules clau que fan que l'ABSENT no necessiti suplència
+const NO_CAL_SUPLIR_KW = ["T.P.", "TP.", "T.P ", "TREBALL PERSONAL", "CAEI", "ESBARJO", "SUPORT",
+// l'absent ja té suport → cobert
+"COORDINACIÓ", "COORDINACIO", "REUNIÓ", "REUNIO", "CÀRREC", "CARREC", "TASQUES CAP", "ENGLISH LAB", "DOBLE:"];
+
+// Paraules clau que fan que el SUPLENT no estigui disponible (ni com a últim recurs)
+const NO_DISPONIBLE_KW = ["CAEI", "ESBARJO", "PISCINA", "COORDINACIÓ", "COORDINACIO", "REUNIÓ", "REUNIO", "CÀRREC", "CARREC", "TASQUES CAP", "DOBLE:"];
+
+// Paraules clau per T.P. (últim recurs)
+const TP_KW = ["T.P.", "TP.", "T.P ", "TREBALL PERSONAL"];
+function calSuplir(actAbsent) {
+  if (!actAbsent) return false;
+  const u = normalitza(actAbsent);
+  // Piscina SÍ cal suplir
+  if (u === "PISCINA") return true;
+  // La resta de paraules clau → no cal suplir
+  if (NO_CAL_SUPLIR_KW.some(k => u === normalitza(k) || u.startsWith(normalitza(k)))) return false;
+  // Si té +Nom → ja té suport dins l'aula → no cal suplir
+  // (la persona del +Nom és qui supleix, gestionat per cercaBase)
+  // PERÒ: calSuplir retorna true perquè cal assignar el +Nom com a suplent
+  return true;
+}
+
+// Retorna el "tipus" d'activitat d'un SUPLENT potencial
+function tipusSuplent(act) {
+  if (!act) return "LLIURE";
+  const u = normalitza(act);
+  if (u.startsWith("DOBLE:")) return "NO_DISPONIBLE";
+  if (NO_DISPONIBLE_KW.some(k => u === normalitza(k) || u.startsWith(normalitza(k)))) return "NO_DISPONIBLE";
+  if (TP_KW.some(k => u === normalitza(k) || u.startsWith(normalitza(k)))) return "TP";
+  // +Nom o *Nom → fa suport en una altra aula
+  if (act.includes("+") || act.includes("*")) return "SUPORT_NATURAL";
+  // "Suport a X" sense +Nom → suport general
+  if (u.startsWith("SUPORT")) return "SUPORT_GENERAL";
+  // Classe normal → no disponible
+  return "CLASSE";
+}
+function actLabel(act) {
+  if (!act) return "—";
+  if (normalitza(act).startsWith("DOBLE:")) return act.slice(6) + " (doble activitat)";
+  return act;
+}
+
+// ─── ALGORISME ────────────────────────────────────────────────────────────────
+function cercaBase(mestres, absent, dia, franja, ocupats = new Set(), reglesJSON = null) {
+  const au = absent.toUpperCase();
+  const actAbsent = mestres[au]?.[dia]?.[franja] || "";
+
+  // Comprova si cal suplir
+  if (!calSuplir(actAbsent)) {
+    return [{
+      nom: null,
+      p: -1,
+      motiu: `No cal suplir — tenia ${actLabel(actAbsent)}`
+    }];
+  }
+
+  // Busquem +Nom a l'activitat de l'absent → suport natural P1
+  const plusMatch = actAbsent.match(/[+*]([A-ZÀ-Úa-zàáâäãèéêëìíîïòóôöõùúûüçñ]+)/i);
+  const naturalNom = plusMatch ? plusMatch[1].toUpperCase() : null;
+  const p1 = [],
+    p2 = [],
+    p3 = [];
+  for (const [nom, horari] of Object.entries(mestres)) {
+    if (nom === au || ocupats.has(nom)) continue;
+    const act = horari?.[dia]?.[franja] || "";
+    const tipus = tipusSuplent(act);
+
+    // P1: és el +Nom que consta a l'horari de l'absent (prioritat absoluta)
+    if (naturalNom && nom.startsWith(naturalNom)) {
+      p1.push({
+        nom,
+        act,
+        p: 1,
+        score: 1,
+        motiu: `Suport natural — ja era dins l'aula de ${cap(absent)}`
+      });
+      continue;
+    }
+
+    // No disponible ni com a últim recurs
+    if (tipus === "NO_DISPONIBLE" || tipus === "CLASSE" || tipus === "LLIURE") continue;
+
+    // P2: fa suport en una altra aula (SUPORT_GENERAL o SUPORT_NATURAL d'una altra aula)
+    if (tipus === "SUPORT_GENERAL" || tipus === "SUPORT_NATURAL") {
+      let score = 2;
+      if (reglesJSON?.penalitzacions) {
+        const pen = reglesJSON.penalitzacions.find(x => nom.startsWith((x.nom || "").toUpperCase()));
+        if (pen) score += pen.factor || 0;
+      }
+      p2.push({
+        nom,
+        act,
+        p: 2,
+        score,
+        motiu: "Fa suport en una altra aula"
+      });
+      continue;
+    }
+
+    // P3: T.P. → últim recurs
+    if (tipus === "TP") {
+      p3.push({
+        nom,
+        act,
+        p: 3,
+        score: 3,
+        motiu: "⚠ Últim recurs — trenca hora de T.P."
+      });
+    }
+  }
+
+  // Ordenem cada grup alfabèticament i concatenem P1 → P2 → P3
+  const ord = (a, b) => a.nom.localeCompare(b.nom);
+  return [...p1.sort(ord), ...p2.sort((a, b) => a.score - b.score || ord(a, b)), ...p3.sort(ord)];
+}
+function assignacioMultiple(mestres, totsAbsents, dia, franjesSeleccionades, continuitat = new Map(), absentPerFranja = null, frangesConfig = FRANGES_DEFAULT, reglesJSON = null) {
+  const resultat = {};
+  const franjesOrdenades = [...franjesSeleccionades].sort((a, b) => frangesConfig.findIndex(f => f.id === a) - frangesConfig.findIndex(f => f.id === b));
+  for (const franja of franjesOrdenades) {
+    const absentsAquestFranja = absentPerFranja ? absentPerFranja[franja] || [] : totsAbsents;
+    if (!absentsAquestFranja.length) continue;
+
+    // Ocupats = tots els absents (no poden suplir-se a si mateixos)
+    const ocupats = new Set(totsAbsents.map(a => a.toUpperCase()));
+    const assignacions = [];
+    const absentsAmbInfo = absentsAquestFranja.map(absent => {
+      const au = absent.toUpperCase();
+      const actAbsent = mestres[au]?.[dia]?.[franja] || "";
+      const cal = calSuplir(actAbsent);
+      const candidats = cal ? cercaBase(mestres, absent, dia, franja, new Set(), reglesJSON).filter(c => c.nom) : [];
+      return {
+        absent,
+        au,
+        actAbsent,
+        cal,
+        candidats
+      };
+    });
+
+    // 1. Els que NO cal suplir
+    for (const {
+      absent,
+      actAbsent
+    } of absentsAmbInfo.filter(a => !a.cal)) {
+      assignacions.push({
+        absent,
+        suplent: null,
+        act: actAbsent,
+        p: -1,
+        motiu: `No cal suplir — tenia ${actLabel(actAbsent)}`
+      });
+    }
+    const calSuplirLlista = absentsAmbInfo.filter(a => a.cal);
+    const assignatsContinuitat = new Set();
+
+    // 2. Continuïtat: el mateix suplent de la franja anterior si segueix disponible com a suport
+    for (const {
+      absent,
+      au
+    } of calSuplirLlista) {
+      const suplentAnterior = continuitat.get(au);
+      if (!suplentAnterior || ocupats.has(suplentAnterior)) continue;
+      const actSuplent = mestres[suplentAnterior]?.[dia]?.[franja] || "";
+      const tipus = tipusSuplent(actSuplent);
+      // Continuïtat només si segueix sent suport (P2) — no si ara té classe o TP
+      if (tipus === "SUPORT_GENERAL" || tipus === "SUPORT_NATURAL") {
+        ocupats.add(suplentAnterior);
+        assignatsContinuitat.add(au);
+        continuitat.set(au, suplentAnterior);
+        assignacions.push({
+          absent,
+          suplent: suplentAnterior,
+          act: actSuplent,
+          p: 2,
+          motiu: `Continuïtat — ja cobria ${cap(absent)} a la franja anterior`
+        });
+      }
+    }
+
+    // 3. Resta: ordenats per menys candidats primer (els difícils, primer)
+    const resta = calSuplirLlista.filter(a => !assignatsContinuitat.has(a.au)).sort((a, b) => a.candidats.length - b.candidats.length);
+    for (const {
+      absent,
+      au,
+      candidats
+    } of resta) {
+      const disponibles = candidats.filter(c => !ocupats.has(c.nom));
+      if (disponibles.length > 0) {
+        const millor = disponibles[0];
+        ocupats.add(millor.nom);
+        continuitat.set(au, millor.nom);
+        assignacions.push({
+          absent,
+          suplent: millor.nom,
+          act: millor.act,
+          p: millor.p,
+          motiu: millor.motiu
+        });
+      } else {
+        assignacions.push({
+          absent,
+          suplent: null,
+          act: "",
+          p: 0,
+          motiu: "⚠ Sense suplent disponible en aquesta franja"
+        });
+      }
+    }
+    resultat[franja] = assignacions;
+  }
+  return resultat;
+}
+
+// ─── LECTOR FITXERS ──────────────────────────────────────────────────────────
+async function readFile(file) {
+  if (file.name.endsWith(".txt")) return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result);
+    r.onerror = () => rej(new Error("Error .txt"));
+    r.readAsText(file, "UTF-8");
+  });
+  if (file.name.endsWith(".docx")) return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = async e => {
+      try {
+        if (!window.mammoth) throw new Error();
+        res((await window.mammoth.extractRawText({
+          arrayBuffer: e.target.result
+        })).value);
+      } catch (err) {
+        rej(err);
+      }
+    };
+    r.onerror = () => rej(new Error("Error .docx"));
+    r.readAsArrayBuffer(file);
+  });
+  throw new Error("Format no suportat");
+}
+async function ensureMammoth() {
+  if (window.mammoth) return;
+  return new Promise((res, rej) => {
+    const s = document.createElement("script");
+    s.src = "https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js";
+    s.onload = res;
+    s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+const cap = s => s ? s.charAt(0) + s.slice(1).toLowerCase() : "";
+const avuiDia = () => {
+  const d = new Date().getDay();
+  return DIES[d === 0 || d === 6 ? 0 : d - 1];
+};
+const P_CFG = {
+  "-1": {
+    bg: "bg-slate-50",
+    border: "border-slate-200",
+    pill: "bg-slate-400",
+    icon: "—"
+  },
+  "0": {
+    bg: "bg-red-50",
+    border: "border-red-200",
+    pill: "bg-red-400",
+    icon: "⚠"
+  },
+  "1": {
+    bg: "bg-emerald-50",
+    border: "border-emerald-400",
+    pill: "bg-emerald-500",
+    icon: "★"
+  },
+  "2": {
+    bg: "bg-amber-50",
+    border: "border-amber-400",
+    pill: "bg-amber-400",
+    icon: "◆"
+  },
+  "3": {
+    bg: "bg-red-50",
+    border: "border-red-300",
+    pill: "bg-red-500",
+    icon: "⚠"
+  }
+};
+const P_LABELS = {
+  "-1": "No cal suplir",
+  "0": "Sense suplent",
+  "1": "Suport Natural",
+  "2": "Suport/Co-doc.",
+  "3": "Últim recurs (T.P.)"
+};
+
+// ─── COMPONENT DRIVE IMPORT ──────────────────────────────────────────────────
+function DriveImport({
+  onImport
+}) {
+  const [link, setLink] = useState("");
+  const [estat, setEstat] = useState(null);
+  const [missatge, setMissatge] = useState("");
+  function extractDriveId(url) {
+    const folderMatch = url.match(/\/folders\/([a-zA-Z0-9_-]+)/);
+    if (folderMatch) return {
+      id: folderMatch[1],
+      tipus: "carpeta"
+    };
+    const fileMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (fileMatch) return {
+      id: fileMatch[1],
+      tipus: "fitxer"
+    };
+    if (/^[a-zA-Z0-9_-]{25,}$/.test(url.trim())) return {
+      id: url.trim(),
+      tipus: "fitxer"
+    };
+    return null;
+  }
+  const handleImportar = async () => {
+    const info = extractDriveId(link.trim());
+    if (!info) {
+      setEstat("error");
+      setMissatge("Enllaç no reconegut.");
+      return;
+    }
+    setEstat("carregant");
+    setMissatge("");
+    try {
+      const exportUrl = `https://docs.google.com/document/d/${info.id}/export?format=txt`;
+      const resp = await fetch(exportUrl);
+      if (!resp.ok) throw new Error(`Error ${resp.status}`);
+      const text = await resp.text();
+      if (!text.trim()) throw new Error("Fitxer buit");
+      await onImport(text);
+      setEstat("ok");
+      setMissatge("Importat correctament!");
+      setLink("");
+    } catch {
+      setEstat("error");
+      setMissatge("No s'ha pogut llegir. Assegura't que és un Google Doc públic.");
+    }
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "space-y-2"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-2"
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "url",
+    value: link,
+    onChange: e => {
+      setLink(e.target.valu
