@@ -1,4 +1,1417 @@
-<!DOCTYPE html><html lang="ca"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Suplències d'Urgència</title><script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script><script src="https://cdn.tailwindcss.com"></script><style>*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}body{margin:0;padding:0;background:#f1f5f9;}</style></head><body><div id="root"></div><script>
+<!DOCTYPE html><html lang="ca"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Suplències d'Urgència</title>
+<style>
+*, ::before, ::after {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
+
+::backdrop {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
+
+/*
+! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com
+*/
+
+/*
+1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
+2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
+*/
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  /* 1 */
+  border-width: 0;
+  /* 2 */
+  border-style: solid;
+  /* 2 */
+  border-color: #e5e7eb;
+  /* 2 */
+}
+
+::before,
+::after {
+  --tw-content: '';
+}
+
+/*
+1. Use a consistent sensible line-height in all browsers.
+2. Prevent adjustments of font size after orientation changes in iOS.
+3. Use a more readable tab size.
+4. Use the user's configured `sans` font-family by default.
+5. Use the user's configured `sans` font-feature-settings by default.
+6. Use the user's configured `sans` font-variation-settings by default.
+7. Disable tap highlights on iOS
+*/
+
+html,
+:host {
+  line-height: 1.5;
+  /* 1 */
+  -webkit-text-size-adjust: 100%;
+  /* 2 */
+  -moz-tab-size: 4;
+  /* 3 */
+  -o-tab-size: 4;
+     tab-size: 4;
+  /* 3 */
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* 4 */
+  font-feature-settings: normal;
+  /* 5 */
+  font-variation-settings: normal;
+  /* 6 */
+  -webkit-tap-highlight-color: transparent;
+  /* 7 */
+}
+
+/*
+1. Remove the margin in all browsers.
+2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+*/
+
+body {
+  margin: 0;
+  /* 1 */
+  line-height: inherit;
+  /* 2 */
+}
+
+/*
+1. Add the correct height in Firefox.
+2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)
+3. Ensure horizontal rules are visible by default.
+*/
+
+hr {
+  height: 0;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  border-top-width: 1px;
+  /* 3 */
+}
+
+/*
+Add the correct text decoration in Chrome, Edge, and Safari.
+*/
+
+abbr:where([title]) {
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
+}
+
+/*
+Remove the default font size and weight for headings.
+*/
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/*
+Reset links to optimize for opt-in styling instead of opt-out.
+*/
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/*
+Add the correct font weight in Edge and Safari.
+*/
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+/*
+1. Use the user's configured `mono` font-family by default.
+2. Use the user's configured `mono` font-feature-settings by default.
+3. Use the user's configured `mono` font-variation-settings by default.
+4. Correct the odd `em` font sizing in all browsers.
+*/
+
+code,
+kbd,
+samp,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* 1 */
+  font-feature-settings: normal;
+  /* 2 */
+  font-variation-settings: normal;
+  /* 3 */
+  font-size: 1em;
+  /* 4 */
+}
+
+/*
+Add the correct font size in all browsers.
+*/
+
+small {
+  font-size: 80%;
+}
+
+/*
+Prevent `sub` and `sup` elements from affecting the line height in all browsers.
+*/
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/*
+1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
+2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)
+3. Remove gaps between table borders by default.
+*/
+
+table {
+  text-indent: 0;
+  /* 1 */
+  border-color: inherit;
+  /* 2 */
+  border-collapse: collapse;
+  /* 3 */
+}
+
+/*
+1. Change the font styles in all browsers.
+2. Remove the margin in Firefox and Safari.
+3. Remove default padding in all browsers.
+*/
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  /* 1 */
+  font-feature-settings: inherit;
+  /* 1 */
+  font-variation-settings: inherit;
+  /* 1 */
+  font-size: 100%;
+  /* 1 */
+  font-weight: inherit;
+  /* 1 */
+  line-height: inherit;
+  /* 1 */
+  letter-spacing: inherit;
+  /* 1 */
+  color: inherit;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+  padding: 0;
+  /* 3 */
+}
+
+/*
+Remove the inheritance of text transform in Edge and Firefox.
+*/
+
+button,
+select {
+  text-transform: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Remove default button styles.
+*/
+
+button,
+input:where([type='button']),
+input:where([type='reset']),
+input:where([type='submit']) {
+  -webkit-appearance: button;
+  /* 1 */
+  background-color: transparent;
+  /* 2 */
+  background-image: none;
+  /* 2 */
+}
+
+/*
+Use the modern Firefox focus style for all focusable elements.
+*/
+
+:-moz-focusring {
+  outline: auto;
+}
+
+/*
+Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
+*/
+
+:-moz-ui-invalid {
+  box-shadow: none;
+}
+
+/*
+Add the correct vertical alignment in Chrome and Firefox.
+*/
+
+progress {
+  vertical-align: baseline;
+}
+
+/*
+Correct the cursor style of increment and decrement buttons in Safari.
+*/
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/*
+1. Correct the odd appearance in Chrome and Safari.
+2. Correct the outline style in Safari.
+*/
+
+[type='search'] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+
+/*
+Remove the inner padding in Chrome and Safari on macOS.
+*/
+
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Change font properties to `inherit` in Safari.
+*/
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+}
+
+/*
+Add the correct display in Chrome and Safari.
+*/
+
+summary {
+  display: list-item;
+}
+
+/*
+Removes the default spacing and border for appropriate elements.
+*/
+
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+legend {
+  padding: 0;
+}
+
+ol,
+ul,
+menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+Reset default styling for dialogs.
+*/
+
+dialog {
+  padding: 0;
+}
+
+/*
+Prevent resizing textareas horizontally by default.
+*/
+
+textarea {
+  resize: vertical;
+}
+
+/*
+1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
+2. Set the default placeholder color to the user's configured gray 400 color.
+*/
+
+input::-moz-placeholder, textarea::-moz-placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
+input::placeholder,
+textarea::placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
+/*
+Set the default cursor for buttons.
+*/
+
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
+/*
+Make sure disabled buttons don't get the pointer cursor.
+*/
+
+:disabled {
+  cursor: default;
+}
+
+/*
+1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
+2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
+   This can trigger a poorly considered lint error in some tools but is included by design.
+*/
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  /* 1 */
+  vertical-align: middle;
+  /* 2 */
+}
+
+/*
+Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
+*/
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Make elements with the HTML hidden attribute stay hidden by default */
+
+[hidden]:where(:not([hidden="until-found"])) {
+  display: none;
+}
+
+.mb-1\.5 {
+  margin-bottom: 0.375rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.ml-9 {
+  margin-left: 2.25rem;
+}
+
+.mt-0\.5 {
+  margin-top: 0.125rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-1\.5 {
+  margin-top: 0.375rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
+.block {
+  display: block;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.flex {
+  display: flex;
+}
+
+.h-1\.5 {
+  height: 0.375rem;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.h-2 {
+  height: 0.5rem;
+}
+
+.h-36 {
+  height: 9rem;
+}
+
+.h-4 {
+  height: 1rem;
+}
+
+.h-6 {
+  height: 1.5rem;
+}
+
+.h-7 {
+  height: 1.75rem;
+}
+
+.h-8 {
+  height: 2rem;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.h-px {
+  height: 1px;
+}
+
+.max-h-60 {
+  max-height: 15rem;
+}
+
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.w-1\.5 {
+  width: 0.375rem;
+}
+
+.w-10 {
+  width: 2.5rem;
+}
+
+.w-2 {
+  width: 0.5rem;
+}
+
+.w-4 {
+  width: 1rem;
+}
+
+.w-6 {
+  width: 1.5rem;
+}
+
+.w-7 {
+  width: 1.75rem;
+}
+
+.w-8 {
+  width: 2rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.min-w-0 {
+  min-width: 0px;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.resize-none {
+  resize: none;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-0\.5 {
+  gap: 0.125rem;
+}
+
+.gap-1\.5 {
+  gap: 0.375rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
+}
+
+.space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.375rem * var(--tw-space-y-reverse));
+}
+
+.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
+}
+
+.space-y-3 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
+}
+
+.space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+}
+
+.divide-y > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-y-reverse: 0;
+  border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+  border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
+}
+
+.divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-opacity: 1;
+  border-color: rgb(241 245 249 / var(--tw-divide-opacity, 1));
+}
+
+.overflow-auto {
+  overflow: auto;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.rounded-2xl {
+  border-radius: 1rem;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-2 {
+  border-width: 2px;
+}
+
+.border-4 {
+  border-width: 4px;
+}
+
+.border-b {
+  border-bottom-width: 1px;
+}
+
+.border-b-2 {
+  border-bottom-width: 2px;
+}
+
+.border-dashed {
+  border-style: dashed;
+}
+
+.border-amber-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(253 230 138 / var(--tw-border-opacity, 1));
+}
+
+.border-amber-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(251 191 36 / var(--tw-border-opacity, 1));
+}
+
+.border-blue-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(191 219 254 / var(--tw-border-opacity, 1));
+}
+
+.border-blue-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(59 130 246 / var(--tw-border-opacity, 1));
+}
+
+.border-blue-600 {
+  --tw-border-opacity: 1;
+  border-color: rgb(37 99 235 / var(--tw-border-opacity, 1));
+}
+
+.border-emerald-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(209 250 229 / var(--tw-border-opacity, 1));
+}
+
+.border-emerald-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(167 243 208 / var(--tw-border-opacity, 1));
+}
+
+.border-emerald-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(52 211 153 / var(--tw-border-opacity, 1));
+}
+
+.border-red-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(254 202 202 / var(--tw-border-opacity, 1));
+}
+
+.border-red-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(252 165 165 / var(--tw-border-opacity, 1));
+}
+
+.border-slate-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(241 245 249 / var(--tw-border-opacity, 1));
+}
+
+.border-slate-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(226 232 240 / var(--tw-border-opacity, 1));
+}
+
+.border-slate-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(203 213 225 / var(--tw-border-opacity, 1));
+}
+
+.border-transparent {
+  border-color: transparent;
+}
+
+.border-white {
+  --tw-border-opacity: 1;
+  border-color: rgb(255 255 255 / var(--tw-border-opacity, 1));
+}
+
+.border-t-transparent {
+  border-top-color: transparent;
+}
+
+.bg-amber-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(251 191 36 / var(--tw-bg-opacity, 1));
+}
+
+.bg-amber-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 251 235 / var(--tw-bg-opacity, 1));
+}
+
+.bg-blue-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1));
+}
+
+.bg-blue-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(96 165 250 / var(--tw-bg-opacity, 1));
+}
+
+.bg-blue-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1));
+}
+
+.bg-blue-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
+}
+
+.bg-blue-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1));
+}
+
+.bg-emerald-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 250 229 / var(--tw-bg-opacity, 1));
+}
+
+.bg-emerald-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(236 253 245 / var(--tw-bg-opacity, 1));
+}
+
+.bg-emerald-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(16 185 129 / var(--tw-bg-opacity, 1));
+}
+
+.bg-emerald-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(5 150 105 / var(--tw-bg-opacity, 1));
+}
+
+.bg-orange-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(251 146 60 / var(--tw-bg-opacity, 1));
+}
+
+.bg-red-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 113 113 / var(--tw-bg-opacity, 1));
+}
+
+.bg-red-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 242 242 / var(--tw-bg-opacity, 1));
+}
+
+.bg-red-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
+}
+
+.bg-slate-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity, 1));
+}
+
+.bg-slate-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity, 1));
+}
+
+.bg-slate-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(203 213 225 / var(--tw-bg-opacity, 1));
+}
+
+.bg-slate-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(148 163 184 / var(--tw-bg-opacity, 1));
+}
+
+.bg-slate-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 250 252 / var(--tw-bg-opacity, 1));
+}
+
+.bg-slate-900 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(15 23 42 / var(--tw-bg-opacity, 1));
+}
+
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+}
+
+.p-1\.5 {
+  padding: 0.375rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.p-5 {
+  padding: 1.25rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.p-8 {
+  padding: 2rem;
+}
+
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.px-2\.5 {
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+}
+
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.py-0\.5 {
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.py-1\.5 {
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.py-2\.5 {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.py-3\.5 {
+  padding-top: 0.875rem;
+  padding-bottom: 0.875rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.font-black {
+  font-weight: 900;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-normal {
+  font-weight: 400;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.normal-case {
+  text-transform: none;
+}
+
+.leading-none {
+  line-height: 1;
+}
+
+.leading-relaxed {
+  line-height: 1.625;
+}
+
+.leading-tight {
+  line-height: 1.25;
+}
+
+.tracking-wide {
+  letter-spacing: 0.025em;
+}
+
+.text-amber-500 {
+  --tw-text-opacity: 1;
+  color: rgb(245 158 11 / var(--tw-text-opacity, 1));
+}
+
+.text-amber-600 {
+  --tw-text-opacity: 1;
+  color: rgb(217 119 6 / var(--tw-text-opacity, 1));
+}
+
+.text-amber-700 {
+  --tw-text-opacity: 1;
+  color: rgb(180 83 9 / var(--tw-text-opacity, 1));
+}
+
+.text-blue-500 {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity, 1));
+}
+
+.text-blue-600 {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity, 1));
+}
+
+.text-blue-700 {
+  --tw-text-opacity: 1;
+  color: rgb(29 78 216 / var(--tw-text-opacity, 1));
+}
+
+.text-emerald-600 {
+  --tw-text-opacity: 1;
+  color: rgb(5 150 105 / var(--tw-text-opacity, 1));
+}
+
+.text-emerald-700 {
+  --tw-text-opacity: 1;
+  color: rgb(4 120 87 / var(--tw-text-opacity, 1));
+}
+
+.text-red-500 {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity, 1));
+}
+
+.text-red-600 {
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity, 1));
+}
+
+.text-slate-300 {
+  --tw-text-opacity: 1;
+  color: rgb(203 213 225 / var(--tw-text-opacity, 1));
+}
+
+.text-slate-400 {
+  --tw-text-opacity: 1;
+  color: rgb(148 163 184 / var(--tw-text-opacity, 1));
+}
+
+.text-slate-500 {
+  --tw-text-opacity: 1;
+  color: rgb(100 116 139 / var(--tw-text-opacity, 1));
+}
+
+.text-slate-600 {
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity, 1));
+}
+
+.text-slate-700 {
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity, 1));
+}
+
+.text-slate-800 {
+  --tw-text-opacity: 1;
+  color: rgb(30 41 59 / var(--tw-text-opacity, 1));
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+}
+
+.underline {
+  text-decoration-line: underline;
+}
+
+.shadow-sm {
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-colors {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.hover\:border-blue-300:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(147 197 253 / var(--tw-border-opacity, 1));
+}
+
+.hover\:bg-blue-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(191 219 254 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-blue-700:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-emerald-700:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(4 120 87 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-slate-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:text-red-400:hover {
+  --tw-text-opacity: 1;
+  color: rgb(248 113 113 / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-red-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-slate-600:hover {
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-slate-700:hover {
+  --tw-text-opacity: 1;
+  color: rgb(51 65 85 / var(--tw-text-opacity, 1));
+}
+
+.hover\:underline:hover {
+  text-decoration-line: underline;
+}
+
+.focus\:outline-none:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus\:ring-1:focus {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.focus\:ring-2:focus {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.focus\:ring-blue-400:focus {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(96 165 250 / var(--tw-ring-opacity, 1));
+}
+
+.disabled\:bg-slate-200:disabled {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity, 1));
+}
+
+.disabled\:text-slate-400:disabled {
+  --tw-text-opacity: 1;
+  color: rgb(148 163 184 / var(--tw-text-opacity, 1));
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<style>*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}body{margin:0;padding:0;background:#f1f5f9;}</style>
+</head><body><div id="root"></div><script>
 const {
   useState,
   useCallback,
@@ -37,10 +1450,6 @@ const FRANGES_DEFAULT = [{
   inici: "15:15",
   fi: "16:05"
 }];
-
-// ─── HORARIS PER DEFECTE ─────────────────────────────────────────────────────
-// Buit — cada escola carrega els seus propis horaris des de 📂 Horaris
-const HORARIS_ESCOLA = ``;
 
 // ─── STORAGE (localStorage) ───────────────────────────────────────────────────
 const SK = {
@@ -204,73 +1613,38 @@ function parseHoraris(text, franges = FRANGES_DEFAULT) {
   return m;
 }
 
-// ─── CLASSIFICACIÓ (regles definitives) ──────────────────────────────────────
-//
-// NO CAL SUPLIR si l'absent tenia:
-//   T.P. / T.P. Nivell / CAEI / Esbarjo / Suport / +Nom / Coordinació / Reunió / Càrrec
-//   (Piscina SÍ cal suplir — la classe queda sola)
-//
-// POT SUPLIR si el suplent té:
-//   P1: consta com +Nom a l'horari de l'absent (ja era dins l'aula)
-//   P2: té "Suport a X" explícit (sense +Nom propi) — es sacrifica un suport
-//   P3 (últim recurs): té T.P. o T.P. Nivell
-//
-// NO DISPONIBLE per suplir si el suplent té:
-//   Classe normal / CAEI / Esbarjo / Coordinació / Reunió / Càrrec / Doble activitat / Piscina
-
+// ─── CLASSIFICACIÓ ────────────────────────────────────────────────────────────
+const NO_DISPONIBLE_KW = ["T.P.", "TP ", "TREBALL PERSONAL", "CAEI", "PISCINA", "ESBARJO", "COORDINACIÓ", "COORDINACIO", "REUNIÓ", "REUNIO", "CÀRREC", "CARREC", "TASQUES CAP", "DOBLE:"];
+const NO_CAL_SUPLIR_KW = ["T.P.", "TP ", "TREBALL PERSONAL", "CAEI", "PISCINA", "ESBARJO", "DOBLE:"];
 function normalitza(s) {
   return s.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 }
-
-// Paraules clau que fan que l'ABSENT no necessiti suplència
-const NO_CAL_SUPLIR_KW = ["T.P.", "TP.", "T.P ", "TREBALL PERSONAL", "CAEI", "ESBARJO", "SUPORT",
-// l'absent ja té suport → cobert
-"COORDINACIÓ", "COORDINACIO", "REUNIÓ", "REUNIO", "CÀRREC", "CARREC", "TASQUES CAP", "ENGLISH LAB", "DOBLE:"];
-
-// Paraules clau que fan que el SUPLENT no estigui disponible (ni com a últim recurs)
-const NO_DISPONIBLE_KW = ["CAEI", "ESBARJO", "PISCINA", "COORDINACIÓ", "COORDINACIO", "REUNIÓ", "REUNIO", "CÀRREC", "CARREC", "TASQUES CAP", "DOBLE:"];
-
-// Paraules clau per T.P. (últim recurs)
-const TP_KW = ["T.P.", "TP.", "T.P ", "TREBALL PERSONAL"];
-function calSuplir(actAbsent) {
-  if (!actAbsent) return false;
-  const u = normalitza(actAbsent);
-  // Piscina SÍ cal suplir
-  if (u === "PISCINA") return true;
-  // La resta de paraules clau → no cal suplir
-  if (NO_CAL_SUPLIR_KW.some(k => u === normalitza(k) || u.startsWith(normalitza(k)))) return false;
-  // Si té +Nom → ja té suport dins l'aula → no cal suplir
-  // (la persona del +Nom és qui supleix, gestionat per cercaBase)
-  // PERÒ: calSuplir retorna true perquè cal assignar el +Nom com a suplent
-  return true;
-}
-
-// Retorna el "tipus" d'activitat d'un SUPLENT potencial
-function tipusSuplent(act) {
-  if (!act) return "LLIURE";
+function tipusActivitat(act) {
+  if (!act) return "NO_DISPONIBLE";
   const u = normalitza(act);
   if (u.startsWith("DOBLE:")) return "NO_DISPONIBLE";
   if (NO_DISPONIBLE_KW.some(k => u === normalitza(k) || u.startsWith(normalitza(k)))) return "NO_DISPONIBLE";
-  if (TP_KW.some(k => u === normalitza(k) || u.startsWith(normalitza(k)))) return "TP";
-  // +Nom o *Nom → fa suport en una altra aula
   if (act.includes("+") || act.includes("*")) return "SUPORT_NATURAL";
-  // "Suport a X" sense +Nom → suport general
   if (u.startsWith("SUPORT")) return "SUPORT_GENERAL";
-  // Classe normal → no disponible
   return "CLASSE";
+}
+function calSuplir(actAbsent) {
+  if (!actAbsent) return false;
+  const u = normalitza(actAbsent);
+  if (u.startsWith("DOBLE:")) return false;
+  return !NO_CAL_SUPLIR_KW.some(k => u === normalitza(k) || u.startsWith(normalitza(k)));
 }
 function actLabel(act) {
   if (!act) return "—";
-  if (normalitza(act).startsWith("DOBLE:")) return act.slice(6) + " (doble activitat)";
+  if (act.toUpperCase().startsWith("DOBLE:")) return act.slice(6) + " (doble activitat)";
   return act;
 }
 
 // ─── ALGORISME ────────────────────────────────────────────────────────────────
+// reglesJSON: { penalitzacions: [{nom_codi, factor}], prioritats: [...] } (opcional, de la IA)
 function cercaBase(mestres, absent, dia, franja, ocupats = new Set(), reglesJSON = null) {
   const au = absent.toUpperCase();
   const actAbsent = mestres[au]?.[dia]?.[franja] || "";
-
-  // Comprova si cal suplir
   if (!calSuplir(actAbsent)) {
     return [{
       nom: null,
@@ -278,65 +1652,41 @@ function cercaBase(mestres, absent, dia, franja, ocupats = new Set(), reglesJSON
       motiu: `No cal suplir — tenia ${actLabel(actAbsent)}`
     }];
   }
-
-  // Busquem +Nom a l'activitat de l'absent → suport natural P1
   const plusMatch = actAbsent.match(/[+*]([A-ZÀ-Úa-zàáâäãèéêëìíîïòóôöõùúûüçñ]+)/i);
   const naturalNom = plusMatch ? plusMatch[1].toUpperCase() : null;
-  const p1 = [],
-    p2 = [],
-    p3 = [];
+  const res = [];
   for (const [nom, horari] of Object.entries(mestres)) {
     if (nom === au || ocupats.has(nom)) continue;
     const act = horari?.[dia]?.[franja] || "";
-    const tipus = tipusSuplent(act);
-
-    // P1: és el +Nom que consta a l'horari de l'absent (prioritat absoluta)
+    const tipus = tipusActivitat(act);
+    if (tipus === "NO_DISPONIBLE" || tipus === "CLASSE") continue;
+    let p = 2;
+    let motiu = "Fa suport en una altra aula";
     if (naturalNom && nom.startsWith(naturalNom)) {
-      p1.push({
-        nom,
-        act,
-        p: 1,
-        score: 1,
-        motiu: `Suport natural — ja era dins l'aula de ${cap(absent)}`
-      });
-      continue;
-    }
-
-    // No disponible ni com a últim recurs
-    if (tipus === "NO_DISPONIBLE" || tipus === "CLASSE" || tipus === "LLIURE") continue;
-
-    // P2: fa suport en una altra aula (SUPORT_GENERAL o SUPORT_NATURAL d'una altra aula)
-    if (tipus === "SUPORT_GENERAL" || tipus === "SUPORT_NATURAL") {
-      let score = 2;
-      if (reglesJSON?.penalitzacions) {
-        const pen = reglesJSON.penalitzacions.find(x => nom.startsWith((x.nom || "").toUpperCase()));
-        if (pen) score += pen.factor || 0;
+      p = 1;
+      motiu = `Suport natural — ja estava assignat a l'aula`;
+    } else if (tipus === "SUPORT_NATURAL") {
+      const af = au.split(" ")[0].slice(0, 4);
+      if (normalitza(act).includes(normalitza(af))) {
+        p = 1;
+        motiu = `Suport natural — ja estava assignat a l'aula`;
       }
-      p2.push({
-        nom,
-        act,
-        p: 2,
-        score,
-        motiu: "Fa suport en una altra aula"
-      });
-      continue;
     }
-
-    // P3: T.P. → últim recurs
-    if (tipus === "TP") {
-      p3.push({
-        nom,
-        act,
-        p: 3,
-        score: 3,
-        motiu: "⚠ Últim recurs — trenca hora de T.P."
-      });
+    // Aplicar penalitzacions de la IA si existeixen
+    let score = p;
+    if (reglesJSON?.penalitzacions) {
+      const pen = reglesJSON.penalitzacions.find(x => nom.startsWith(x.nom?.toUpperCase?.() || "___"));
+      if (pen) score = p + (pen.factor || 0);
     }
+    res.push({
+      nom,
+      act,
+      p,
+      score,
+      motiu
+    });
   }
-
-  // Ordenem cada grup alfabèticament i concatenem P1 → P2 → P3
-  const ord = (a, b) => a.nom.localeCompare(b.nom);
-  return [...p1.sort(ord), ...p2.sort((a, b) => a.score - b.score || ord(a, b)), ...p3.sort(ord)];
+  return res.sort((a, b) => a.score - b.score || a.nom.localeCompare(b.nom));
 }
 function assignacioMultiple(mestres, totsAbsents, dia, franjesSeleccionades, continuitat = new Map(), absentPerFranja = null, frangesConfig = FRANGES_DEFAULT, reglesJSON = null) {
   const resultat = {};
@@ -344,8 +1694,6 @@ function assignacioMultiple(mestres, totsAbsents, dia, franjesSeleccionades, con
   for (const franja of franjesOrdenades) {
     const absentsAquestFranja = absentPerFranja ? absentPerFranja[franja] || [] : totsAbsents;
     if (!absentsAquestFranja.length) continue;
-
-    // Ocupats = tots els absents (no poden suplir-se a si mateixos)
     const ocupats = new Set(totsAbsents.map(a => a.toUpperCase()));
     const assignacions = [];
     const absentsAmbInfo = absentsAquestFranja.map(absent => {
@@ -361,8 +1709,6 @@ function assignacioMultiple(mestres, totsAbsents, dia, franjesSeleccionades, con
         candidats
       };
     });
-
-    // 1. Els que NO cal suplir
     for (const {
       absent,
       actAbsent
@@ -377,18 +1723,15 @@ function assignacioMultiple(mestres, totsAbsents, dia, franjesSeleccionades, con
     }
     const calSuplirLlista = absentsAmbInfo.filter(a => a.cal);
     const assignatsContinuitat = new Set();
-
-    // 2. Continuïtat: el mateix suplent de la franja anterior si segueix disponible com a suport
     for (const {
       absent,
       au
     } of calSuplirLlista) {
       const suplentAnterior = continuitat.get(au);
-      if (!suplentAnterior || ocupats.has(suplentAnterior)) continue;
+      if (!suplentAnterior) continue;
       const actSuplent = mestres[suplentAnterior]?.[dia]?.[franja] || "";
-      const tipus = tipusSuplent(actSuplent);
-      // Continuïtat només si segueix sent suport (P2) — no si ara té classe o TP
-      if (tipus === "SUPORT_GENERAL" || tipus === "SUPORT_NATURAL") {
+      const tipus = tipusActivitat(actSuplent);
+      if ((tipus === "SUPORT_NATURAL" || tipus === "SUPORT_GENERAL") && !ocupats.has(suplentAnterior)) {
         ocupats.add(suplentAnterior);
         assignatsContinuitat.add(au);
         continuitat.set(au, suplentAnterior);
@@ -396,13 +1739,11 @@ function assignacioMultiple(mestres, totsAbsents, dia, franjesSeleccionades, con
           absent,
           suplent: suplentAnterior,
           act: actSuplent,
-          p: 2,
+          p: 1,
           motiu: `Continuïtat — ja cobria ${cap(absent)} a la franja anterior`
         });
       }
     }
-
-    // 3. Resta: ordenats per menys candidats primer (els difícils, primer)
     const resta = calSuplirLlista.filter(a => !assignatsContinuitat.has(a.au)).sort((a, b) => a.candidats.length - b.candidats.length);
     for (const {
       absent,
@@ -502,20 +1843,13 @@ const P_CFG = {
     border: "border-amber-400",
     pill: "bg-amber-400",
     icon: "◆"
-  },
-  "3": {
-    bg: "bg-red-50",
-    border: "border-red-300",
-    pill: "bg-red-500",
-    icon: "⚠"
   }
 };
 const P_LABELS = {
   "-1": "No cal suplir",
   "0": "Sense suplent",
   "1": "Suport Natural",
-  "2": "Suport/Co-doc.",
-  "3": "Últim recurs (T.P.)"
+  "2": "Suport/Co-doc."
 };
 
 // ─── COMPONENT DRIVE IMPORT ──────────────────────────────────────────────────
@@ -574,4 +1908,1031 @@ function DriveImport({
     type: "url",
     value: link,
     onChange: e => {
-      setLink(e.target.valu
+      setLink(e.target.value);
+      setEstat(null);
+    },
+    placeholder: "https://drive.google.com/...",
+    className: "flex-1 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: handleImportar,
+    disabled: !link.trim() || estat === "carregant",
+    className: "bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition-colors flex items-center gap-1.5 shrink-0"
+  }, estat === "carregant" ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
+  }), "Llegint...") : "Importar")), estat === "ok" && /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-emerald-600 font-medium"
+  }, "\u2713 ", missatge), estat === "error" && /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-red-500"
+  }, missatge), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-slate-400"
+  }, "Nom\xE9s funciona amb Google Docs (no .docx). Ha d'estar compartit p\xFAblicament."));
+}
+
+// ─── APP ─────────────────────────────────────────────────────────────────────
+function App() {
+  const [page, setPage] = useState("cercar");
+  const [appReady, setAppReady] = useState(false);
+
+  // Franges dinàmiques
+  const [franges, setFranges] = useState(FRANGES_DEFAULT);
+  const [editantFranges, setEditantFranges] = useState(false);
+  const [frangesDraft, setFrangesDraft] = useState(FRANGES_DEFAULT);
+
+  // Dades
+  const [mestres, setMestres] = useState({});
+  const [rawText, setRawText] = useState("");
+  const [fitxers, setFitxers] = useState([]);
+  const [isLoadingFitxer, setIsLoadingFitxer] = useState(false);
+  const [parseError, setParseError] = useState("");
+
+  // Criteris
+  const [criterisText, setCriterisText] = useState("");
+  const [reglesEstructurades, setReglesEstructurades] = useState("");
+  const [reglesJSON, setReglesJSON] = useState(null);
+  const [isInterpretant, setIsInterpretant] = useState(false);
+  const [criterisGuardats, setCriterisGuardats] = useState(false);
+  const [criterisError, setCriterisError] = useState("");
+
+  // Cercador
+  const [diaC, setDiaC] = useState(avuiDia);
+  const [absentsAmbFranges, setAbsentsAmbFranges] = useState([]);
+  const [resultatsMultiple, setResultatsMultiple] = useState(null);
+  // canvisManuals: { `${franja}__${absent}` -> nomSuplentManual }
+  const [canvisManuals, setCanvisManuals] = useState({});
+  const [isCercant, setIsCercant] = useState(false);
+
+  // Avui
+  const [registre, setRegistre] = useState([]);
+  const [diaAvui, setDiaAvui] = useState(avuiDia);
+  const [subpaginaAvui, setSubpaginaAvui] = useState("suplencies"); // "suplencies" | "estadistiques"
+
+  const fileRef = useRef(null);
+
+  // ── CÀRREGA INICIAL (localStorage) ──
+  useEffect(() => {
+    const hG = storageGet(SK.horaris);
+    const cG = storageGet(SK.criteris);
+    const rG = storageGet(SK.regles);
+    const regG = storageGet(SK.registre);
+    const fG = storageGet(SK.franges);
+    if (fG?.franges?.length) setFranges(fG.franges);
+    const frangesActuals = fG?.franges?.length ? fG.franges : FRANGES_DEFAULT;
+    const text = hG?.text || "";
+    const parsed = text ? parseHoraris(text, frangesActuals) : {};
+    setRawText(text);
+    setMestres(parsed);
+    if (cG?.text) setCriterisText(cG.text);
+    if (rG?.text) {
+      setReglesEstructurades(rG.text);
+      setCriterisGuardats(true);
+      try {
+        setReglesJSON(JSON.parse(rG.json || "{}"));
+      } catch {}
+    }
+    if (regG?.llista) setRegistre(regG.llista);
+    setAppReady(true);
+  }, []);
+  useEffect(() => {
+    if (appReady) storageSet(SK.registre, {
+      llista: registre
+    });
+  }, [registre, appReady]);
+  const nomsMestres = Object.keys(mestres).sort();
+  const {
+    codeMap,
+    decodeMap
+  } = buildCodeMap(mestres);
+  const frangesDisplay = franges.map(f => f.id);
+
+  // ── FRANGES DINÀMIQUES ──
+  const handleGuardarFranges = () => {
+    // Reconstruïm els id a partir de l'hora d'inici
+    const noves = frangesDraft.map(f => ({
+      ...f,
+      id: f.inici.replace(":", "") + "h",
+      label: `${f.inici}–${f.fi}`
+    }));
+    setFranges(noves);
+    storageSet(SK.franges, {
+      franges: noves
+    });
+    setEditantFranges(false);
+    // Re-parsem els horaris amb les noves franges
+    if (rawText) {
+      const parsed = parseHoraris(rawText, noves);
+      if (Object.keys(parsed).length) setMestres(parsed);
+    }
+  };
+
+  // ── FITXERS ──
+  const processarFitxers = useCallback(async files => {
+    setIsLoadingFitxer(true);
+    setParseError("");
+    await ensureMammoth();
+    let text = "";
+    const nous = [];
+    for (const f of files) {
+      try {
+        text = text ? text + "\n\n" + (await readFile(f)) : await readFile(f);
+        nous.push({
+          nom: f.name,
+          ok: true
+        });
+      } catch (e) {
+        nous.push({
+          nom: f.name,
+          ok: false,
+          err: e.message
+        });
+      }
+    }
+    setRawText(text);
+    setFitxers(p => [...p, ...nous]);
+    if (!text.trim()) {
+      setParseError("No s'ha pogut llegir cap fitxer.");
+      setIsLoadingFitxer(false);
+      return;
+    }
+    try {
+      const parsed = parseHoraris(text, franges);
+      if (Object.keys(parsed).length) {
+        setMestres(parsed);
+        storageSet(SK.horaris, {
+          text
+        });
+      } else setParseError("El parser no ha reconegut cap mestre.");
+    } catch (e) {
+      setParseError("Error: " + e.message);
+    }
+    setIsLoadingFitxer(false);
+  }, [franges]);
+  const handleFileInput = useCallback(async e => {
+    const files = Array.from(e.target.files || []);
+    if (files.length) await processarFitxers(files);
+    e.target.value = "";
+  }, [processarFitxers]);
+  const handleDrop = useCallback(async e => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files).filter(f => f.name.endsWith(".docx") || f.name.endsWith(".txt"));
+    if (files.length) await processarFitxers(files);
+  }, [processarFitxers]);
+
+  // ── CRITERIS ──
+  const handleInterpretarCriteris = async () => {
+    setIsInterpretant(true);
+    setCriterisError("");
+    storageSet(SK.criteris, {
+      text: criterisText
+    });
+    try {
+      const segur = encodeText(criterisText, codeMap);
+      const resp = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 2000,
+          messages: [{
+            role: "user",
+            content: `Ets un assistent per configurar suplències escolars.
+Analitza aquests criteris i retorna DOS blocs:
+
+1. TEXT_REGLES: Llista numerada de regles clares en català.
+2. JSON_REGLES: Un JSON amb estructura {"penalitzacions":[{"nom":"NomMestre","factor":1}],"notes":"..."} per penalitzar mestres concrets (factor positiu = menys prioritat). Si no hi ha penalitzacions específiques, retorna llista buida.
+
+Format de resposta EXACTE (res més):
+TEXT_REGLES:
+[regles aquí]
+JSON_REGLES:
+[json aquí]
+
+CRITERIS DE L'ESCOLA:
+${segur}`
+          }]
+        })
+      });
+      const data = await resp.json();
+      const txt = data.content?.find(b => b.type === "text")?.text || "";
+      const textMatch = txt.match(/TEXT_REGLES:\s*([\s\S]*?)(?=JSON_REGLES:|$)/);
+      const jsonMatch = txt.match(/JSON_REGLES:\s*([\s\S]*?)$/);
+      const reglesText = textMatch?.[1]?.trim() || txt;
+      let reglesJSONParsed = null;
+      try {
+        reglesJSONParsed = JSON.parse(jsonMatch?.[1]?.trim() || "{}");
+      } catch {}
+      if (!reglesText) throw new Error("Resposta buida");
+      setReglesEstructurades(reglesText);
+      setReglesJSON(reglesJSONParsed);
+      setCriterisGuardats(true);
+      storageSet(SK.regles, {
+        text: reglesText,
+        json: JSON.stringify(reglesJSONParsed || {})
+      });
+    } catch (e) {
+      setCriterisError(e.message === "Resposta buida" ? "La IA no ha retornat res." : "Error de connexió. Els criteris s'han guardat localment.");
+      setCriterisGuardats(true);
+    }
+    setIsInterpretant(false);
+  };
+
+  // ── CERCA ──
+  const afegirAbsent = nom => {
+    if (absentsAmbFranges.find(a => a.nom === nom)) return;
+    setAbsentsAmbFranges(prev => [...prev, {
+      nom,
+      franges: []
+    }]);
+    setResultatsMultiple(null);
+    setCanvisManuals({});
+  };
+  const eliminarAbsent = nom => {
+    setAbsentsAmbFranges(prev => prev.filter(a => a.nom !== nom));
+    setResultatsMultiple(null);
+    setCanvisManuals({});
+  };
+  const toggleFranjaAbsent = (nom, franja) => {
+    setAbsentsAmbFranges(prev => prev.map(a => {
+      if (a.nom !== nom) return a;
+      const fs = a.franges.includes(franja) ? a.franges.filter(f => f !== franja) : [...a.franges, franja];
+      return {
+        ...a,
+        franges: fs
+      };
+    }));
+    setResultatsMultiple(null);
+    setCanvisManuals({});
+  };
+  const marcarTotElDia = nom => {
+    setAbsentsAmbFranges(prev => prev.map(a => a.nom === nom ? {
+      ...a,
+      franges: [...frangesDisplay]
+    } : a));
+    setResultatsMultiple(null);
+    setCanvisManuals({});
+  };
+  const potCalcular = absentsAmbFranges.some(a => a.franges.length > 0);
+  const handleCerca = () => {
+    if (!potCalcular) return;
+    setIsCercant(true);
+    setResultatsMultiple(null);
+    setCanvisManuals({});
+    const absentPerFranja = {};
+    for (const {
+      nom,
+      franges: fs
+    } of absentsAmbFranges) {
+      for (const f of fs) {
+        if (!absentPerFranja[f]) absentPerFranja[f] = [];
+        absentPerFranja[f].push(nom);
+      }
+    }
+    const totsAbsents = absentsAmbFranges.map(a => a.nom);
+    const res = assignacioMultiple(mestres, totsAbsents, diaC, Object.keys(absentPerFranja), new Map(), absentPerFranja, franges, reglesJSON);
+    setResultatsMultiple(res);
+    setIsCercant(false);
+  };
+
+  // Candidats disponibles per canvi manual (per una franja i absent concrets)
+  const candidatsDisponibles = (franja, absent, suplentActual) => {
+    const totsAbsentsUp = new Set(absentsAmbFranges.map(a => a.nom.toUpperCase()));
+    const suplentsJaUsats = new Set(Object.values(resultatsMultiple || {}).flat().filter(a => a.suplent && a.absent !== absent).map(a => a.suplent));
+    return nomsMestres.filter(nom => {
+      if (totsAbsentsUp.has(nom)) return false;
+      const act = mestres[nom]?.[diaC]?.[franja] || "";
+      const tipus = tipusActivitat(act);
+      return tipus === "SUPORT_NATURAL" || tipus === "SUPORT_GENERAL";
+    });
+  };
+  const handleAssignar = (franja, assignacio) => {
+    const clau = `${franja}__${assignacio.absent}`;
+    const suplentFinal = canvisManuals[clau] || assignacio.suplent;
+    if (!suplentFinal) return;
+    setRegistre(prev => [{
+      id: Date.now() + Math.random(),
+      absent: assignacio.absent,
+      suplent: suplentFinal,
+      dia: diaC,
+      franja,
+      prioritat: assignacio.p,
+      motiu: assignacio.motiu,
+      nota: "",
+      ts: new Date().toLocaleTimeString("ca", {
+        hour: "2-digit",
+        minute: "2-digit"
+      })
+    }, ...prev]);
+  };
+  const handleAssignarTot = () => {
+    if (!resultatsMultiple) return;
+    const noves = [];
+    for (const [franja, assignacions] of Object.entries(resultatsMultiple)) {
+      for (const a of assignacions) {
+        if (a.p === -1) continue;
+        const clau = `${franja}__${a.absent}`;
+        const suplentFinal = canvisManuals[clau] || a.suplent;
+        if (!suplentFinal) continue;
+        noves.push({
+          id: Date.now() + Math.random(),
+          absent: a.absent,
+          suplent: suplentFinal,
+          dia: diaC,
+          franja,
+          prioritat: a.p,
+          motiu: a.motiu,
+          nota: "",
+          ts: new Date().toLocaleTimeString("ca", {
+            hour: "2-digit",
+            minute: "2-digit"
+          })
+        });
+      }
+    }
+    setRegistre(prev => [...noves, ...prev]);
+  };
+
+  // ── AVUI ──
+  const respostaAvui = franges.map(({
+    id: franja
+  }) => {
+    const suport = [];
+    for (const [nom, horari] of Object.entries(mestres)) {
+      const act = horari?.[diaAvui]?.[franja] || "";
+      const tipus = tipusActivitat(act);
+      if (tipus === "SUPORT_NATURAL" || tipus === "SUPORT_GENERAL") suport.push({
+        nom,
+        act
+      });
+    }
+    return {
+      franja,
+      suport
+    };
+  });
+  const registreAvui = registre.filter(r => r.dia === diaAvui);
+
+  // ── ESTADÍSTIQUES ──
+  const estadistiques = nomsMestres.map(nom => ({
+    nom,
+    total: registre.filter(r => r.suplent === nom).length,
+    ultim: registre.filter(r => r.suplent === nom).sort((a, b) => b.id - a.id)[0]?.dia || "—"
+  })).filter(e => e.total > 0).sort((a, b) => b.total - a.total);
+  const NAV = [{
+    key: "cercar",
+    icon: "🔍",
+    label: "Suplències"
+  }, {
+    key: "avui",
+    icon: "📋",
+    label: "Avui"
+  }, {
+    key: "criteris",
+    icon: "⚙️",
+    label: "Criteris"
+  }, {
+    key: "horaris",
+    icon: "📂",
+    label: "Horaris"
+  }];
+  if (!appReady) return /*#__PURE__*/React.createElement("div", {
+    className: "min-h-screen bg-slate-100 flex items-center justify-center"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col items-center gap-3"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+  }), /*#__PURE__*/React.createElement("p", {
+    className: "text-slate-500 text-sm font-medium"
+  }, "Carregant...")));
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: "'DM Sans','Segoe UI',sans-serif",
+      maxWidth: 480,
+      margin: "0 auto"
+    },
+    className: "min-h-screen bg-slate-100 flex flex-col"
+  }, /*#__PURE__*/React.createElement("header", {
+    className: "bg-slate-900 text-white px-5 py-3.5 flex items-center justify-between shrink-0"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-3"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center font-black text-sm"
+  }, "S"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", {
+    className: "font-bold text-base leading-tight"
+  }, "Supl\xE8ncies d'Urg\xE8ncia"), /*#__PURE__*/React.createElement("p", {
+    className: "text-slate-400 text-xs"
+  }, nomsMestres.length, " mestres \xB7", " ", criterisGuardats ? /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "#6ee7b7"
+    }
+  }, "Criteris actius") : /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: "#fcd34d"
+    }
+  }, "Sense criteris")))), registreAvui.length > 0 && /*#__PURE__*/React.createElement("span", {
+    className: "bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-full"
+  }, registreAvui.length, " avui")), /*#__PURE__*/React.createElement("div", {
+    className: "bg-white border-b border-slate-200 flex shrink-0"
+  }, NAV.map(({
+    key,
+    icon,
+    label
+  }) => /*#__PURE__*/React.createElement("button", {
+    key: key,
+    onClick: () => setPage(key),
+    className: `flex-1 flex flex-col items-center py-2.5 gap-0.5 border-b-2 transition-all font-medium text-xs ${page === key ? "border-blue-500 text-blue-600" : "border-transparent text-slate-400 hover:text-slate-600"}`
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-lg leading-none"
+  }, icon), /*#__PURE__*/React.createElement("span", null, label)))), /*#__PURE__*/React.createElement("div", {
+    className: "flex-1 overflow-auto"
+  }, page === "cercar" && /*#__PURE__*/React.createElement("div", {
+    className: "p-4 space-y-4"
+  }, nomsMestres.length === 0 && /*#__PURE__*/React.createElement("div", {
+    className: "bg-amber-50 border border-amber-200 rounded-2xl p-4 text-center"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-amber-700 font-semibold text-sm"
+  }, "\u26A0 No hi ha horaris carregats"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setPage("horaris"),
+    className: "text-amber-600 text-xs underline mt-1"
+  }, "V\xE9s a Horaris")), /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "px-5 py-4 border-b border-slate-100"
+  }, /*#__PURE__*/React.createElement("h2", {
+    className: "font-bold text-slate-800"
+  }, "Qui falta avui?"), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-slate-400 mt-0.5"
+  }, "Selecciona mestres i les seves franges individuals")), /*#__PURE__*/React.createElement("div", {
+    className: "p-5 space-y-4"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "text-xs font-bold text-slate-500 uppercase tracking-wide block mb-1.5"
+  }, "Dia"), /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-1.5"
+  }, DIES.map((d, i) => /*#__PURE__*/React.createElement("button", {
+    key: d,
+    onClick: () => {
+      setDiaC(d);
+      setResultatsMultiple(null);
+      setCanvisManuals({});
+    },
+    className: `flex-1 py-2 rounded-xl text-xs font-bold transition-all ${diaC === d ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-500 hover:bg-slate-200"}`
+  }, DIES_CURTS[i])))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "text-xs font-bold text-slate-500 uppercase tracking-wide block mb-1.5"
+  }, "Mestres absents", absentsAmbFranges.length > 0 && /*#__PURE__*/React.createElement("span", {
+    className: "ml-2 bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full normal-case font-semibold"
+  }, absentsAmbFranges.length)), /*#__PURE__*/React.createElement("select", {
+    value: "",
+    onChange: e => {
+      if (e.target.value) {
+        afegirAbsent(e.target.value);
+        e.target.value = "";
+      }
+    },
+    className: "w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-700 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-3"
+  }, /*#__PURE__*/React.createElement("option", {
+    value: ""
+  }, "+ Afegir mestre absent..."), nomsMestres.filter(n => !absentsAmbFranges.find(a => a.nom === n)).map(n => /*#__PURE__*/React.createElement("option", {
+    key: n,
+    value: n
+  }, cap(n)))), absentsAmbFranges.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "space-y-2"
+  }, absentsAmbFranges.map(({
+    nom,
+    franges: fs
+  }) => /*#__PURE__*/React.createElement("div", {
+    key: nom,
+    className: "bg-slate-50 border border-slate-200 rounded-xl p-3"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-between mb-2"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "font-bold text-slate-800 text-sm"
+  }, cap(nom)), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-2"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => marcarTotElDia(nom),
+    className: "text-xs text-blue-600 font-semibold hover:underline"
+  }, "Tot el dia"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => eliminarAbsent(nom),
+    className: "text-slate-300 hover:text-red-400 text-lg leading-none transition-colors"
+  }, "\xD7"))), /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-wrap gap-1.5"
+  }, franges.map(f => {
+    const sel = fs.includes(f.id);
+    return /*#__PURE__*/React.createElement("button", {
+      key: f.id,
+      onClick: () => toggleFranjaAbsent(nom, f.id),
+      className: `px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all border ${sel ? "bg-blue-600 text-white border-blue-600" : "bg-white text-slate-500 border-slate-200 hover:border-blue-300"}`
+    }, f.label);
+  })), fs.length === 0 && /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-amber-500 mt-1.5"
+  }, "Selecciona les franges que falta"))))), /*#__PURE__*/React.createElement("button", {
+    onClick: handleCerca,
+    disabled: !potCalcular || isCercant || nomsMestres.length === 0,
+    className: "w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+  }, isCercant ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
+  }), "Calculant...") : "🔍 Calcular assignació"))), resultatsMultiple && !isCercant && /*#__PURE__*/React.createElement("div", {
+    className: "space-y-3"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center justify-between px-1"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-sm font-bold text-slate-700"
+  }, "Proposta d'assignaci\xF3"), /*#__PURE__*/React.createElement("button", {
+    onClick: handleAssignarTot,
+    className: "bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-colors"
+  }, "\u2713 Assignar tot")), Object.entries(resultatsMultiple).sort((a, b) => franges.findIndex(f => f.id === a[0]) - franges.findIndex(f => f.id === b[0])).map(([franja, assignacions]) => /*#__PURE__*/React.createElement("div", {
+    key: franja,
+    className: "bg-white rounded-2xl border border-slate-200 overflow-hidden"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "font-bold text-slate-700 text-sm"
+  }, franges.find(f => f.id === franja)?.label || franja), /*#__PURE__*/React.createElement("span", {
+    className: "text-xs text-slate-400"
+  }, assignacions.filter(a => a.suplent || a.p === -1).length, "/", assignacions.length, " gestionats")), /*#__PURE__*/React.createElement("div", {
+    className: "p-3 space-y-2"
+  }, assignacions.map((a, i) => {
+    const noCalSuplir = a.p === -1;
+    const p = noCalSuplir ? -1 : Math.min(a.p || 0, 2);
+    const c = P_CFG[String(p)] || P_CFG["0"];
+    const clau = `${franja}__${a.absent}`;
+    const suplentFinal = canvisManuals[clau] || a.suplent;
+    const candidats = !noCalSuplir && !a.suplent === false ? candidatsDisponibles(franja, a.absent, suplentFinal) : [];
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      className: `rounded-xl border p-3 ${noCalSuplir ? "bg-slate-50 border-slate-200" : `${c.bg} ${c.border}`}`
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "flex items-start gap-3"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: `w-8 h-8 rounded-lg text-white flex items-center justify-center font-bold text-sm shrink-0 ${noCalSuplir ? "bg-slate-300" : c.pill}`
+    }, noCalSuplir ? "—" : c.icon), /*#__PURE__*/React.createElement("div", {
+      className: "flex-1 min-w-0"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "flex flex-wrap items-center gap-1.5"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-xs text-slate-500"
+    }, "Absent:"), /*#__PURE__*/React.createElement("span", {
+      className: "font-bold text-slate-800 text-sm"
+    }, cap(a.absent))), /*#__PURE__*/React.createElement("p", {
+      className: "text-xs text-slate-400 mt-0.5"
+    }, "Tenia: ", actLabel(mestres[a.absent.toUpperCase()]?.[diaC]?.[franja] || "—")), noCalSuplir ? /*#__PURE__*/React.createElement("p", {
+      className: "text-xs text-slate-500 font-semibold mt-1"
+    }, "\u2713 ", a.motiu) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+      className: "flex items-center gap-2 mt-1.5"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "text-xs text-slate-500"
+    }, "Suplent:"), /*#__PURE__*/React.createElement("select", {
+      value: suplentFinal || "",
+      onChange: e => setCanvisManuals(prev => ({
+        ...prev,
+        [clau]: e.target.value || null
+      })),
+      className: "flex-1 text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-blue-400 font-semibold",
+      style: {
+        color: p === 1 ? "#059669" : p === 2 ? "#d97706" : "#dc2626"
+      }
+    }, /*#__PURE__*/React.createElement("option", {
+      value: ""
+    }, "\u2014 Sense suplent \u2014"), suplentFinal && !candidats.includes(suplentFinal) && /*#__PURE__*/React.createElement("option", {
+      value: suplentFinal
+    }, cap(suplentFinal), " \u2605"), candidats.map(n => /*#__PURE__*/React.createElement("option", {
+      key: n,
+      value: n
+    }, cap(n)))), suplentFinal && /*#__PURE__*/React.createElement("span", {
+      className: `text-xs font-bold px-2 py-0.5 rounded-full text-white shrink-0 ${c.pill}`
+    }, P_LABELS[String(p)] || "")), !suplentFinal && /*#__PURE__*/React.createElement("p", {
+      className: "text-xs text-red-500 font-semibold mt-1"
+    }, "\u26A0 Sense suplent disponible"), a.motiu && suplentFinal && /*#__PURE__*/React.createElement("p", {
+      className: "text-xs text-slate-400 mt-0.5"
+    }, a.motiu))), !noCalSuplir && suplentFinal && /*#__PURE__*/React.createElement("button", {
+      onClick: () => handleAssignar(franja, a),
+      className: "bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-2 py-1.5 rounded-lg transition-colors shrink-0 self-center"
+    }, "\u2713")));
+  })))))), page === "avui" && /*#__PURE__*/React.createElement("div", {
+    className: "p-4 space-y-4"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-2 bg-white rounded-2xl border border-slate-200 p-1.5"
+  }, [{
+    key: "suplencies",
+    label: "📋 Suplències"
+  }, {
+    key: "estadistiques",
+    label: "📊 Estadístiques"
+  }].map(s => /*#__PURE__*/React.createElement("button", {
+    key: s.key,
+    onClick: () => setSubpaginaAvui(s.key),
+    className: `flex-1 py-2 rounded-xl text-xs font-bold transition-all ${subpaginaAvui === s.key ? "bg-slate-900 text-white" : "text-slate-500 hover:text-slate-700"}`
+  }, s.label))), subpaginaAvui === "suplencies" && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-2xl border border-slate-200 p-4"
+  }, /*#__PURE__*/React.createElement("label", {
+    className: "text-xs font-bold text-slate-500 uppercase tracking-wide block mb-2"
+  }, "Dia"), /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-1.5"
+  }, DIES.map((d, i) => /*#__PURE__*/React.createElement("button", {
+    key: d,
+    onClick: () => setDiaAvui(d),
+    className: `flex-1 py-2 rounded-xl text-xs font-bold transition-all ${diaAvui === d ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500 hover:bg-slate-200"}`
+  }, DIES_CURTS[i])))), registreAvui.length > 0 ? /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-2xl border border-slate-200 overflow-hidden"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "px-5 py-3 border-b border-slate-100 flex items-center justify-between"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "font-bold text-slate-700 text-sm"
+  }, "Supl\xE8ncies assignades"), /*#__PURE__*/React.createElement("span", {
+    className: "bg-slate-900 text-white text-xs font-bold px-2 py-0.5 rounded-full"
+  }, registreAvui.length)), /*#__PURE__*/React.createElement("div", {
+    className: "divide-y divide-slate-100"
+  }, registreAvui.map(r => {
+    const p = Math.min(r.prioritat || 2, 2);
+    const c = P_CFG[String(p)];
+    return /*#__PURE__*/React.createElement("div", {
+      key: r.id,
+      className: "px-5 py-3 flex items-start gap-3"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: `w-2 h-2 rounded-full mt-1.5 shrink-0 ${c.pill}`
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "flex-1 min-w-0"
+    }, /*#__PURE__*/React.createElement("p", {
+      className: "text-sm font-bold text-slate-800"
+    }, cap(r.absent), " ", /*#__PURE__*/React.createElement("span", {
+      className: "text-slate-400 font-normal"
+    }, "\u2192"), " ", cap(r.suplent)), /*#__PURE__*/React.createElement("p", {
+      className: "text-xs text-slate-400"
+    }, franges.find(f => f.id === r.franja)?.label || r.franja, " \xB7 ", r.ts), r.motiu && /*#__PURE__*/React.createElement("p", {
+      className: "text-xs text-slate-500 mt-0.5"
+    }, r.motiu)), /*#__PURE__*/React.createElement("button", {
+      onClick: () => setRegistre(prev => prev.filter(x => x.id !== r.id)),
+      className: "text-slate-300 hover:text-red-400 text-xl leading-none transition-colors shrink-0"
+    }, "\xD7"));
+  }))) : /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-2xl border border-slate-200 p-6 text-center"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-3xl mb-2"
+  }, "\u2705"), /*#__PURE__*/React.createElement("p", {
+    className: "text-slate-500 text-sm font-medium"
+  }, "Cap supl\xE8ncia registrada per ", diaAvui, ".")), /*#__PURE__*/React.createElement("div", {
+    className: "space-y-3"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "font-bold text-slate-600 text-sm px-1"
+  }, "Disponibilitat \u2014 ", diaAvui), respostaAvui.map(({
+    franja,
+    suport
+  }) => /*#__PURE__*/React.createElement("div", {
+    key: franja,
+    className: "bg-white rounded-2xl border border-slate-200 overflow-hidden"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "px-5 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "font-bold text-slate-700 text-sm"
+  }, franges.find(f => f.id === franja)?.label || franja), /*#__PURE__*/React.createElement("span", {
+    className: "text-xs text-slate-400"
+  }, suport.length, " disponibles")), /*#__PURE__*/React.createElement("div", {
+    className: "p-4"
+  }, suport.length > 0 ? /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-wrap gap-1.5"
+  }, suport.map(s => /*#__PURE__*/React.createElement("span", {
+    key: s.nom,
+    className: "text-xs bg-amber-50 border border-amber-200 text-amber-700 font-medium px-2.5 py-1 rounded-lg"
+  }, cap(s.nom)))) : /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-slate-400"
+  }, "Ning\xFA disponible per suplir en aquesta franja.")))))), subpaginaAvui === "estadistiques" && /*#__PURE__*/React.createElement("div", {
+    className: "space-y-3"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-2xl border border-slate-200 overflow-hidden"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "px-5 py-4 border-b border-slate-100 flex items-center justify-between"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+    className: "font-bold text-slate-800"
+  }, "Term\xF2metre del Claustre"), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-slate-400 mt-0.5"
+  }, "Qui ha suplert m\xE9s vegades")), /*#__PURE__*/React.createElement("span", {
+    className: "bg-slate-100 text-slate-600 text-xs font-bold px-2.5 py-1 rounded-full"
+  }, registre.length, " total")), estadistiques.length > 0 ? /*#__PURE__*/React.createElement("div", {
+    className: "divide-y divide-slate-100"
+  }, estadistiques.map((e, i) => {
+    const maxTotal = estadistiques[0]?.total || 1;
+    const pct = Math.round(e.total / maxTotal * 100);
+    const color = i === 0 ? "bg-red-500" : i === 1 ? "bg-orange-400" : i === 2 ? "bg-amber-400" : "bg-blue-400";
+    return /*#__PURE__*/React.createElement("div", {
+      key: e.nom,
+      className: "px-5 py-3"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "flex items-center gap-3 mb-1.5"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: `w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-black shrink-0 ${color}`
+    }, i + 1), /*#__PURE__*/React.createElement("span", {
+      className: "font-semibold text-slate-800 text-sm flex-1"
+    }, cap(e.nom)), /*#__PURE__*/React.createElement("span", {
+      className: "font-black text-slate-700 text-sm"
+    }, e.total), /*#__PURE__*/React.createElement("span", {
+      className: "text-xs text-slate-400"
+    }, e.total === 1 ? "vegada" : "vegades")), /*#__PURE__*/React.createElement("div", {
+      className: "ml-9 bg-slate-100 rounded-full h-1.5 overflow-hidden"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: `h-full rounded-full transition-all ${color}`,
+      style: {
+        width: `${pct}%`
+      }
+    })));
+  })) : /*#__PURE__*/React.createElement("div", {
+    className: "p-8 text-center"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "text-3xl mb-2"
+  }, "\uD83D\uDCCA"), /*#__PURE__*/React.createElement("p", {
+    className: "text-slate-500 text-sm"
+  }, "Encara no hi ha supl\xE8ncies registrades."), /*#__PURE__*/React.createElement("p", {
+    className: "text-slate-400 text-xs mt-1"
+  }, "Les estad\xEDstiques apareixeran aqu\xED un cop s'assignin supl\xE8ncies."))), registre.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-2xl border border-slate-200 p-4"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-xs font-bold text-slate-500 uppercase tracking-wide mb-2"
+  }, "Historial complet"), /*#__PURE__*/React.createElement("div", {
+    className: "space-y-1.5 max-h-60 overflow-y-auto"
+  }, registre.slice(0, 50).map(r => /*#__PURE__*/React.createElement("div", {
+    key: r.id,
+    className: "flex items-center gap-2 text-xs text-slate-600"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-slate-400 shrink-0"
+  }, r.dia, " ", franges.find(f => f.id === r.franja)?.label || r.franja), /*#__PURE__*/React.createElement("span", {
+    className: "text-slate-300"
+  }, "\xB7"), /*#__PURE__*/React.createElement("span", null, cap(r.absent)), /*#__PURE__*/React.createElement("span", {
+    className: "text-slate-300"
+  }, "\u2192"), /*#__PURE__*/React.createElement("span", {
+    className: "font-semibold"
+  }, cap(r.suplent))))), /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      if (confirm("Segur que vols esborrar tot l'historial?")) setRegistre([]);
+    },
+    className: "mt-3 text-xs text-slate-400 hover:text-red-500 transition-colors"
+  }, "Esborrar historial")))), page === "criteris" && /*#__PURE__*/React.createElement("div", {
+    className: "p-4 space-y-4"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-2xl border border-slate-200 overflow-hidden"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "px-5 py-4 border-b border-slate-100 flex items-center justify-between"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+    className: "font-bold text-slate-800"
+  }, "Criteris de supl\xE8ncia"), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-slate-400 mt-0.5"
+  }, "Escriu les regles de la teva escola en text lliure")), criterisGuardats && /*#__PURE__*/React.createElement("span", {
+    className: "bg-emerald-100 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-full"
+  }, "\u2713 Actius")), /*#__PURE__*/React.createElement("div", {
+    className: "p-5 space-y-4"
+  }, /*#__PURE__*/React.createElement("textarea", {
+    value: criterisText,
+    onChange: e => {
+      setCriterisText(e.target.value);
+      setCriterisGuardats(false);
+    },
+    rows: 8,
+    className: "w-full border border-slate-200 rounded-xl p-4 text-sm text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 bg-slate-50 leading-relaxed",
+    placeholder: "Exemple:\n1. Els mestres de suport ja assignats a l'aula tenen prioritat m\xE0xima.\n2. Despr\xE9s, els que fan suport en una altra aula.\n3. L'equip directiu supleix en \xFAltim lloc.\n4. Si hi ha empat, ordenar alfab\xE8ticament."
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "bg-slate-50 border border-slate-200 rounded-xl p-3"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-slate-500 flex items-start gap-1.5"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-blue-500 shrink-0"
+  }, "\uD83D\uDD12"), "Noms codificats abans d'enviar a la IA. Un cop guardats, les cerques funcionen ", /*#__PURE__*/React.createElement("strong", null, "100% localment"), ".")), criterisError && /*#__PURE__*/React.createElement("div", {
+    className: "bg-red-50 border border-red-200 rounded-xl p-3"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-red-600 text-sm font-medium"
+  }, "\u26A0 ", criterisError)), /*#__PURE__*/React.createElement("button", {
+    onClick: handleInterpretarCriteris,
+    disabled: isInterpretant || !criterisText.trim(),
+    className: "w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
+  }, isInterpretant ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
+  }), "Interpretant...") : "⚙️ Guardar i interpretar criteris"))), reglesEstructurades ? /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-2xl border border-emerald-200 overflow-hidden"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "px-5 py-3 border-b border-emerald-100 bg-emerald-50 flex items-center justify-between"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-2"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-emerald-600"
+  }, "\u2713"), /*#__PURE__*/React.createElement("h3", {
+    className: "font-bold text-emerald-700 text-sm"
+  }, "Regles actives")), /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      setReglesEstructurades("");
+      setReglesJSON(null);
+      setCriterisGuardats(false);
+      storageSet(SK.regles, {
+        text: "",
+        json: "{}"
+      });
+    },
+    className: "text-xs text-slate-400 hover:text-red-500 transition-colors"
+  }, "Esborrar")), /*#__PURE__*/React.createElement("div", {
+    className: "p-5"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-slate-600 leading-relaxed whitespace-pre-wrap"
+  }, reglesEstructurades))) : /*#__PURE__*/React.createElement("div", {
+    className: "bg-slate-50 border border-slate-200 rounded-2xl p-5 text-center"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-slate-400 text-sm"
+  }, "Encara no hi ha criteris interpretats."), /*#__PURE__*/React.createElement("p", {
+    className: "text-slate-400 text-xs mt-1"
+  }, "Escriu les teves regles i prem el bot\xF3.")), /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-2xl border border-slate-200 overflow-hidden"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "px-5 py-4 border-b border-slate-100 flex items-center justify-between"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+    className: "font-bold text-slate-800"
+  }, "Franges hor\xE0ries"), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-slate-400 mt-0.5"
+  }, "Adapta els horaris de la teva escola")), /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      setFrangesDraft([...franges]);
+      setEditantFranges(!editantFranges);
+    },
+    className: `text-xs font-bold px-3 py-1.5 rounded-lg transition-colors ${editantFranges ? "bg-slate-200 text-slate-600" : "bg-blue-100 text-blue-600 hover:bg-blue-200"}`
+  }, editantFranges ? "Cancel·lar" : "Editar")), /*#__PURE__*/React.createElement("div", {
+    className: "p-4"
+  }, !editantFranges ? /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-wrap gap-2"
+  }, franges.map(f => /*#__PURE__*/React.createElement("div", {
+    key: f.id,
+    className: "flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-xs font-bold text-blue-600"
+  }, f.label)))) : /*#__PURE__*/React.createElement("div", {
+    className: "space-y-3"
+  }, frangesDraft.map((f, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    className: "flex items-center gap-2"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-xs text-slate-400 w-4"
+  }, i + 1, "."), /*#__PURE__*/React.createElement("input", {
+    type: "time",
+    value: f.inici,
+    onChange: e => setFrangesDraft(prev => prev.map((x, j) => j === i ? {
+      ...x,
+      inici: e.target.value
+    } : x)),
+    className: "flex-1 border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-400"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "text-xs text-slate-400"
+  }, "\u2013"), /*#__PURE__*/React.createElement("input", {
+    type: "time",
+    value: f.fi,
+    onChange: e => setFrangesDraft(prev => prev.map((x, j) => j === i ? {
+      ...x,
+      fi: e.target.value
+    } : x)),
+    className: "flex-1 border border-slate-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-400"
+  }))), /*#__PURE__*/React.createElement("button", {
+    onClick: handleGuardarFranges,
+    className: "w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm py-2.5 rounded-xl transition-colors mt-2"
+  }, "Guardar franges \u2192"))))), page === "horaris" && /*#__PURE__*/React.createElement("div", {
+    className: "p-4 space-y-4"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-2xl border border-slate-200 overflow-hidden"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "px-5 py-4 border-b border-slate-100 flex items-center justify-between"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+    className: "font-bold text-slate-800"
+  }, "Gesti\xF3 d'horaris"), /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-slate-400 mt-0.5"
+  }, "Es guarden autom\xE0ticament en aquest dispositiu")), /*#__PURE__*/React.createElement("span", {
+    className: `text-xs font-bold px-2.5 py-1 rounded-full ${nomsMestres.length > 0 ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"}`
+  }, nomsMestres.length, " mestres")), /*#__PURE__*/React.createElement("div", {
+    className: "p-5 space-y-4"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    className: "text-xs font-bold text-slate-500 uppercase tracking-wide block mb-1.5"
+  }, "\uD83D\uDCCE Importar des de Google Drive"), /*#__PURE__*/React.createElement(DriveImport, {
+    onImport: async text => {
+      setRawText(text);
+      try {
+        const parsed = parseHoraris(text, franges);
+        if (Object.keys(parsed).length) {
+          setMestres(parsed);
+          storageSet(SK.horaris, {
+            text
+          });
+          setParseError("");
+        } else setParseError("No s'ha pogut llegir cap mestre del Drive.");
+      } catch {
+        setParseError("Error processant.");
+      }
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "flex items-center gap-3"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex-1 h-px bg-slate-200"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "text-xs text-slate-400 font-medium"
+  }, "o puja fitxers"), /*#__PURE__*/React.createElement("div", {
+    className: "flex-1 h-px bg-slate-200"
+  })), /*#__PURE__*/React.createElement("div", {
+    onDragOver: e => {
+      e.preventDefault();
+    },
+    onDrop: handleDrop,
+    className: "border-2 border-dashed border-slate-300 rounded-2xl p-6 bg-slate-50 flex flex-col items-center gap-3 text-center"
+  }, isLoadingFitxer ? /*#__PURE__*/React.createElement("div", {
+    className: "flex flex-col items-center gap-2 py-2"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "w-7 h-7 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"
+  }), /*#__PURE__*/React.createElement("p", {
+    className: "text-sm text-blue-600 font-medium"
+  }, "Llegint fitxers...")) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "text-3xl"
+  }, "\uD83D\uDCC2"), /*#__PURE__*/React.createElement("p", {
+    className: "text-slate-600 font-semibold text-sm"
+  }, "Selecciona els fitxers d'horaris"), /*#__PURE__*/React.createElement("p", {
+    className: "text-slate-400 text-xs"
+  }, ".docx i .txt \xB7 M\xFAltiples alhora"), /*#__PURE__*/React.createElement("label", {
+    style: {
+      background: "#2563eb",
+      color: "white",
+      fontWeight: "700",
+      padding: "10px 24px",
+      borderRadius: "12px",
+      cursor: "pointer",
+      fontSize: "14px",
+      display: "inline-block"
+    }
+  }, "Obrir fitxers", /*#__PURE__*/React.createElement("input", {
+    type: "file",
+    multiple: true,
+    accept: ".docx,.txt",
+    onChange: handleFileInput,
+    style: {
+      display: "none"
+    }
+  })))), fitxers.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "space-y-1.5"
+  }, fitxers.map((f, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    className: `flex items-center gap-2 rounded-xl px-3 py-2 text-xs ${f.ok ? "bg-emerald-50 border border-emerald-200" : "bg-red-50 border border-red-200"}`
+  }, /*#__PURE__*/React.createElement("span", null, f.ok ? "✅" : "❌"), /*#__PURE__*/React.createElement("span", {
+    className: `font-medium truncate ${f.ok ? "text-slate-700" : "text-red-600"}`
+  }, f.nom))), nomsMestres.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "bg-blue-50 border border-blue-200 rounded-xl px-3 py-2 text-xs text-blue-700 font-medium"
+  }, "\u2713 S'han carregat ", nomsMestres.length, " mestres correctament")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    className: "text-xs font-bold text-slate-500 uppercase tracking-wide mb-1.5"
+  }, "O edita directament"), /*#__PURE__*/React.createElement("textarea", {
+    value: rawText,
+    onChange: e => setRawText(e.target.value),
+    className: "w-full h-36 border border-slate-200 rounded-xl p-3 text-xs font-mono text-slate-600 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 bg-slate-50",
+    placeholder: "NOM COGNOM\nDilluns: 9h Classe | 10h T.P. | 11:30h Suport 3A +Nom"
+  }), parseError && /*#__PURE__*/React.createElement("p", {
+    className: "text-red-500 text-xs mt-1"
+  }, "\u26A0 ", parseError), /*#__PURE__*/React.createElement("div", {
+    className: "flex gap-2 mt-2"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      try {
+        const p = parseHoraris(rawText, franges);
+        if (!Object.keys(p).length) {
+          setParseError("No s'ha llegit cap mestre.");
+          return;
+        }
+        setMestres(p);
+        setParseError("");
+        storageSet(SK.horaris, {
+          text: rawText
+        });
+      } catch {
+        setParseError("Error.");
+      }
+    },
+    className: "flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm py-2.5 rounded-xl transition-colors"
+  }, "Processar i guardar \u2192"), /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      if (!confirm("Segur?")) return;
+      setRawText("");
+      setMestres({});
+      setFitxers([]);
+      storageSet(SK.horaris, {
+        text: ""
+      });
+    },
+    className: "px-4 text-sm text-slate-400 hover:text-red-500 transition-colors font-medium"
+  }, "Esborrar"))))), nomsMestres.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-2xl border border-slate-200 overflow-hidden"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "px-5 py-3 border-b border-slate-100"
+  }, /*#__PURE__*/React.createElement("h3", {
+    className: "font-bold text-slate-700 text-sm"
+  }, "Mestres carregats (", nomsMestres.length, ")")), /*#__PURE__*/React.createElement("div", {
+    className: "p-4 flex flex-wrap gap-2"
+  }, nomsMestres.map(nom => /*#__PURE__*/React.createElement("div", {
+    key: nom,
+    className: "flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "w-1.5 h-1.5 rounded-full bg-emerald-500"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "text-xs font-semibold text-slate-700"
+  }, cap(nom)))))), /*#__PURE__*/React.createElement("div", {
+    className: "bg-slate-100 rounded-2xl border border-slate-200 p-4"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "text-xs text-slate-500 flex items-start gap-1.5"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "shrink-0"
+  }, "\uD83D\uDCBE"), "Les dades es guarden en aquest navegador (localStorage). No es pugen a cap servidor.")))));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+</script></body></html>
