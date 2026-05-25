@@ -1409,6 +1409,7 @@ video {
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <style>*{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}body{margin:0;padding:0;background:#f1f5f9;}</style>
 </head><body><div id="root"></div><script>
@@ -1850,6 +1851,93 @@ function assignacioMultiple(mestres, totsAbsents, dia, franjesSeleccionades, con
 }
 
 // ─── LECTOR FITXERS ──────────────────────────────────────────────────────────
+// Llegeix .docx directament de l'XML (sense mammoth) per suportar content controls (SDT)
+async function readDocxXML(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = async e => {
+      try {
+        // Descomprimim el .docx (és un ZIP)
+        const JSZip = window.JSZip;
+        if (!JSZip) throw new Error("JSZip no disponible");
+        const zip = await JSZip.loadAsync(e.target.result);
+        const xmlFile = zip.file("word/document.xml");
+        if (!xmlFile) throw new Error("No s'ha trobat document.xml");
+        const xmlText = await xmlFile.async("text");
+        res(xmlText);
+      } catch (err) {
+        rej(err);
+      }
+    };
+    r.onerror = () => rej(new Error("Error llegint fitxer"));
+    r.readAsArrayBuffer(file);
+  });
+}
+async function ensureJSZip() {
+  if (window.JSZip) return;
+  return new Promise((res, rej) => {
+    const s = document.createElement("script");
+    s.src = "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
+    s.onload = res;
+    s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+
+// Parser XML de document.xml — llegeix taules dins SDT i taules normals
+function parseDocxXML(xmlText, nomMestre, frangesConfig) {
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+  const NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+  function getCellText(cell) {
+    const texts = cell.getElementsByTagNameNS(NS, "t");
+    return Array.from(texts).map(t => t.textContent || "").join("").trim();
+  }
+
+  // Busquem totes les taules (tant dins SDT com directes)
+  const allTables = xmlDoc.getElementsByTagNameNS(NS, "tbl");
+  const horari = {};
+  for (const tbl of allTables) {
+    const rows = tbl.getElementsByTagNameNS(NS, "tr");
+    if (rows.length < 3) continue;
+
+    // Comprovem si la primera fila conté els dies
+    const firstRow = rows[0];
+    const firstCells = Array.from(firstRow.getElementsByTagNameNS(NS, "tc")).map(c => getCellText(c).toUpperCase());
+    const hasDies = firstCells.some(c => c.includes("DILLUNS") || c.includes("DIMARTS"));
+    if (!hasDies) continue;
+
+    // Mapem columnes → dies
+    const colDia = {};
+    firstCells.forEach((c, i) => {
+      const dia = DIES.find(d => c.includes(d.toUpperCase()));
+      if (dia) colDia[i] = dia;
+    });
+
+    // Llegim cada fila de dades
+    for (let r = 1; r < rows.length; r++) {
+      const cells = Array.from(rows[r].getElementsByTagNameNS(NS, "tc"));
+      if (!cells.length) continue;
+      const col0 = getCellText(cells[0]);
+      const franja = canonFranja(col0, frangesConfig);
+      if (!franja) continue;
+      cells.forEach((cell, i) => {
+        if (!colDia[i]) return;
+        const dia = colDia[i];
+        const act = getCellText(cell);
+        if (!act || isSoroll(act)) return;
+        if (!horari[dia]) horari[dia] = {};
+        if (!horari[dia][franja]) {
+          horari[dia][franja] = act;
+        } else {
+          // Doble activitat
+          horari[dia][franja] = "DOBLE:" + horari[dia][franja] + " / " + act;
+        }
+      });
+    }
+  }
+  return horari;
+}
 async function readFile(file) {
   if (file.name.endsWith(".txt")) return new Promise((res, rej) => {
     const r = new FileReader();
@@ -1857,21 +1945,38 @@ async function readFile(file) {
     r.onerror = () => rej(new Error("Error .txt"));
     r.readAsText(file, "UTF-8");
   });
-  if (file.name.endsWith(".docx")) return new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = async e => {
-      try {
-        if (!window.mammoth) throw new Error();
-        res((await window.mammoth.extractRawText({
-          arrayBuffer: e.target.result
-        })).value);
-      } catch (err) {
-        rej(err);
-      }
-    };
-    r.onerror = () => rej(new Error("Error .docx"));
-    r.readAsArrayBuffer(file);
-  });
+  if (file.name.endsWith(".docx")) {
+    // Intentem primer amb XML directe (millor per SDT)
+    try {
+      await ensureJSZip();
+      const xmlText = await readDocxXML(file);
+      return {
+        tipus: "xml",
+        xml: xmlText
+      };
+    } catch {
+      // Fallback a mammoth
+      return new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = async e => {
+          try {
+            await ensureMammoth();
+            const result = await window.mammoth.extractRawText({
+              arrayBuffer: e.target.result
+            });
+            res({
+              tipus: "text",
+              text: result.value
+            });
+          } catch (err) {
+            rej(err);
+          }
+        };
+        r.onerror = () => rej(new Error("Error .docx"));
+        r.readAsArrayBuffer(file);
+      });
+    }
+  }
   throw new Error("Format no suportat");
 }
 async function ensureMammoth() {
@@ -2125,28 +2230,33 @@ function App() {
   const processarFitxers = useCallback(async files => {
     setIsLoadingFitxer(true);
     setParseError("");
-    await ensureMammoth();
+    await ensureJSZip();
     const nous = [];
     const mestresParsats = {};
     for (const f of files) {
       try {
-        const contingut = await readFile(f);
         const nomMestre = nomMestreDelFitxer(f.name);
         if (!nomMestre || nomMestre.length < 3) {
           nous.push({
             nom: f.name,
             ok: false,
-            err: "No s'ha pogut extreure el nom del mestre del fitxer"
+            err: "No s'ha pogut extreure el nom del mestre"
           });
           continue;
         }
-        // Parsem l'horari d'aquest fitxer i assignem el nom extret del fitxer
-        const parsedFitxer = parseHoraris(contingut, franges);
-        // Agafem el primer mestre trobat (hauria de ser l'únic per fitxer)
-        const noms = Object.keys(parsedFitxer);
-        if (noms.length > 0) {
-          // Usem el nom del fitxer com a clau, no el que ha trobat el parser
-          mestresParsats[nomMestre] = parsedFitxer[noms[0]];
+        const resultat = await readFile(f);
+        let horariMestre = {};
+        if (resultat.tipus === "xml") {
+          // Parser XML directe (millor per SDT)
+          horariMestre = parseDocxXML(resultat.xml, nomMestre, franges);
+        } else {
+          // Fallback: parser de text
+          const parsed = parseHoraris(resultat.text, franges);
+          const noms = Object.keys(parsed);
+          if (noms.length > 0) horariMestre = parsed[noms[0]];
+        }
+        if (Object.keys(horariMestre).length > 0) {
+          mestresParsats[nomMestre] = horariMestre;
           nous.push({
             nom: f.name,
             ok: true,
@@ -2156,7 +2266,7 @@ function App() {
           nous.push({
             nom: f.name,
             ok: false,
-            err: "No s'ha trobat l'horari dins el document"
+            err: "No s'ha pogut llegir l'horari del document"
           });
         }
       } catch (e) {
@@ -2174,7 +2284,6 @@ function App() {
         ...mestresParsats
       };
       setMestres(mestresFinals);
-      // Guardem en format text pla per al storage
       const textGuardat = Object.entries(mestresFinals).map(([nom, horari]) => {
         const lines = [nom];
         for (const dia of DIES) {
@@ -2190,7 +2299,7 @@ function App() {
       });
       setParseError("");
     } else {
-      setParseError("No s'ha pogut llegir cap horari. Comprova que els fitxers són correctes.");
+      setParseError("No s'ha pogut llegir cap horari.");
     }
     setIsLoadingFitxer(false);
   }, [franges, mestres]);
