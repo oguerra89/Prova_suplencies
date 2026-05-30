@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Gestor de Suplències Intel·ligent</title>
+  <title>Gestor de Suplències de l'Escola</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   
@@ -27,92 +27,63 @@
   <script type="text/babel">
     const { useState, useEffect } = React;
 
-    // Funció auxiliar per posar la primera lletra en majúscula
     const cap = (nom) => nom ? nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase() : '';
 
     function AppCobrirSuplencies() {
-      // 1. Estats de l'aplicació buits de base (sense dades inventades)
+      // Estats amb memòria de l'ordinador (LocalStorage)
       const [mestres, setMestres] = useState(() => {
-        const desat = localStorage.getItem('suplencies_mestres');
-        return desat ? JSON.parse(desat) : []; // Buit si no hi ha res desat
+        const desat = localStorage.getItem('suplencies_mestres_v2');
+        return desat ? JSON.parse(desat) : [];
+      });
+
+      const [criterisText, setCriterisText] = useState(() => {
+        const desat = localStorage.getItem('suplencies_criteris_text');
+        return desat ? desat : 'Escriu aquí els criteris de l\'escola...\nExemple:\n1. Prioritzar mestres del mateix cicle.\n2. Evitar que un mestre faci dues hores seguides.';
       });
 
       const [comptadorSuplencies, setComptadorSuplencies] = useState(() => {
-        const desat = localStorage.getItem('suplencies_comptador');
+        const desat = localStorage.getItem('suplencies_comptador_v2');
         return desat ? JSON.parse(desat) : {};
       });
 
-      const [criteris, setCriteris] = useState(() => {
-        const desat = localStorage.getItem('suplencies_criteris');
-        return desat ? JSON.parse(desat) : { mateixCicle: true, menysSuplencies: true };
-      });
-
-      const [incidencia, setIncidencia] = useState({ mestreAbsent: '', hora: 'H1', cicle: 'Tots' });
-      const [candidatsRecomanats, setCandidatsRecomanats] = useState([]);
+      const [incidencia, setIncidencia] = useState({ mestreAbsent: '', hora: 'H1' });
+      const [disponibles, setDisponibles] = useState([]);
       const [isCarregant, setIsCarregant] = useState(false);
-      const [origenDades, setOrigenDades] = useState(mestres.length > 0 ? 'Memòria activa' : 'Cap fitxer carregat');
+      const [nomFitxer, setNomFitxer] = useState(mestres.length > 0 ? 'Horaris guardats a la memòria' : 'Cap fitxer carregat');
 
-      // Persistència a la memòria local (LocalStorage)
+      // Guardar a la memòria automàticament
       useEffect(() => {
-        localStorage.setItem('suplencies_mestres', JSON.stringify(mestres));
+        localStorage.setItem('suplencies_mestres_v2', JSON.stringify(mestres));
       }, [mestres]);
 
       useEffect(() => {
-        localStorage.setItem('suplencies_comptador', JSON.stringify(comptadorSuplencies));
+        localStorage.setItem('suplencies_criteris_text', criterisText);
+      }, [criterisText]);
+
+      useEffect(() => {
+        localStorage.setItem('suplencies_comptador_v2', JSON.stringify(comptadorSuplencies));
       }, [comptadorSuplencies]);
 
-      useEffect(() => {
-        localStorage.setItem('suplencies_criteris', JSON.stringify(criteris));
-      }, [criteris]);
-
-      // 2. Lògica de l'algorisme de tria
+      // Filtrar mestres disponibles segons l'hora
       useEffect(() => {
         if (mestres.length === 0) {
-          setCandidatsRecomanats([]);
+          setDisponibles([]);
           return;
         }
 
-        // Filtrar mestres lliures o de guàrdia/suport en l'hora de la incidència
         let filtrats = mestres.filter(m => {
           const estatHora = m[incidencia.hora]?.toUpperCase() || '';
           return estatHora === 'LLIURE' || estatHora === 'GUÀRDIA' || estatHora === 'GUARDIA' || estatHora === 'SUPORT';
         });
 
-        // Excloure el mestre absent
         if (incidencia.mestreAbsent) {
           filtrats = filtrats.filter(m => m.nom.toLowerCase() !== incidencia.mestreAbsent.toLowerCase());
         }
 
-        // Puntuar els candidats segons criteris de l'escola
-        const candidatsPuntuats = filtrats.map(m => {
-          let puntuacio = 0;
-          let motius = [];
+        setDisponibles(filtrats);
+      }, [incidencia, mestres]);
 
-          // Criteri: Mateix cicle escolar
-          if (criteris.mateixCicle && m.cicle && incidencia.cicle !== 'Tots') {
-            if (m.cicle.toLowerCase() === incidencia.cicle.toLowerCase()) {
-              puntuacio += 10;
-              motius.push(`Del mateix cicle (${m.cicle})`);
-            }
-          }
-
-          // Criteri: Equitat (prioritza qui hagi treballat menys)
-          if (criteris.menysSuplencies) {
-            const fetes = comptadorSuplencies[m.nom] || 0;
-            puntuacio -= fetes * 3; 
-            motius.push(`${fetes} suplències acumulades`);
-          }
-
-          return { ...m, puntuacio, motius };
-        });
-
-        // Ordenar resultats
-        candidatsPuntuats.sort((a, b) => b.puntuacio - a.puntuacio);
-        setCandidatsRecomanats(candidatsPuntuats);
-
-      }, [incidencia, criteris, mestres, comptadorSuplencies]);
-
-      // 3. Extreure dades reals de la taula del Word (.docx)
+      // Llegir el document Word
       const processarDocx = (e) => {
         const fitxer = e.target.files[0];
         if (!fitxer) return;
@@ -122,253 +93,171 @@
 
         reader.onload = function (event) {
           const arrayBuffer = event.target.result;
-          
-          // Forcem a Mammoth a extreure-ho com a HTML per poder analitzar fàcilment les taules <table>
           mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
             .then(function (result) {
-              const htmlText = result.value;
-              parsejarTaulaWord(htmlText, fitxer.name);
+              parsejarTaula(result.value, fitxer.name);
             })
-            .catch(function (err) {
-              alert("Error en descodificar el document de Word.");
+            .catch(function () {
+              alert("Error en llegir el document de Word.");
               setIsCarregant(false);
             });
         };
-
         reader.readAsArrayBuffer(fitxer);
       };
 
-      // Funció que processa el codi HTML de la taula generat pel Word
-      const parsejarTaulaWord = (htmlText, nomFitxer) => {
+      const parsejarTaula = (htmlText, nom) => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, 'text/html');
-        const filesTaula = doc.querySelectorAll('tr');
-        
-        const mestresImportats = [];
+        const files = doc.querySelectorAll('tr');
+        const llistaMestres = [];
 
-        filesTaula.forEach((fila, index) => {
+        files.forEach((fila, index) => {
           const celdes = fila.querySelectorAll('td');
-          // Ignorem la primera fila si és la capçalera (Nom, Cicle, H1...)
-          if (index === 0 || celdes.length < 3) return;
+          if (index === 0 || celdes.length < 3) return; // Capçalera o fila buida
 
-          const nom = celdes[0]?.textContent?.trim() || '';
-          const cicle = celdes[1]?.textContent?.trim() || '';
+          const nomMestre = celdes[0]?.textContent?.trim() || '';
+          const cicleMestre = celdes[1]?.textContent?.trim() || '';
           const h1 = celdes[2]?.textContent?.trim() || '';
           const h2 = celdes[3]?.textContent?.trim() || '';
           const h3 = celdes[4]?.textContent?.trim() || '';
 
-          if (nom) {
-            mestresImportats.push({
-              nom: nom,
-              cicle: cicle,
-              H1: h1,
-              H2: h2,
-              H3: h3
-            });
+          if (nomMestre) {
+            llistaMestres.push({ nom: nomMestre, cicle: cicleMestre, H1: h1, H2: h2, H3: h3 });
           }
         });
 
-        if (mestresImportats.length === 0) {
-          alert("No s'ha pogut extreure cap taula vàlida del Word. Assegura't que l'horari està estructurat dins d'una taula.");
+        if (llistaMestres.length === 0) {
+          alert("No s'ha trobat cap taula d'horaris vàlida al Word.");
           setIsCarregant(false);
           return;
         }
 
-        setMestres(mestresImportats);
-        
-        // Inicialitzar comptadors per als nous mestres
-        setComptadorSuplencies(prev => {
-          const nouComptador = { ...prev };
-          mestresImportats.forEach(m => {
-            if (nouComptador[m.nom] === undefined) nouComptador[m.nom] = 0;
-          });
-          return nouComptador;
-        });
-
-        setOrigenDades(`Fitxer actiu: ${nomFitxer}`);
+        setMestres(llistaMestres);
+        setNomFitxer(`Fitxer actiu: ${nom}`);
         setIsCarregant(false);
-        alert(`S'han carregat correctament ${mestresImportats.length} mestres de la taula del Word!`);
       };
 
-      const assignarSuplencia = (nomMestre) => {
-        setComptadorSuplencies(prev => ({
-          ...prev,
-          [nomMestre]: (prev[nomMestre] || 0) + 1
-        }));
-        alert(`Suplència assignada a ${cap(nomMestre)}.`);
+      const ferSuplencia = (nom) => {
+        setComptadorSuplencies(prev => ({ ...prev, [nom]: (prev[nom] || 0) + 1 }));
+        alert(`S'ha comptabilitzat la suplència per a ${cap(nom)}.`);
       };
 
-      const esborrarMemoria = () => {
-        if (confirm("Vols buidar les dades actuals i començar de zero?")) {
-          localStorage.clear();
+      const esborrarTot = () => {
+        if (confirm("Vols buidar la llista de mestres i els comptadors?")) {
           setMestres([]);
           setComptadorSuplencies({});
-          setOrigenDades('Cap fitxer carregat');
+          setNomFitxer('Cap fitxer carregat');
         }
       };
 
       return (
         <div className="min-w-screen min-h-screen bg-slate-50 p-4 md:p-6 font-sans text-slate-800">
-          <div className="max-w-4xl mx-auto space-y-6">
+          <div className="max-w-6xl mx-auto space-y-6">
             
-            {/* Capçalera */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            {/* Capçalera única */}
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
-                <h1 className="text-xl md:text-2xl font-bold text-slate-900 mb-1">Gestor de Suplències</h1>
-                <p className="text-xs md:text-sm text-slate-500">Lectura de taules .docx en temps real amb memòria de seguretat.</p>
+                <h1 className="text-xl md:text-2xl font-bold text-slate-900">Gestor de Suplències Escolar</h1>
+                <p className="text-xs text-slate-400 mt-0.5">{nomFitxer}</p>
               </div>
-              <span className="text-xs bg-slate-100 text-slate-600 font-medium px-3 py-1.5 rounded-xl border border-slate-200">
-                {origenDades}
-              </span>
-            </div>
-
-            {/* Pas 1: Pujada del Word original */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
-              <h2 className="font-bold text-slate-700 text-base">1. Carregar Horaris Escolar (.docx de Word)</h2>
-              <p className="text-xs text-slate-500">L'aplicació analitzarà la taula de l'arxiu per buscar qui està "Lliure", "Guàrdia" o "Suport".</p>
-              
-              <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+              <div className="flex gap-2 w-full sm:w-auto">
                 <input 
                   type="file" 
                   accept=".docx" 
-                  onChange={processarDocx}
-                  className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border border-slate-200 rounded-xl p-1 bg-slate-50"
+                  onChange={processarDocx} 
+                  className="text-xs border border-slate-200 rounded-xl p-2 bg-slate-50 cursor-pointer flex-1 sm:flex-none"
                 />
                 {mestres.length > 0 && (
-                  <button 
-                    onClick={esborrarMemoria}
-                    className="text-xs text-red-500 hover:text-red-700 font-medium border border-red-200 hover:bg-red-50 px-3 py-2 rounded-xl transition-all shrink-0"
-                  >
-                    Buidar dades
+                  <button onClick={esborrarTot} className="text-xs text-red-500 border border-red-200 rounded-xl px-3 hover:bg-red-50 font-medium transition-colors">
+                    Buidar
                   </button>
                 )}
               </div>
             </div>
 
-            {/* Formulari i criteris d'ajust */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Pantalla partida de treball */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
               
-              {/* Absència */}
-              <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
-                <h2 className="font-bold text-slate-700 text-base">2. Detalls de l'Absència</h2>
-                
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">Mestre absent (Opcional)</label>
-                  <input 
-                    type="text" 
-                    placeholder="Escriu el nom per excloure'l..." 
-                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50/50"
-                    value={incidencia.mestreAbsent}
-                    onChange={(e) => setIncidencia({...incidencia, mestreAbsent: e.target.value})}
-                  />
+              {/* Meitat Esquerra: El quadre de text lliure per als criteris */}
+              <div className="md:col-span-5 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col h-[500px]">
+                <div className="mb-3">
+                  <h2 className="font-bold text-slate-800 text-base">Criteris d'Assignació del Centre</h2>
+                  <p className="text-xs text-slate-400">Qualsevol mestre pot modificar aquest full de ruta. Es guarda sol.</p>
                 </div>
+                <textarea
+                  value={criterisText}
+                  onChange={(e) => setCriterisText(e.target.value)}
+                  className="w-full flex-1 p-4 border border-slate-200 rounded-xl bg-slate-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono resize-none text-slate-700"
+                  placeholder="Escriu aquí les vostres normes internrs..."
+                />
+              </div>
 
-                <div className="grid grid-cols-2 gap-3">
+              {/* Meitat Dreta: L'Eina automàtica de cerca */}
+              <div className="md:col-span-7 space-y-6 flex flex-col justify-start">
+                
+                {/* Formularet de Baixa */}
+                <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">Mestre que falta (Opcional)</label>
+                    <input 
+                      type="text" 
+                      placeholder="Nom per excloure'l..." 
+                      value={incidencia.mestreAbsent}
+                      onChange={(e) => setIncidencia({...incidencia, mestreAbsent: e.target.value})}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
                   <div>
                     <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">Hora a cobrir</label>
                     <select 
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm bg-white"
                       value={incidencia.hora}
                       onChange={(e) => setIncidencia({...incidencia, hora: e.target.value})}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm bg-white border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="H1">1a Hora</option>
                       <option value="H2">2a Hora</option>
                       <option value="H3">3a Hora</option>
                     </select>
                   </div>
-                  <div>
-                    <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">Cicle del Grup</label>
-                    <select 
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm bg-white"
-                      value={incidencia.cicle}
-                      onChange={(e) => setIncidencia({...incidencia, cicle: e.target.value})}
-                    >
-                      <option value="Tots">Qualsevol cicle</option>
-                      <option value="Infantil">Infantil</option>
-                      <option value="Primària">Primària</option>
-                    </select>
+                </div>
+
+                {/* Resultat de qui està lliure realment */}
+                <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex-1 min-h-[300px] flex flex-col">
+                  <div className="px-5 py-3 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                    <h3 className="font-bold text-slate-700 text-sm">Mestres amb l'hora disponible ({disponibles.length})</h3>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  </div>
+
+                  <div className="p-4 divide-y divide-slate-100 overflow-y-auto flex-1">
+                    {mestres.length === 0 ? (
+                      <div className="text-center py-12 text-slate-400 text-sm">
+                        Carrega un document Word (.docx) amb la graella per veure qui està lliure.
+                      </div>
+                    ) : disponibles.length === 0 ? (
+                      <div className="text-center py-12 text-slate-400 text-sm">
+                        No hi ha cap mestre lliure o de guàrdia en aquesta franja.
+                      </div>
+                    ) : (
+                      disponibles.map(m => (
+                        <div key={m.nom} className="flex items-center justify-between py-3 first:pt-0 last:pb-0 gap-4">
+                          <div>
+                            <h4 className="font-bold text-slate-800 text-sm">{cap(m.nom)}</h4>
+                            <p className="text-xs text-slate-400 mt-0.5">
+                              Cicle: {m.cicle || 'No especificat'} • Suplències fetes: <span className="font-semibold text-slate-600">{comptadorSuplencies[m.nom] || 0}</span>
+                            </p>
+                          </div>
+                          <button 
+                            onClick={() => ferSuplencia(m.nom)}
+                            className="bg-slate-900 hover:bg-blue-600 text-white font-medium text-xs px-3 py-1.5 rounded-xl transition-colors shrink-0"
+                          >
+                            Comptabilitzar
+                          </button>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
-              </div>
 
-              {/* Criteris */}
-              <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
-                <h2 className="font-bold text-slate-700 text-base">3. Filtres i Criteris d'Ajust</h2>
-                
-                <label className="flex items-start gap-3 p-2.5 hover:bg-slate-50 rounded-xl cursor-pointer transition-colors">
-                  <input 
-                    type="checkbox" 
-                    checked={criteris.mateixCicle}
-                    onChange={(e) => setCriteris({...criteris, mateixCicle: e.target.checked})}
-                    className="w-4 h-4 text-blue-600 border-slate-300 rounded mt-0.5"
-                  />
-                  <div>
-                    <span className="text-sm font-semibold block">Prioritzar el mateix cicle</span>
-                    <span className="text-xs text-slate-400">Recomana abans els mestres del mateix cicle afectat.</span>
-                  </div>
-                </label>
-
-                <label className="flex items-start gap-3 p-2.5 hover:bg-slate-50 rounded-xl cursor-pointer transition-colors">
-                  <input 
-                    type="checkbox" 
-                    checked={criteris.menysSuplencies}
-                    onChange={(e) => setCriteris({...criteris, menysSuplencies: e.target.checked})}
-                    className="w-4 h-4 text-blue-600 border-slate-300 rounded mt-0.5"
-                  />
-                  <div>
-                    <span className="text-sm font-semibold block">Garantir equitat de guàrdies</span>
-                    <span className="text-xs text-slate-400">Ordena automàticament segons qui porti menys hores fetes.</span>
-                  </div>
-                </label>
-              </div>
-
-            </div>
-
-            {/* Resultats */}
-            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-              <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/70 flex justify-between items-center">
-                <h3 className="font-bold text-slate-800 text-sm md:text-base">Mestres idonis recomanats ({candidatsRecomanats.length})</h3>
-                <span className="text-xs bg-emerald-50 text-emerald-700 font-bold px-2.5 py-1 rounded-full border border-emerald-200 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Algorisme Net
-                </span>
-              </div>
-
-              <div className="p-4 divide-y divide-slate-100">
-                {mestres.length === 0 ? (
-                  <div className="text-center py-10 text-slate-400 text-sm">
-                    Llista buida. Puja el fitxer .docx de l'escola per començar.
-                  </div>
-                ) : candidatsRecomanats.length === 0 ? (
-                  <div className="text-center py-10 text-slate-500 text-sm">
-                    No hi ha cap mestre disponible (Lliure/Guàrdia/Suport) per a l'hora seleccionada.
-                  </div>
-                ) : (
-                  candidatsRecomanats.map((candidat, index) => (
-                    <div key={candidat.nom} className="flex items-center justify-between py-3.5 first:pt-0 last:pb-0 gap-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 border border-blue-100">
-                          #{index + 1}
-                        </div>
-                        <div>
-                          <h4 className="font-bold text-slate-800 text-sm">{cap(candidat.nom)}</h4>
-                          <div className="flex flex-wrap gap-1.5 mt-1">
-                            {candidat.motius.map((motiu, i) => (
-                              <span key={i} className="text-[10px] bg-slate-100 border border-slate-200 text-slate-600 px-2 py-0.5 rounded-md font-medium">
-                                {motiu}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <button 
-                        onClick={() => assignarSuplencia(candidat.nom)}
-                        className="bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow-sm active:scale-95 shrink-0"
-                      >
-                        Assignar
-                      </button>
-                    </div>
-                  ))
-                )}
               </div>
             </div>
 
