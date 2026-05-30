@@ -1,233 +1,173 @@
-<!DOCTYPE html>
-<html lang="ca">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Cobrir Suplencies</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+<!DOCTYPE html><html lang='ca'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'><title>Cobrir Suplencies</title>
+<style>*, ::before, ::after {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
 
-  <div class="min-w-screen min-h-screen p-4 md:p-6">
-    <div class="max-w-4xl mx-auto space-y-4">
-      
-      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-        <div class="flex justify-between items-center mb-4">
-          <h1 class="text-xl font-bold text-slate-900">Suplències I.E Tramuntana</h1>
-          <button 
-            id="btnBuidar" 
-            class="hidden text-xs text-red-500 border border-red-200 hover:bg-red-50 rounded-xl px-3 py-1.5 font-medium transition-colors"
-          >
-            Buidar llista
-          </button>
-        </div>
-        
-        <div class="flex flex-col sm:flex-row gap-2">
-          <input 
-            type="text" 
-            id="inputUrl"
-            placeholder="Enganxa l'enllaç del Drive o Sheets aquí..." 
-            class="flex-1 px-4 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50/50"
-          />
-          <button 
-            id="btnCarregar"
-            class="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2 rounded-xl transition-colors flex items-center justify-center gap-2"
-          >
-            <span id="textCarregar">Carregar</span>
-          </button>
-        </div>
-      </div>
+::backdrop {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
 
-      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
-        <div class="mb-2">
-          <h3 class="font-bold text-slate-800 text-sm">Criteris de Suplència Actius</h3>
-          <p class="text-xs text-slate-400 mt-0.5">Escriu lliurement les teves normes o els noms dels mestres prioritaris. La llista de sota reaccionarà al teu text.</p>
-        </div>
-        <textarea
-          id="criterisLliures"
-          placeholder="Deixa aquí anotats els teus criteris o instruccions de cobertura d'avui..."
-          class="w-full h-28 p-3 border border-slate-200 rounded-xl bg-slate-50/30 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans text-slate-700 mt-2"
-        ></textarea>
-      </div>
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+}
 
-      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-        <div class="px-5 py-3 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-          <h3 id="titolLlista" class="font-bold text-slate-700 text-sm">
-            Mestres carregats (0)
-          </h3>
-          <span class="text-[11px] text-slate-400 font-medium">Fes clic a Esborrar per treure'ls temporalment</span>
-        </div>
-        
-        <div id="contenidorMestres" class="p-4 flex flex-wrap gap-2">
-          </div>
-      </div>
+::before,
+::after {
+  --tw-content: '';
+}
 
-      <div class="bg-slate-100 rounded-2xl border border-slate-200 p-4">
-        <p class="text-xs text-slate-500 text-center">Eina de coordinació interna de l'escola.</p>
-      </div>
+html,
+:host {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+     tab-size: 4;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
+}
 
-    </div>
-  </div>
+body {
+  margin: 0;
+  line-height: inherit;
+}
 
-  <script>
-    let allMestres = [];
-    
-    const inputUrl = document.getElementById('inputUrl');
-    const btnCarregar = document.getElementById('btnCarregar');
-    const textCarregar = document.getElementById('textCarregar');
-    const btnBuidar = document.getElementById('btnBuidar');
-    const criterisLliures = document.getElementById('criterisLliures');
-    const titolLlista = document.getElementById('titolLlista');
-    const contenidorMestres = document.getElementById('contenidorMestres');
+hr {
+  height: 0;
+  color: inherit;
+  border-top-width: 1px;
+}
 
-    function inicialitzar() {
-      const desatMestres = localStorage.getItem('suplencies_all_mestres');
-      if (desatMestres) {
-        allMestres = JSON.parse(desatMestres);
-      }
-      
-      const desatCriteris = localStorage.getItem('suplencies_criteris_lliures');
-      if (desatCriteris) {
-        criterisLliures.value = desatCriteris;
-      }
+abbr:where([title]) {
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
+}
 
-      renderitzar();
-    }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
 
-    function cap(nom) {
-      return nom ? nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase() : '';
-    }
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
 
-    function renderitzar() {
-      localStorage.setItem('suplencies_all_mestres', JSON.stringify(allMestres));
-      localStorage.setItem('suplencies_criteris_lliures', criterisLliures.value);
+b,
+strong {
+  font-weight: bolder;
+}
 
-      if (allMestres.length > 0) {
-        btnBuidar.classList.remove('hidden');
-      } else {
-        btnBuidar.classList.add('hidden');
-      }
-
-      contenidorMestres.innerHTML = '';
-
-      if (allMestres.length === 0) {
-        titolLlista.innerText = "Mestres carregats (0)";
-        contenidorMestres.innerHTML = `
-          <div class="text-center py-6 text-slate-400 text-sm w-full">
-            No hi ha cap mestre carregat. Enganxa un enllaç superior per començar.
-          </div>`;
-        return;
-      }
-
-      const textCriteri = criterisLliures.value.trim();
-      let mestresAAlbergar = [...allMestres];
-
-      if (textCriteri) {
-        titolLlista.innerText = "Mestres filtrats per criteri";
-        const paraulesClau = textCriteri.toLowerCase().split(/[\n, ]+/).filter(p => p.length > 1);
-        
-        if (paraulesClau.length > 0) {
-          const filtrats = allMestres.filter(nom => {
-            return paraulesClau.some(paraula => nom.toLowerCase().includes(paraula));
-          });
-          if (filtrats.length > 0) {
-            mestresAAlbergar = filtrats;
-          } else {
-            mestresAAlbergar = [];
-          }
-        }
-      } else {
-        titolLlista.innerText = `Mestres carregats (${allMestres.length})`;
-      }
-
-      if (mestresAAlbergar.length === 0 && textCriteri) {
-        contenidorMestres.innerHTML = `
-          <div class="text-center py-6 text-amber-600 text-sm w-full font-medium">
-            Cap mestre coincideix amb els criteris escrits a dalt.
-          </div>`;
-        return;
-      }
-
-      mestresAAlbergar.forEach(nom => {
-        const xip = document.createElement('div');
-        xip.className = "flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 group hover:border-slate-300 transition-all";
-        
-        xip.innerHTML = `
-          <div class="flex items-center gap-1.5">
-            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-            <span class="text-xs font-semibold text-slate-700">${cap(nom)}</span>
-          </div>
-        `;
-
-        const btnEsborrar = document.createElement('button');
-        btnEsborrar.className = "text-[11px] text-slate-400 hover:text-red-500 transition-colors font-medium border-l border-slate-200 pl-2";
-        btnEsborrar.innerText = "Esborrar";
-        btnEsborrar.onclick = () => {
-          allMestres = allMestres.filter(n => n !== nom);
-          renderitzar();
-        };
-
-        xip.appendChild(btnEsborrar);
-        contenidorMestres.appendChild(xip);
-      });
-    }
-
-    async function handleProcess() {
-      const url = inputUrl.value.trim();
-      if (!url) return;
-
-      textCarregar.innerText = 'Processant...';
-      btnCarregar.disabled = true;
-
-      try {
-        let fetchUrl = url;
-        if (url.includes('docs.google.com/spreadsheets')) {
-          fetchUrl = url.replace(/\/edit.*/, '/export?format=csv');
-        }
-
-        const response = await fetch(fetchUrl);
-        if (!response.ok) throw new Error('Error de connexió');
-
-        const text = await response.text();
-        const lines = text.split('\n');
-        const names = [];
-
-        lines.forEach((line, index) => {
-          if (index === 0) return;
-          const columns = line.split(/[;,]/);
-          const name = columns[0]?.trim().replace(/^"|"$/g, '');
-          if (name) names.push(name);
-        });
-
-        if (names.length > 0) {
-          allMestres = names;
-          renderitzar();
-          alert(`S'han carregat correctament ${names.length} mestres.`);
-        } else {
-          alert("No s'ha trobat cap nom a la primera columna d'aquest fitxer.");
-        }
-      } catch (error) {
-        console.error(error);
-        alert("Error en processar l'enllaç. Comprova que l'arxiu estigui configurat com a Públic ('Qualsevol persona amb l'enllaç').");
-      } finally {
-        textCarregar.innerText = 'Carregar';
-        btnCarregar.disabled = false;
-      }
-    }
-
-    btnCarregar.addEventListener('click', handleProcess);
-    criterisLliures.addEventListener('input', renderitzar);
-    
-    btnBuidar.addEventListener('click', () => {
-      if (confirm("Vols esborrar tota la llista de mestres?")) {
-        allMestres = [];
-        inputUrl.value = '';
-        renderitzar();
-      }
-    });
-
-    inicialitzar();
-  </script>
-</body>
-</html>
+code,
