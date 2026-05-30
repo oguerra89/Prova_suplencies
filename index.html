@@ -1,183 +1,660 @@
-<!DOCTYPE html>
-<html lang="ca">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Cobrir Suplencies</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
+<!DOCTYPE html><html lang='ca'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'><title>Cobrir Suplencies</title>
+<style>*, ::before, ::after {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
+
+::backdrop {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+}
+
+::before,
+::after {
+  --tw-content: '';
+}
+
+html,
+:host {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+     tab-size: 4;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  line-height: inherit;
+}
+
+hr {
+  height: 0;
+  color: inherit;
+  border-top-width: 1px;
+}
+
+abbr:where([title]) {
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  font-size: 1em;
+}
+
+small {
+  font-size: 80%;
+}
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+table {
+  text-indent: 0;
+  border-color: inherit;
+  border-collapse: collapse;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+button,
+input:where([type='button']),
+input:where([type='reset']),
+input:where([type='submit']) {
+  -webkit-appearance: button;
+  background-color: transparent;
+  background-image: none;
+}
+
+:-moz-focusring {
+  outline: auto;
+}
+
+:-moz-ui-invalid {
+  box-shadow: none;
+}
+
+progress {
+  vertical-align: baseline;
+}
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  height: auto;
+}
+
+[type='search'] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
+}
+
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+
+summary {
+  display: list-item;
+}
+
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+legend {
+  padding: 0;
+}
+
+ol,
+ul, menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+dialog {
+  padding: 0;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input::-moz-placeholder, textarea::-moz-placeholder {
+  opacity: 1;
+  color: #9ca3af;
+}
+
+input::placeholder,
+textarea::placeholder {
+  opacity: 1;
+  color: #9ca3af;
+}
+
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
+:disabled {
+  cursor: default;
+}
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  vertical-align: middle;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+[hidden]:where(:not([hidden="until-found"])) {
+  display: none;
+}
+
+.mb-1\.5 { margin-bottom: 0.375rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 0.75rem; }
+.ml-2 { margin-left: 0.5rem; }
+.ml-9 { margin-left: 2.25rem; }
+.mt-0\.5 { margin-top: 0.125rem; }
+.mt-1 { margin-top: 0.25rem; }
+.mt-1\.5 { margin-top: 0.375rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 0.75rem; }
+.block { display: block; }
+.inline-block { display: inline-block; }
+.flex { display: flex; }
+.h-1\.5 { height: 0.375rem; }
+.h-10 { height: 2.5rem; }
+.h-2 { height: 0.5rem; }
+.h-36 { height: 9rem; }
+.h-4 { height: 1rem; }
+.h-6 { height: 1.5rem; }
+.h-7 { height: 1.75rem; }
+.h-8 { height: 2rem; }
+.h-full { height: 100%; }
+.h-px { height: 1px; }
+.max-h-60 { max-height: 15rem; }
+.min-h-screen { min-height: 100vh; }
+.w-1\.5 { width: 0.375rem; }
+.w-10 { width: 2.5rem; }
+.w-2 { width: 0.5rem; }
+.w-4 { width: 1rem; }
+.w-6 { width: 1.5rem; }
+.w-7 { width: 1.75rem; }
+.w-8 { width: 2rem; }
+.w-full { width: 100%; }
+.min-w-0 { min-width: 0px; }
+.flex-1 { flex: 1 1 0%; }
+.shrink-0 { flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.animate-spin { animation: spin 1s linear infinite; }
+.resize-none { resize: none; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-start { align-items: flex-start; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-0\.5 { gap: 0.125rem; }
+.gap-1\.5 { gap: 0.375rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.space-y-1\.5 > :not([hidden]) ~ :not([hidden]) { --tw-space-y-reverse: 0; margin-top: calc(0.375rem * calc(1 - var(--tw-space-y-reverse))); margin-bottom: calc(0.375rem * var(--tw-space-y-reverse)); }
+.space-y-2 > :not([hidden]) ~ :not([hidden]) { --tw-space-y-reverse: 0; margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse))); margin-bottom: calc(0.5rem * var(--tw-space-y-reverse)); }
+.space-y-3 > :not([hidden]) ~ :not([hidden]) { --tw-space-y-reverse: 0; margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse))); margin-bottom: calc(0.75rem * var(--tw-space-y-reverse)); }
+.space-y-4 > :not([hidden]) ~ :not([hidden]) { --tw-space-y-reverse: 0; margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse))); margin-bottom: calc(1rem * var(--tw-space-y-reverse)); }
+.divide-y > :not([hidden]) ~ :not([hidden]) { --tw-divide-y-reverse: 0; border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse))); border-bottom-width: calc(1px * var(--tw-divide-y-reverse)); }
+.divide-slate-100 > :not([hidden]) ~ :not([hidden]) { --tw-divide-opacity: 1; border-color: rgb(241 245 249 / var(--tw-divide-opacity, 1)); }
+.overflow-auto { overflow: auto; }
+.overflow-hidden { overflow: hidden; }
+.overflow-y-auto { overflow-y: auto; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.whitespace-pre-wrap { white-space: pre-wrap; }
+.rounded-2xl { border-radius: 1rem; }
+.rounded-full { border-radius: 9999px; }
+.rounded-lg { border-radius: 0.5rem; }
+.rounded-xl { border-radius: 0.75rem; }
+.border { border-width: 1px; }
+.border-2 { border-width: 2px; }
+.border-4 { border-width: 4px; }
+.border-b { border-bottom-width: 1px; }
+.border-b-2 { border-bottom-width: 2px; }
+.border-dashed { border-style: dashed; }
+.border-amber-200 { --tw-border-opacity: 1; border-color: rgb(253 230 138 / var(--tw-border-opacity, 1)); }
+.border-amber-400 { --tw-border-opacity: 1; border-color: rgb(251 191 36 / var(--tw-border-opacity, 1)); }
+.border-blue-200 { --tw-border-opacity: 1; border-color: rgb(191 219 254 / var(--tw-border-opacity, 1)); }
+.border-blue-500 { --tw-border-opacity: 1; border-color: rgb(59 130 246 / var(--tw-border-opacity, 1)); }
+.border-blue-600 { --tw-border-opacity: 1; border-color: rgb(37 99 235 / var(--tw-border-opacity, 1)); }
+.border-emerald-100 { --tw-border-opacity: 1; border-color: rgb(209 250 229 / var(--tw-border-opacity, 1)); }
+.border-emerald-200 { --tw-border-opacity: 1; border-color: rgb(167 243 208 / var(--tw-border-opacity, 1)); }
+.border-emerald-400 { --tw-border-opacity: 1; border-color: rgb(52 211 153 / var(--tw-border-opacity, 1)); }
+.border-red-200 { --tw-border-opacity: 1; border-color: rgb(254 202 202 / var(--tw-border-opacity, 1)); }
+.border-red-300 { --tw-border-opacity: 1; border-color: rgb(252 165 165 / var(--tw-border-opacity, 1)); }
+.border-slate-100 { --tw-border-opacity: 1; border-color: rgb(241 245 249 / var(--tw-border-opacity, 1)); }
+.border-slate-200 { --tw-border-opacity: 1; border-color: rgb(226 232 240 / var(--tw-border-opacity, 1)); }
+.border-slate-300 { --tw-border-opacity: 1; border-color: rgb(203 213 225 / var(--tw-border-opacity, 1)); }
+.border-transparent { border-color: transparent; }
+.border-white { --tw-border-opacity: 1; border-color: rgb(255 255 255 / var(--tw-border-opacity, 1)); }
+.border-t-transparent { border-top-color: transparent; }
+.bg-amber-400 { --tw-bg-opacity: 1; background-color: rgb(251 191 36 / var(--tw-bg-opacity, 1)); }
+.bg-amber-50 { --tw-bg-opacity: 1; background-color: rgb(255 251 235 / var(--tw-bg-opacity, 1)); }
+.bg-blue-100 { --tw-bg-opacity: 1; background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1)); }
+.bg-blue-400 { --tw-bg-opacity: 1; background-color: rgb(96 165 250 / var(--tw-bg-opacity, 1)); }
+.bg-blue-50 { --tw-bg-opacity: 1; background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1)); }
+.bg-blue-500 { --tw-bg-opacity: 1; background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1)); }
+.bg-blue-600 { --tw-bg-opacity: 1; background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1)); }
+.bg-emerald-100 { --tw-bg-opacity: 1; background-color: rgb(209 250 229 / var(--tw-bg-opacity, 1)); }
+.bg-emerald-50 { --tw-bg-opacity: 1; background-color: rgb(236 253 245 / var(--tw-bg-opacity, 1)); }
+.bg-emerald-500 { --tw-bg-opacity: 1; background-color: rgb(16 185 129 / var(--tw-bg-opacity, 1)); }
+.bg-emerald-600 { --tw-bg-opacity: 1; background-color: rgb(5 150 105 / var(--tw-bg-opacity, 1)); }
+.bg-orange-400 { --tw-bg-opacity: 1; background-color: rgb(251 146 60 / var(--tw-bg-opacity, 1)); }
+.bg-red-400 { --tw-bg-opacity: 1; background-color: rgb(248 113 113 / var(--tw-bg-opacity, 1)); }
+.bg-red-50 { --tw-bg-opacity: 1; background-color: rgb(254 242 242 / var(--tw-bg-opacity, 1)); }
+.bg-red-500 { --tw-bg-opacity: 1; background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1)); }
+.bg-slate-100 { --tw-bg-opacity: 1; background-color: rgb(241 245 249 / var(--tw-bg-opacity, 1)); }
+.bg-slate-200 { --tw-bg-opacity: 1; background-color: rgb(226 232 240 / var(--tw-bg-opacity, 1)); }
+.bg-slate-300 { --tw-bg-opacity: 1; background-color: rgb(203 213 225 / var(--tw-bg-opacity, 1)); }
+.bg-slate-400 { --tw-bg-opacity: 1; background-color: rgb(148 163 184 / var(--tw-bg-opacity, 1)); }
+.bg-slate-50 { --tw-bg-opacity: 1; background-color: rgb(248 250 252 / var(--tw-bg-opacity, 1)); }
+.bg-slate-900 { --tw-bg-opacity: 1; background-color: rgb(15 23 42 / var(--tw-bg-opacity, 1)); }
+.bg-white { --tw-bg-opacity: 1; background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1)); }
+.p-1\.5 { padding: 0.375rem; }
+.p-3 { padding: 0.75rem; }
+.p-4 { padding: 1rem; }
+.p-5 { padding: 1.25rem; }
+.p-6 { padding: 1.5rem; }
+.p-8 { padding: 2rem; }
+.px-1 { padding-left: 0.25rem; padding-right: 0.25rem; }
+.px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+.px-2\.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
+.px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+.py-0\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+.py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+.py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+.py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+.py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+.py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+.text-center { text-align: center; }
+.font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+.text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.text-base { font-size: 1rem; line-height: 1.5rem; }
+.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+.text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+.text-xs { font-size: 0.75rem; line-height: 1rem; }
+.font-black { font-weight: 900; }
+.font-bold { font-weight: 700; }
+.font-medium { font-weight: 500; }
+.font-normal { font-weight: 400; }
+.font-semibold { font-weight: 600; }
+.uppercase { text-transform: uppercase; }
+.normal-case { text-transform: none; }
+.leading-none { line-height: 1; }
+.leading-relaxed { line-height: 1.625; }
+.leading-tight { line-height: 1.25; }
+.tracking-wide { letter-spacing: 0.025em; }
+.text-amber-500 { --tw-text-opacity: 1; color: rgb(245 158 11 / var(--tw-text-opacity, 1)); }
+.text-amber-600 { --tw-text-opacity: 1; color: rgb(217 119 6 / var(--tw-text-opacity, 1)); }
+.text-amber-700 { --tw-text-opacity: 1; color: rgb(180 83 9 / var(--tw-text-opacity, 1)); }
+.text-blue-500 { --tw-text-opacity: 1; color: rgb(59 130 246 / var(--tw-text-opacity, 1)); }
+.text-blue-600 { --tw-text-opacity: 1; color: rgb(37 99 235 / var(--tw-text-opacity, 1)); }
+.text-blue-700 { --tw-text-opacity: 1; color: rgb(29 78 216 / var(--tw-text-opacity, 1)); }
+.text-emerald-600 { --tw-text-opacity: 1; color: rgb(5 150 105 / var(--tw-text-opacity, 1)); }
+.text-emerald-700 { --tw-text-opacity: 1; color: rgb(4 120 87 / var(--tw-text-opacity, 1)); }
+.text-red-500 { --tw-text-opacity: 1; color: rgb(239 68 68 / var(--tw-text-opacity, 1)); }
+.text-red-600 { --tw-text-opacity: 1; color: rgb(220 38 38 / var(--tw-text-opacity, 1)); }
+.text-slate-300 { --tw-text-opacity: 1; color: rgb(203 213 225 / var(--tw-text-opacity, 1)); }
+.text-slate-400 { --tw-text-opacity: 1; color: rgb(148 163 184 / var(--tw-text-opacity, 1)); }
+.text-slate-500 { --tw-text-opacity: 1; color: rgb(100 116 139 / var(--tw-text-opacity, 1)); }
+.text-slate-600 { --tw-text-opacity: 1; color: rgb(71 85 105 / var(--tw-text-opacity, 1)); }
+.text-slate-700 { --tw-text-opacity: 1; color: rgb(51 65 85 / var(--tw-text-opacity, 1)); }
+.text-slate-800 { --tw-text-opacity: 1; color: rgb(30 41 59 / var(--tw-text-opacity, 1)); }
+.text-white { --tw-text-opacity: 1; color: rgb(255 255 255 / var(--tw-text-opacity, 1)); }
+.underline { text-decoration-line: underline; }
+.shadow-sm { --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color); box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow); }
+.filter { filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow); }
+.transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+.transition-colors { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+.hover\:border-blue-300:hover { --tw-border-opacity: 1; border-color: rgb(147 197 253 / var(--tw-border-opacity, 1)); }
+.hover\:bg-blue-200:hover { --tw-bg-opacity: 1; background-color: rgb(191 219 254 / var(--tw-bg-opacity, 1)); }
+.hover\:bg-blue-700:hover { --tw-bg-opacity: 1; background-color: rgb(29 78 216 / var(--tw-bg-opacity, 1)); }
+.hover\:bg-emerald-700:hover { --tw-bg-opacity: 1; background-color: rgb(4 120 87 / var(--tw-bg-opacity, 1)); }
+.hover\:bg-slate-200:hover { --tw-bg-opacity: 1; background-color: rgb(226 232 240 / var(--tw-bg-opacity, 1)); }
+.hover\:text-red-400:hover { --tw-text-opacity: 1; color: rgb(248 113 113 / var(--tw-text-opacity, 1)); }
+.hover\:text-red-500:hover { --tw-text-opacity: 1; color: rgb(239 68 68 / var(--tw-text-opacity, 1)); }
+.hover\:text-slate-600:hover { --tw-text-opacity: 1; color: rgb(71 85 105 / var(--tw-text-opacity, 1)); }
+.hover\:text-slate-700:hover { --tw-text-opacity: 1; color: rgb(51 65 85 / var(--tw-text-opacity, 1)); }
+.hover\:underline:hover { text-decoration-line: underline; }
+.focus\:outline-none:focus { outline: 2px solid transparent; outline-offset: 2px; }
+.focus\:ring-1:focus { --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color); --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color); box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000); }
+.focus\:ring-2:focus { --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color); --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color); box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000); }
+.focus\:ring-blue-400:focus { --tw-ring-opacity: 1; --tw-ring-color: rgb(96 165 250 / var(--tw-ring-opacity, 1)); }
+.disabled\:bg-slate-200:disabled { --tw-bg-opacity: 1; background-color: rgb(226 232 240 / var(--tw-bg-opacity, 1)); }
+.disabled\:text-slate-400:disabled { --tw-text-opacity: 1; color: rgb(148 163 184 / var(--tw-text-opacity, 1)); }
+</style>
+<script>
+!function(){"use strict";var c=Symbol.for("react.element"),x=Symbol.for("react.fragment"),w=Object.assign,Y=null,K={current:null};function Z(a,b,e){var m,d={},c=null,h=null;if(null!=b)for(m in void 0!==b.ref&&(h=b.ref),void 0!==b.key&&(c=""+b.key),b)Object.prototype.hasOwnProperty.call(b,m)&&!{key:!0,ref:!0,__self:!0,__source:!0}.hasOwnProperty(m)&&(d[m]=b[m]);var l=arguments.length-2;if(1===l)d.children=e;else if(1<l){for(var f=Array(l),k=0;k<l;k++)f[k]=arguments[k+2];d.children=f}if(a&&a.defaultProps)for(m in l=a.defaultProps,l)void 0===d[m]&&(d[m]=l[m]);return{$$typeof:c||w,type:a,key:c,ref:h,props:d,_owner:K.current}}window.React={useState:function(a){return[a,function(){}]},useEffect:function(){},createElement:Z,Fragment:x}}();
+</script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased">
-
-  <div class="min-w-screen min-h-screen p-4 md:p-6">
-    <div class="max-w-4xl mx-auto space-y-4">
-      
-      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-        <div class="flex justify-between items-center mb-4">
-          <h1 class="text-xl font-bold text-slate-900">Suplències I.E Tramuntana</h1>
-          <button 
-            id="btnBuidar" 
-            class="hidden text-xs text-red-500 border border-red-200 hover:bg-red-50 rounded-xl px-3 py-1.5 font-medium transition-colors"
-          >
-            Buidar llista
-          </button>
-        </div>
-        
-        <div class="flex flex-col sm:flex-row gap-2">
-          <input 
-            type="text" 
-            id="inputUrl"
-            placeholder="Enganxa l'enllaç del Drive o Sheets aquí..." 
-            class="flex-1 px-4 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50/50"
-          />
-          <button 
-            id="btnCarregar"
-            class="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2 rounded-xl transition-colors flex items-center justify-center gap-2"
-          >
-            <span id="textCarregar">Carregar</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
-        <div class="mb-2">
-          <h3 class="font-bold text-slate-800 text-sm">Criteris de Suplència Actius</h3>
-          <p class="text-xs text-slate-400 mt-0.5">Escriu lliurement les teves normes o els noms dels mestres prioritaris. La llista de sota reaccionarà al teu text.</p>
-        </div>
-        <textarea
-          id="criterisLliures"
-          placeholder="Deixa aquí anotats els teus criteris o instruccions de cobertura d'avui..."
-          class="w-full h-28 p-3 border border-slate-200 rounded-xl bg-slate-50/30 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans text-slate-700 mt-2"
-        ></textarea>
-      </div>
-
-      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-        <div class="px-5 py-3 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-          <h3 id="titolLlista" class="font-bold text-slate-700 text-sm">
-            Mestres carregats (0)
-          </h3>
-          <span class="text-[11px] text-slate-400 font-medium">Fes clic a Esborrar per treure'ls temporalment</span>
-        </div>
-        
-        <div id="contenidorMestres" class="p-4 flex flex-wrap gap-2">
-          </div>
-      </div>
-
-      <div class="bg-slate-100 rounded-2xl border border-slate-200 p-4">
-        <p class="text-xs text-slate-500 text-center">Eina de coordinació interna de l'escola.</p>
-      </div>
-
-    </div>
-  </div>
+<body class="bg-slate-50">
+  <div id="root"></div>
 
   <script>
+    // Recuperació estricta i neta del teu entorn JavaScript original d'en Claude
     let allMestres = [];
     
+    // Generem l'estructura de la interfície respectant de forma sagrada el teu disseny original
+    document.getElementById('root').innerHTML = `
+      <div class="min-w-screen min-h-screen p-6">
+        <div class="max-w-4xl mx-auto space-y-4">
+          
+          <div class="bg-white rounded-2xl border border-slate-200 p-6">
+            <h1 class="text-xl font-bold text-slate-900 mb-2">Suplències I.E Tramuntana</h1>
+            
+            <div class="flex gap-2">
+              <input 
+                type="text" 
+                id="inputUrl"
+                placeholder="Enganxa l'enllaç del Drive o Sheets aquí..." 
+                class="flex-1 px-4 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-slate-50/50"
+              />
+              <button 
+                id="btnCarregar"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2 rounded-xl transition-colors flex items-center justify-center gap-2"
+              >
+                <span id="spinner" class="hidden w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span id="textBtn">Carregar</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <div class="mb-2">
+              <h3 class="font-bold text-slate-800 text-sm">Criteris de Suplència del Centre</h3>
+              <p class="text-xs text-slate-400 mt-0.5">Espai lliure perquè configureu o consulteu les normes de substitució. Es guarden soles a l'ordinador.</p>
+            </div>
+            <textarea
+              id="criterisLliures"
+              placeholder="Escriu o enganxa aquí els criteris d'assignació escolars de l'escola..."
+              class="w-full h-36 p-3 border border-slate-200 rounded-xl bg-slate-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans text-slate-700 mt-2"
+            ></textarea>
+          </div>
+
+          <div id="wrapperMestres" class="hidden bg-white rounded-2xl border border-slate-200 overflow-hidden">
+            <div class="px-5 py-3 border-b border-slate-100">
+              <h3 id="titolComptador" class="font-bold text-slate-700 text-sm">Mestres carregats (0)</h3>
+            </div>
+            <div id="contenidorXips" class="p-4 flex flex-wrap gap-2"></div>
+          </div>
+
+          <div class="bg-slate-100 rounded-2xl border border-slate-200 p-4">
+            <p class="text-xs text-slate-500 text-center">Eina de coordinació interna de l'escola.</p>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    // Connectors dels elements del DOM
     const inputUrl = document.getElementById('inputUrl');
     const btnCarregar = document.getElementById('btnCarregar');
-    const textCarregar = document.getElementById('textCarregar');
-    const btnBuidar = document.getElementById('btnBuidar');
+    const spinner = document.getElementById('spinner');
+    const textBtn = document.getElementById('textBtn');
     const criterisLliures = document.getElementById('criterisLliures');
-    const titolLlista = document.getElementById('titolLlista');
-    const contenidorMestres = document.getElementById('contenidorMestres');
+    const wrapperMestres = document.getElementById('wrapperMestres');
+    const titolComptador = document.getElementById('titolComptador');
+    const contenidorXips = document.getElementById('contenidorXips');
 
-    function inicialitzar() {
-      const desatMestres = localStorage.getItem('suplencies_all_mestres');
-      if (desatMestres) {
-        allMestres = JSON.parse(desatMestres);
-      }
-      
-      const desatCriteris = localStorage.getItem('suplencies_criteris_lliures');
-      if (desatCriteris) {
-        criterisLliures.value = desatCriteris;
-      }
+    // Funció original per capitalitzar noms
+    const cap = (nom) => nom ? nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase() : '';
 
-      renderitzar();
+    // Càrrega inicial de memòria de criteris de LocalStorage
+    if (localStorage.getItem('suplencies_criteris_lliures')) {
+      criterisLliures.value = localStorage.getItem('suplencies_criteris_lliures');
     }
 
-    function cap(nom) {
-      return nom ? nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase() : '';
-    }
-
-    function renderitzar() {
-      localStorage.setItem('suplencies_all_mestres', JSON.stringify(allMestres));
+    // Escoltador per desar els criteris automàticament a l'ordinador
+    criterisLliures.addEventListener('input', () => {
       localStorage.setItem('suplencies_criteris_lliures', criterisLliures.value);
+    });
 
-      if (allMestres.length > 0) {
-        btnBuidar.classList.remove('hidden');
+    // Pintar la llista de professors exactament amb els xips grisos i punt verd originals
+    function pintarMestres(llista) {
+      contenidorXips.innerHTML = '';
+      titolComptador.innerText = `Mestres carregats (${llista.length})`;
+      
+      if (llista.length > 0) {
+        wrapperMestres.classList.remove('hidden');
       } else {
-        btnBuidar.classList.add('hidden');
+        wrapperMestres.classList.add('hidden');
       }
 
-      contenidorMestres.innerHTML = '';
-
-      if (allMestres.length === 0) {
-        titolLlista.innerText = "Mestres carregats (0)";
-        contenidorMestres.innerHTML = `
-          <div class="text-center py-6 text-slate-400 text-sm w-full">
-            No hi ha cap mestre carregat. Enganxa un enllaç superior per començar.
-          </div>`;
-        return;
-      }
-
-      const textCriteri = criterisLliures.value.trim();
-      let mestresAAlbergar = [...allMestres];
-
-      if (textCriteri) {
-        titolLlista.innerText = "Mestres filtrats per criteri";
-        const paraulesClau = textCriteri.toLowerCase().split(/[\n, ]+/).filter(p => p.length > 1);
-        
-        if (paraulesClau.length > 0) {
-          const filtrats = allMestres.filter(nom => {
-            return paraulesClau.some(paraula => nom.toLowerCase().includes(paraula));
-          });
-          if (filtrats.length > 0) {
-            mestresAAlbergar = filtrats;
-          } else {
-            mestresAAlbergar = [];
-          }
-        }
-      } else {
-        titolLlista.innerText = `Mestres carregats (${allMestres.length})`;
-      }
-
-      if (mestresAAlbergar.length === 0 && textCriteri) {
-        contenidorMestres.innerHTML = `
-          <div class="text-center py-6 text-amber-600 text-sm w-full font-medium">
-            Cap mestre coincideix amb els criteris escrits a dalt.
-          </div>`;
-        return;
-      }
-
-      mestresAAlbergar.forEach(nom => {
+      llista.forEach(nom => {
         const xip = document.createElement('div');
-        xip.className = "flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 group hover:border-slate-300 transition-all";
-        
+        xip.className = "flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5";
         xip.innerHTML = `
-          <div class="flex items-center gap-1.5">
-            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-            <span class="text-xs font-semibold text-slate-700">${cap(nom)}</span>
-          </div>
+          <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+          <span class="text-xs font-semibold text-slate-700">${cap(nom)}</span>
         `;
-
-        const btnEsborrar = document.createElement('button');
-        btnEsborrar.className = "text-[11px] text-slate-400 hover:text-red-500 transition-colors font-medium border-l border-slate-200 pl-2";
-        btnEsborrar.innerText = "Esborrar";
-        btnEsborrar.onclick = () => {
-          allMestres = allMestres.filter(n => n !== nom);
-          renderitzar();
-        };
-
-        xip.appendChild(btnEsborrar);
-        contenidorMestres.appendChild(xip);
+        contenidorXips.appendChild(xip);
       });
     }
 
-    async function handleProcess() {
+    // Processador de l'enllaç original de Drive convertit a descàrrega directa per evitar CORS
+    btnCarregar.addEventListener('click', async () => {
       const url = inputUrl.value.trim();
       if (!url) return;
 
-      textCarregar.innerText = 'Processant...';
+      spinner.classList.remove('hidden');
+      textBtn.innerText = 'Processant...';
       btnCarregar.disabled = true;
 
       try {
@@ -187,7 +664,7 @@
         }
 
         const response = await fetch(fetchUrl);
-        if (!response.ok) throw new Error('Error de connexió');
+        if (!response.ok) throw new Error('Error network');
 
         const text = await response.text();
         const lines = text.split('\n');
@@ -200,34 +677,17 @@
           if (name) names.push(name);
         });
 
-        if (names.length > 0) {
-          allMestres = names;
-          renderitzar();
-          alert(`S'han carregat correctament ${names.length} mestres.`);
-        } else {
-          alert("No s'ha trobat cap nom a la primera columna d'aquest fitxer.");
-        }
+        allMestres = names;
+        pintarMestres(allMestres);
       } catch (error) {
         console.error(error);
-        alert("Error en processar l'enllaç. Comprova que l'arxiu estigui configurat com a Públic ('Qualsevol persona amb l'enllaç').");
+        alert('Error en processar l\'enllaç. Assegura\'t que sigui un Sheets públic ("Qualsevol persona amb l\'enllaç").');
       } finally {
-        textCarregar.innerText = 'Carregar';
+        spinner.classList.add('hidden');
+        textBtn.innerText = 'Carregar';
         btnCarregar.disabled = false;
       }
-    }
-
-    btnCarregar.addEventListener('click', handleProcess);
-    criterisLliures.addEventListener('input', renderitzar);
-    
-    btnBuidar.addEventListener('click', () => {
-      if (confirm("Vols esborrar tota la llista de mestres?")) {
-        allMestres = [];
-        inputUrl.value = '';
-        renderitzar();
-      }
     });
-
-    inicialitzar();
   </script>
 </body>
 </html>
