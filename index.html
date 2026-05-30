@@ -42,7 +42,7 @@
       <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
         <div class="mb-2">
           <h3 class="font-bold text-slate-800 text-sm">Criteris de Suplència Actius</h3>
-          <p className="text-xs text-slate-400 mt-0.5">Escriu lliurement les teves normes o els noms dels mestres prioritaris. La llista de sota reaccionarà al teu text.</p>
+          <p class="text-xs text-slate-400 mt-0.5">Escriu lliurement les teves normes o els noms dels mestres prioritaris. La llista de sota reaccionarà al teu text.</p>
         </div>
         <textarea
           id="criterisLliures"
@@ -71,10 +71,8 @@
   </div>
 
   <script>
-    // Variables d'estat globals en JavaScript pur
     let allMestres = [];
     
-    // Elements del DOM
     const inputUrl = document.getElementById('inputUrl');
     const btnCarregar = document.getElementById('btnCarregar');
     const textCarregar = document.getElementById('textCarregar');
@@ -83,7 +81,6 @@
     const titolLlista = document.getElementById('titolLlista');
     const contenidorMestres = document.getElementById('contenidorMestres');
 
-    // Inicialització des de LocalStorage
     function inicialitzar() {
       const desatMestres = localStorage.getItem('suplencies_all_mestres');
       if (desatMestres) {
@@ -98,25 +95,20 @@
       renderitzar();
     }
 
-    // Funció per formatar correctament els noms (Capitalize)
     function cap(nom) {
       return nom ? nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase() : '';
     }
 
-    // Actualització visual de la pantalla i aplicació de filtres
     function renderitzar() {
-      // Guardar estat actual a LocalStorage
       localStorage.setItem('suplencies_all_mestres', JSON.stringify(allMestres));
       localStorage.setItem('suplencies_criteris_lliures', criterisLliures.value);
 
-      // Mostrar/Amagar botó de buidar global
       if (allMestres.length > 0) {
         btnBuidar.classList.remove('hidden');
       } else {
         btnBuidar.classList.add('hidden');
       }
 
-      // Netejar el contenidor
       contenidorMestres.innerHTML = '';
 
       if (allMestres.length === 0) {
@@ -128,7 +120,6 @@
         return;
       }
 
-      // Aplicar l'algorisme de filtre segons el quadre de text actiu
       const textCriteri = criterisLliures.value.trim();
       let mestresAAlbergar = [...allMestres];
 
@@ -150,7 +141,6 @@
         titolLlista.innerText = `Mestres carregats (${allMestres.length})`;
       }
 
-      // Si s'aplica filtre i no queda cap mestre coincident
       if (mestresAAlbergar.length === 0 && textCriteri) {
         contenidorMestres.innerHTML = `
           <div class="text-center py-6 text-amber-600 text-sm w-full font-medium">
@@ -159,7 +149,6 @@
         return;
       }
 
-      // Crear cada xip de mestre amb el disseny original
       mestresAAlbergar.forEach(nom => {
         const xip = document.createElement('div');
         xip.className = "flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 group hover:border-slate-300 transition-all";
@@ -171,7 +160,6 @@
           </div>
         `;
 
-        // Botó individual d'esborrar temporalment
         const btnEsborrar = document.createElement('button');
         btnEsborrar.className = "text-[11px] text-slate-400 hover:text-red-500 transition-colors font-medium border-l border-slate-200 pl-2";
         btnEsborrar.innerText = "Esborrar";
@@ -185,7 +173,6 @@
       });
     }
 
-    // Processar acció de càrrega del Sheets/Drive CSV
     async function handleProcess() {
       const url = inputUrl.value.trim();
       if (!url) return;
@@ -207,7 +194,7 @@
         const names = [];
 
         lines.forEach((line, index) => {
-          if (index === 0) return; // Ometre capçalera del document
+          if (index === 0) return;
           const columns = line.split(/[;,]/);
           const name = columns[0]?.trim().replace(/^"|"$/g, '');
           if (name) names.push(name);
@@ -229,9 +216,7 @@
       }
     }
 
-    // Escoltadors d'esdeveniments (Listeners)
     btnCarregar.addEventListener('click', handleProcess);
-    
     criterisLliures.addEventListener('input', renderitzar);
     
     btnBuidar.addEventListener('click', () => {
@@ -242,7 +227,6 @@
       }
     });
 
-    // Engegar l'aplicació en carregar la pàgina
     inicialitzar();
   </script>
 </body>
