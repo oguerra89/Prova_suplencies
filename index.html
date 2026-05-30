@@ -31,10 +31,10 @@
     const cap = (nom) => nom ? nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase() : '';
 
     function AppCobrirSuplencies() {
-      // 1. Estats de l'aplicació amb persistència a la memòria local (LocalStorage)
+      // 1. Estats de l'aplicació buits de base (sense dades inventades)
       const [mestres, setMestres] = useState(() => {
         const desat = localStorage.getItem('suplencies_mestres');
-        return desat ? JSON.parse(desat) : [];
+        return desat ? JSON.parse(desat) : []; // Buit si no hi ha res desat
       });
 
       const [comptadorSuplencies, setComptadorSuplencies] = useState(() => {
@@ -50,9 +50,9 @@
       const [incidencia, setIncidencia] = useState({ mestreAbsent: '', hora: 'H1', cicle: 'Tots' });
       const [candidatsRecomanats, setCandidatsRecomanats] = useState([]);
       const [isCarregant, setIsCarregant] = useState(false);
-      const [origenDades, setOrigenDades] = useState(mestres.length > 0 ? 'Memòria de l\'ordinador' : 'Cap fitxer carregat');
+      const [origenDades, setOrigenDades] = useState(mestres.length > 0 ? 'Memòria activa' : 'Cap fitxer carregat');
 
-      // Guardar canvis automàticament a la memòria del navegador
+      // Persistència a la memòria local (LocalStorage)
       useEffect(() => {
         localStorage.setItem('suplencies_mestres', JSON.stringify(mestres));
       }, [mestres]);
@@ -65,31 +65,38 @@
         localStorage.setItem('suplencies_criteris', JSON.stringify(criteris));
       }, [criteris]);
 
-      // 2. Lògica de l'algorisme: Filtra i puntua candidats segons els teus criteris escolars
+      // 2. Lògica de l'algorisme de tria
       useEffect(() => {
-        if (mestres.length === 0) return;
+        if (mestres.length === 0) {
+          setCandidatsRecomanats([]);
+          return;
+        }
 
-        // Filtrar mestres que estan lliures o de guàrdia/suport en aquella hora
+        // Filtrar mestres lliures o de guàrdia/suport en l'hora de la incidència
         let filtrats = mestres.filter(m => {
           const estatHora = m[incidencia.hora]?.toUpperCase() || '';
           return estatHora === 'LLIURE' || estatHora === 'GUÀRDIA' || estatHora === 'GUARDIA' || estatHora === 'SUPORT';
         });
 
-        // Excloure el mestre absent de la llista de candidats
-        filtrats = filtrats.filter(m => m.nom.toLowerCase() !== incidencia.mestreAbsent.toLowerCase());
+        // Excloure el mestre absent
+        if (incidencia.mestreAbsent) {
+          filtrats = filtrats.filter(m => m.nom.toLowerCase() !== incidencia.mestreAbsent.toLowerCase());
+        }
 
-        // Puntuar els candidats segons els criteris seleccionats
+        // Puntuar els candidats segons criteris de l'escola
         const candidatsPuntuats = filtrats.map(m => {
           let puntuacio = 0;
           let motius = [];
 
-          // Criteri 1: Mateix cicle escolar
-          if (criteris.mateixCicle && m.cicle.toLowerCase() === incidencia.cicle.toLowerCase()) {
-            puntuacio += 10;
-            motius.push(`Del mateix cicle (${m.cicle})`);
+          // Criteri: Mateix cicle escolar
+          if (criteris.mateixCicle && m.cicle && incidencia.cicle !== 'Tots') {
+            if (m.cicle.toLowerCase() === incidencia.cicle.toLowerCase()) {
+              puntuacio += 10;
+              motius.push(`Del mateix cicle (${m.cicle})`);
+            }
           }
 
-          // Criteri 2: Equitat (Penalitza qui ja ha fet més suplències)
+          // Criteri: Equitat (prioritza qui hagi treballat menys)
           if (criteris.menysSuplencies) {
             const fetes = comptadorSuplencies[m.nom] || 0;
             puntuacio -= fetes * 3; 
@@ -99,13 +106,13 @@
           return { ...m, puntuacio, motius };
         });
 
-        // Ordenar de millor candidat a pior candidat
+        // Ordenar resultats
         candidatsPuntuats.sort((a, b) => b.puntuacio - a.puntuacio);
         setCandidatsRecomanats(candidatsPuntuats);
 
       }, [incidencia, criteris, mestres, comptadorSuplencies]);
 
-      // 3. Funció per processar i llegir el fitxer .docx (Word) aportat per l'usuari
+      // 3. Extreure dades reals de la taula del Word (.docx)
       const processarDocx = (e) => {
         const fitxer = e.target.files[0];
         if (!fitxer) return;
@@ -116,14 +123,14 @@
         reader.onload = function (event) {
           const arrayBuffer = event.target.result;
           
-          // Mammoth llegeix el fitxer .docx i el converteix a text pla editable
-          mammoth.extractRawText({ arrayBuffer: arrayBuffer })
+          // Forcem a Mammoth a extreure-ho com a HTML per poder analitzar fàcilment les taules <table>
+          mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
             .then(function (result) {
-              const text = result.value;
-              analitzarTextHoraris(text, fitxer.name);
+              const htmlText = result.value;
+              parsejarTaulaWord(htmlText, fitxer.name);
             })
             .catch(function (err) {
-              alert("Error descodificant el fitxer Word .docx");
+              alert("Error en descodificar el document de Word.");
               setIsCarregant(false);
             });
         };
@@ -131,25 +138,48 @@
         reader.readAsArrayBuffer(fitxer);
       };
 
-      // Interpretació del text extret del Word
-      const analitzarTextHoraris = (text, nomFitxer) => {
-        const linies = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+      // Funció que processa el codi HTML de la taula generat pel Word
+      const parsejarTaulaWord = (htmlText, nomFitxer) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, 'text/html');
+        const filesTaula = doc.querySelectorAll('tr');
         
-        // Estructura de dades simulada basada en la lectura del text detectat al document
-        // Un cop sàpigues exactament com escrius el Word de l'escola, podem afinar aquest detector adaptat a les teves paraules clau
-        const mestresDetectats = [
-          { nom: 'Joan Prat', cicle: 'Infantil', H1: 'Lliure', H2: 'Classe', H3: 'Guàrdia' },
-          { nom: 'Marta Soler', cicle: 'Primària', H1: 'Lliure', H2: 'Lliure', H3: 'Classe' },
-          { nom: 'Anna Vila', cicle: 'Infantil', H1: 'Guàrdia', H2: 'Suport', H3: 'Lliure' },
-          { nom: 'Carles Pou', cicle: 'Primària', H1: 'Classe', H2: 'Guàrdia', H3: 'Lliure' }
-        ];
+        const mestresImportats = [];
 
-        setMestres(mestresDetectats);
+        filesTaula.forEach((fila, index) => {
+          const celdes = fila.querySelectorAll('td');
+          // Ignorem la primera fila si és la capçalera (Nom, Cicle, H1...)
+          if (index === 0 || celdes.length < 3) return;
+
+          const nom = celdes[0]?.textContent?.trim() || '';
+          const cicle = celdes[1]?.textContent?.trim() || '';
+          const h1 = celdes[2]?.textContent?.trim() || '';
+          const h2 = celdes[3]?.textContent?.trim() || '';
+          const h3 = celdes[4]?.textContent?.trim() || '';
+
+          if (nom) {
+            mestresImportats.push({
+              nom: nom,
+              cicle: cicle,
+              H1: h1,
+              H2: h2,
+              H3: h3
+            });
+          }
+        });
+
+        if (mestresImportats.length === 0) {
+          alert("No s'ha pogut extreure cap taula vàlida del Word. Assegura't que l'horari està estructurat dins d'una taula.");
+          setIsCarregant(false);
+          return;
+        }
+
+        setMestres(mestresImportats);
         
-        // Inicialitzar comptadors d'equitat si són nous
+        // Inicialitzar comptadors per als nous mestres
         setComptadorSuplencies(prev => {
           const nouComptador = { ...prev };
-          mestresDetectats.forEach(m => {
+          mestresImportats.forEach(m => {
             if (nouComptador[m.nom] === undefined) nouComptador[m.nom] = 0;
           });
           return nouComptador;
@@ -157,7 +187,7 @@
 
         setOrigenDades(`Fitxer actiu: ${nomFitxer}`);
         setIsCarregant(false);
-        alert(`Document Word .docx descompilat correctament! S'han trobat ${mestresDetectats.length} mestres.`);
+        alert(`S'han carregat correctament ${mestresImportats.length} mestres de la taula del Word!`);
       };
 
       const assignarSuplencia = (nomMestre) => {
@@ -165,11 +195,11 @@
           ...prev,
           [nomMestre]: (prev[nomMestre] || 0) + 1
         }));
-        alert(`Suplència assignada correctament a ${cap(nomMestre)}. S'ha sumat al seu historial d'equitat.`);
+        alert(`Suplència assignada a ${cap(nomMestre)}.`);
       };
 
       const esborrarMemoria = () => {
-        if (confirm("Vols esborrar la memòria de l'ordinador i reiniciar l'aplicació?")) {
+        if (confirm("Vols buidar les dades actuals i començar de zero?")) {
           localStorage.clear();
           setMestres([]);
           setComptadorSuplencies({});
@@ -181,21 +211,21 @@
         <div className="min-w-screen min-h-screen bg-slate-50 p-4 md:p-6 font-sans text-slate-800">
           <div className="max-w-4xl mx-auto space-y-6">
             
-            {/* Capçalera de l'aplicació */}
+            {/* Capçalera */}
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <h1 className="text-xl md:text-2xl font-bold text-slate-900 mb-1">Gestor de Suplències de l'Escola</h1>
-                <p className="text-xs md:text-sm text-slate-500">Descodificació automàtica de documents .docx / Horaris i Criteris Integrats.</p>
+                <h1 className="text-xl md:text-2xl font-bold text-slate-900 mb-1">Gestor de Suplències</h1>
+                <p className="text-xs md:text-sm text-slate-500">Lectura de taules .docx en temps real amb memòria de seguretat.</p>
               </div>
               <span className="text-xs bg-slate-100 text-slate-600 font-medium px-3 py-1.5 rounded-xl border border-slate-200">
                 {origenDades}
               </span>
             </div>
 
-            {/* Pas 1: Carrega del Fitxer Word de l'Escola */}
+            {/* Pas 1: Pujada del Word original */}
             <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
-              <h2 className="font-bold text-slate-700 text-base">1. Carregar Horaris del Centre (.docx / Word)</h2>
-              <p className="text-xs text-slate-500">Puja el document de text de l'escola. L'aplicació en llegirà la llista de mestres i les hores disponibles.</p>
+              <h2 className="font-bold text-slate-700 text-base">1. Carregar Horaris Escolar (.docx de Word)</h2>
+              <p className="text-xs text-slate-500">L'aplicació analitzarà la taula de l'arxiu per buscar qui està "Lliure", "Guàrdia" o "Suport".</p>
               
               <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
                 <input 
@@ -209,24 +239,24 @@
                     onClick={esborrarMemoria}
                     className="text-xs text-red-500 hover:text-red-700 font-medium border border-red-200 hover:bg-red-50 px-3 py-2 rounded-xl transition-all shrink-0"
                   >
-                    Buidar memòria
+                    Buidar dades
                   </button>
                 )}
               </div>
             </div>
 
-            {/* Secció Central: Formulari d'incidència i regulador de criteris escolars */}
+            {/* Formulari i criteris d'ajust */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
-              {/* Pas 2: Qui falta i quan? */}
+              {/* Absència */}
               <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
                 <h2 className="font-bold text-slate-700 text-base">2. Detalls de l'Absència</h2>
                 
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">Nom del mestre absent</label>
+                  <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">Mestre absent (Opcional)</label>
                   <input 
                     type="text" 
-                    placeholder="Ex. Sandra Torrent" 
+                    placeholder="Escriu el nom per excloure'l..." 
                     className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50/50"
                     value={incidencia.mestreAbsent}
                     onChange={(e) => setIncidencia({...incidencia, mestreAbsent: e.target.value})}
@@ -235,36 +265,35 @@
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">Franja Horària</label>
+                    <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">Hora a cobrir</label>
                     <select 
                       className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm bg-white"
                       value={incidencia.hora}
                       onChange={(e) => setIncidencia({...incidencia, hora: e.target.value})}
                     >
-                      <option value="H1">1a Hora (9:00 - 10:00)</option>
-                      <option value="H2">2a Hora (10:00 - 11:00)</option>
-                      <option value="H3">3a Hora (11:30 - 12:30)</option>
+                      <option value="H1">1a Hora</option>
+                      <option value="H2">2a Hora</option>
+                      <option value="H3">3a Hora</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">Cicle afectat</label>
+                    <label className="block text-[11px] font-bold text-slate-400 uppercase mb-1">Cicle del Grup</label>
                     <select 
                       className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm bg-white"
                       value={incidencia.cicle}
                       onChange={(e) => setIncidencia({...incidencia, cicle: e.target.value})}
                     >
                       <option value="Tots">Qualsevol cicle</option>
-                      <option value="Infantil">Educació Infantil</option>
-                      <option value="Primària">Educació Primària</option>
+                      <option value="Infantil">Infantil</option>
+                      <option value="Primària">Primària</option>
                     </select>
                   </div>
                 </div>
               </div>
 
-              {/* Pas 3: Criteris d'ajust i priorització de l'escola */}
+              {/* Criteris */}
               <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
                 <h2 className="font-bold text-slate-700 text-base">3. Filtres i Criteris d'Ajust</h2>
-                <p className="text-xs text-slate-400 mb-2">Activa o desactiva les preferències de l'algorisme de tria.</p>
                 
                 <label className="flex items-start gap-3 p-2.5 hover:bg-slate-50 rounded-xl cursor-pointer transition-colors">
                   <input 
@@ -275,7 +304,7 @@
                   />
                   <div>
                     <span className="text-sm font-semibold block">Prioritzar el mateix cicle</span>
-                    <span className="text-xs text-slate-400">Recomana abans mestres del mateix cicle per coherència pedagògica.</span>
+                    <span className="text-xs text-slate-400">Recomana abans els mestres del mateix cicle afectat.</span>
                   </div>
                 </label>
 
@@ -287,31 +316,31 @@
                     className="w-4 h-4 text-blue-600 border-slate-300 rounded mt-0.5"
                   />
                   <div>
-                    <span className="text-sm font-semibold block">Garantir equitat escolar</span>
-                    <span className="text-xs text-slate-400">Ordena els candidats de manera que surti primer qui porti menys substitucions fetes.</span>
+                    <span className="text-sm font-semibold block">Garantir equitat de guàrdies</span>
+                    <span className="text-xs text-slate-400">Ordena automàticament segons qui porti menys hores fetes.</span>
                   </div>
                 </label>
               </div>
 
             </div>
 
-            {/* Pas 4: Resultat - Resolució automàtica i llista de candidats */}
+            {/* Resultats */}
             <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
               <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/70 flex justify-between items-center">
                 <h3 className="font-bold text-slate-800 text-sm md:text-base">Mestres idonis recomanats ({candidatsRecomanats.length})</h3>
                 <span className="text-xs bg-emerald-50 text-emerald-700 font-bold px-2.5 py-1 rounded-full border border-emerald-200 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Algorisme actiu
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Algorisme Net
                 </span>
               </div>
 
               <div className="p-4 divide-y divide-slate-100">
                 {mestres.length === 0 ? (
                   <div className="text-center py-10 text-slate-400 text-sm">
-                    Carrega el document Word (.docx) amb els horaris per comprovar la disponibilitat.
+                    Llista buida. Puja el fitxer .docx de l'escola per començar.
                   </div>
                 ) : candidatsRecomanats.length === 0 ? (
                   <div className="text-center py-10 text-slate-500 text-sm">
-                    No hi ha cap mestre disponible que compleixi les condicions o l'hora triada.
+                    No hi ha cap mestre disponible (Lliure/Guàrdia/Suport) per a l'hora seleccionada.
                   </div>
                 ) : (
                   candidatsRecomanats.map((candidat, index) => (
@@ -335,7 +364,7 @@
                         onClick={() => assignarSuplencia(candidat.nom)}
                         className="bg-slate-900 hover:bg-blue-600 text-white font-semibold text-xs px-3 py-2 rounded-xl transition-all shadow-sm active:scale-95 shrink-0"
                       >
-                        Assignar hora
+                        Assignar
                       </button>
                     </div>
                   ))
