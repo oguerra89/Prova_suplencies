@@ -6,218 +6,244 @@
   <title>Cobrir Suplencies</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body class="bg-slate-50">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
 
-  <div id="root"></div>
-
-  <script type="text/babel">
-    const { useState, useEffect } = React;
-
-    const cap = (nom) => nom ? nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase() : '';
-
-    function MainApp() {
-      const [inputUrl, setInputUrl] = useState('');
-      const [isProcessing, setIsProcessing] = useState(false);
+  <div class="min-w-screen min-h-screen p-4 md:p-6">
+    <div class="max-w-4xl mx-auto space-y-4">
       
-      // Tots els mestres de la llista original
-      const [allMestres, setAllMestres] = useState(() => {
-        const desat = localStorage.getItem('suplencies_all_mestres');
-        return desat ? JSON.parse(desat) : [];
-      });
-
-      // Mestres filtrats que es mostraran a la pantalla
-      const [nomsMestres, setNomsMestres] = useState([]);
-
-      // QUADRE DE CRITERIS EN BLANC AMB MEMÒRIA LOCAL
-      const [criterisLliures, setCriterisLliures] = useState(() => {
-        return localStorage.getItem('suplencies_criteris_lliures') || '';
-      });
-
-      // Guardar canvis automàticament al navegador
-      useEffect(() => {
-        localStorage.setItem('suplencies_all_mestres', JSON.stringify(allMestres));
-      }, [allMestres]);
-
-      useEffect(() => {
-        localStorage.setItem('suplencies_criteris_lliures', criterisLliures);
-      }, [criterisLliures]);
-
-      // L'ALGORISME: Cada vegada que el mestre escriu un criteri o canvia la llista, la web en fa cas immediat
-      useEffect(() => {
-        if (allMestres.length === 0) {
-          setNomsMestres([]);
-          return;
-        }
-
-        // Si el quadre de criteris està buit, mostrem tots els mestres
-        if (!criterisLliures.trim()) {
-          setNomsMestres(allMestres);
-          return;
-        }
-
-        // Si el mestre escriu algun nom o paraula clau als criteris, filtrem la llista fent-li cas
-        const paraulesClau = criterisLliures.toLowerCase().split(/[\n, ]+/).filter(p => p.length > 1);
-        
-        const filtrats = allMestres.filter(nom => {
-          return paraulesClau.some(paraula => nom.toLowerCase().includes(paraula));
-        });
-
-        // Si el que ha escrit coincideix amb mestres, mostrem només aquells que compleixen el criteri
-        setNomsMestres(filtrats.length > 0 ? filtrats : allMestres);
-
-      }, [criterisLliures, allMestres]);
-
-      // Processar l'enllaç del Drive o Sheets públic
-      const handleProcess = async () => {
-        if (!inputUrl) return;
-        setIsProcessing(true);
-        
-        try {
-          let fetchUrl = inputUrl.trim();
-          if (inputUrl.includes('docs.google.com/spreadsheets')) {
-            fetchUrl = inputUrl.replace(/\/edit.*/, '/export?format=csv');
-          }
-          
-          const response = await fetch(fetchUrl);
-          if (!response.ok) throw new Error('Error de xarxa');
-          
-          const text = await response.text();
-          const lines = text.split('\n');
-          const names = [];
-          
-          lines.forEach((line, index) => {
-            if (index === 0) return; // Ignorar capçalera
-            const columns = line.split(/[;,]/); // Accepta tant coma com punt i coma
-            const name = columns[0]?.trim().replace(/^"|"$/g, '');
-            if (name) names.push(name);
-          });
-          
-          setAllMestres(names);
-          alert(`S'han carregat correctament ${names.length} mestres des del Drive!`);
-        } catch (error) {
-          console.error(error);
-          alert('Error en processar l\'enllaç. Comprova que l\'arxiu de Sheets sigui públic ("Qualsevol persona amb l\'enllaç").');
-        } finally {
-          setIsProcessing(false);
-        }
-      };
-
-      const esborrarMestre = (nomAEditar) => {
-        setAllMestres(prev => prev.filter(n => n !== nomAEditar));
-      };
-
-      const buidarTot = () => {
-        if (confirm("Vols esborrar tota la llista de mestres?")) {
-          setAllMestres([]);
-          setInputUrl('');
-        }
-      };
-
-      return (
-        <div className="min-w-screen min-h-screen bg-slate-50 p-4 md:p-6 text-slate-800">
-          <div className="max-w-4xl mx-auto space-y-4">
-            
-            {/* Targeta Principal de Càrrega (El teu disseny original) */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-              <div className="flex justify-between items-center mb-4">
-                <h1 className="text-xl font-bold text-slate-900">Suplències I.E Tramuntana</h1>
-                {allMestres.length > 0 && (
-                  <button 
-                    onClick={buidarTot} 
-                    className="text-xs text-red-500 border border-red-200 hover:bg-red-50 rounded-xl px-3 py-1.5 font-medium transition-colors"
-                  >
-                    Buidar llista
-                  </button>
-                )}
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-2">
-                <input 
-                  type="text" 
-                  placeholder="Enganxa l'enllaç del Drive o Sheets aquí..." 
-                  className="flex-1 px-4 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50/50"
-                  value={inputUrl}
-                  onChange={(e) => setInputUrl(e.target.value)}
-                />
-                <button 
-                  onClick={handleProcess}
-                  disabled={isProcessing}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 text-white font-medium text-sm px-5 py-2 rounded-xl transition-colors flex items-center justify-center gap-2"
-                >
-                  {isProcessing && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>}
-                  {isProcessing ? 'Processant...' : 'Carregar'}
-                </button>
-              </div>
-            </div>
-
-            {/* Quadre del text de criteris sol·licitat en blanc */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
-              <div className="mb-2">
-                <h3 className="font-bold text-slate-800 text-sm">Criteris de Suplència Actius</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Escriu lliurement les teves normes o els noms dels mestres prioritaris. La llista de sota reaccionarà al teu text.</p>
-              </div>
-              <textarea
-                value={criterisLliures}
-                onChange={(e) => setCriterisLliures(e.target.value)}
-                placeholder="Deixa aquí anotats els teus criteris o instruccions de cobertura d'avui..."
-                className="w-full h-28 p-3 border border-slate-200 rounded-xl bg-slate-50/30 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans text-slate-700 mt-2"
-              />
-            </div>
-
-            {/* Llistat dinàmic amb els teus xips i el botó vermell d'esborrar exactament iguals */}
-            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-              <div className="px-5 py-3 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-                <h3 className="font-bold text-slate-700 text-sm">
-                  {criterisLliures.trim() ? 'Mestres filtrats per criteri' : 'Mestres carregats'} ({nomsMestres.length})
-                </h3>
-                <span className="text-[11px] text-slate-400 font-medium">Fes clic a Esborrar per treure'ls temporalment</span>
-              </div>
-              
-              <div className="p-4 flex flex-wrap gap-2">
-                {allMestres.length === 0 ? (
-                  <div className="text-center py-6 text-slate-400 text-sm w-full">
-                    No hi ha cap mestre carregat. Enganxa un enllaç superior per començar.
-                  </div>
-                ) : nomsMestres.length === 0 ? (
-                  <div className="text-center py-6 text-amber-600 text-sm w-full font-medium">
-                    Cap mestre coincideix amb els criteris escrits a dalt.
-                  </div>
-                ) : (
-                  nomsMestres.map(nom => (
-                    <div key={nom} className="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 group hover:border-slate-300 transition-all">
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
-                        <span className="text-xs font-semibold text-slate-700">{cap(nom)}</span>
-                      </div>
-                      <button 
-                        onClick={() => esborrarMestre(nom)}
-                        className="text-[11px] text-slate-400 hover:text-red-500 transition-colors font-medium border-l border-slate-200 pl-2"
-                      >
-                        Esborrar
-                      </button>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-
-            {/* Peu de pàgina original */}
-            <div className="bg-slate-100 rounded-2xl border border-slate-200 p-4">
-              <p className="text-xs text-slate-500 text-center">Eina de coordinació interna de l'escola.</p>
-            </div>
-
-          </div>
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <div class="flex justify-between items-center mb-4">
+          <h1 class="text-xl font-bold text-slate-900">Suplències I.E Tramuntana</h1>
+          <button 
+            id="btnBuidar" 
+            class="hidden text-xs text-red-500 border border-red-200 hover:bg-red-50 rounded-xl px-3 py-1.5 font-medium transition-colors"
+          >
+            Buidar llista
+          </button>
         </div>
-      );
+        
+        <div class="flex flex-col sm:flex-row gap-2">
+          <input 
+            type="text" 
+            id="inputUrl"
+            placeholder="Enganxa l'enllaç del Drive o Sheets aquí..." 
+            class="flex-1 px-4 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50/50"
+          />
+          <button 
+            id="btnCarregar"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-5 py-2 rounded-xl transition-colors flex items-center justify-center gap-2"
+          >
+            <span id="textCarregar">Carregar</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+        <div class="mb-2">
+          <h3 class="font-bold text-slate-800 text-sm">Criteris de Suplència Actius</h3>
+          <p className="text-xs text-slate-400 mt-0.5">Escriu lliurement les teves normes o els noms dels mestres prioritaris. La llista de sota reaccionarà al teu text.</p>
+        </div>
+        <textarea
+          id="criterisLliures"
+          placeholder="Deixa aquí anotats els teus criteris o instruccions de cobertura d'avui..."
+          class="w-full h-28 p-3 border border-slate-200 rounded-xl bg-slate-50/30 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-sans text-slate-700 mt-2"
+        ></textarea>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+        <div class="px-5 py-3 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+          <h3 id="titolLlista" class="font-bold text-slate-700 text-sm">
+            Mestres carregats (0)
+          </h3>
+          <span class="text-[11px] text-slate-400 font-medium">Fes clic a Esborrar per treure'ls temporalment</span>
+        </div>
+        
+        <div id="contenidorMestres" class="p-4 flex flex-wrap gap-2">
+          </div>
+      </div>
+
+      <div class="bg-slate-100 rounded-2xl border border-slate-200 p-4">
+        <p class="text-xs text-slate-500 text-center">Eina de coordinació interna de l'escola.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Variables d'estat globals en JavaScript pur
+    let allMestres = [];
+    
+    // Elements del DOM
+    const inputUrl = document.getElementById('inputUrl');
+    const btnCarregar = document.getElementById('btnCarregar');
+    const textCarregar = document.getElementById('textCarregar');
+    const btnBuidar = document.getElementById('btnBuidar');
+    const criterisLliures = document.getElementById('criterisLliures');
+    const titolLlista = document.getElementById('titolLlista');
+    const contenidorMestres = document.getElementById('contenidorMestres');
+
+    // Inicialització des de LocalStorage
+    function inicialitzar() {
+      const desatMestres = localStorage.getItem('suplencies_all_mestres');
+      if (desatMestres) {
+        allMestres = JSON.parse(desatMestres);
+      }
+      
+      const desatCriteris = localStorage.getItem('suplencies_criteris_lliures');
+      if (desatCriteris) {
+        criterisLliures.value = desatCriteris;
+      }
+
+      renderitzar();
     }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<MainApp />);
+    // Funció per formatar correctament els noms (Capitalize)
+    function cap(nom) {
+      return nom ? nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase() : '';
+    }
+
+    // Actualització visual de la pantalla i aplicació de filtres
+    function renderitzar() {
+      // Guardar estat actual a LocalStorage
+      localStorage.setItem('suplencies_all_mestres', JSON.stringify(allMestres));
+      localStorage.setItem('suplencies_criteris_lliures', criterisLliures.value);
+
+      // Mostrar/Amagar botó de buidar global
+      if (allMestres.length > 0) {
+        btnBuidar.classList.remove('hidden');
+      } else {
+        btnBuidar.classList.add('hidden');
+      }
+
+      // Netejar el contenidor
+      contenidorMestres.innerHTML = '';
+
+      if (allMestres.length === 0) {
+        titolLlista.innerText = "Mestres carregats (0)";
+        contenidorMestres.innerHTML = `
+          <div class="text-center py-6 text-slate-400 text-sm w-full">
+            No hi ha cap mestre carregat. Enganxa un enllaç superior per començar.
+          </div>`;
+        return;
+      }
+
+      // Aplicar l'algorisme de filtre segons el quadre de text actiu
+      const textCriteri = criterisLliures.value.trim();
+      let mestresAAlbergar = [...allMestres];
+
+      if (textCriteri) {
+        titolLlista.innerText = "Mestres filtrats per criteri";
+        const paraulesClau = textCriteri.toLowerCase().split(/[\n, ]+/).filter(p => p.length > 1);
+        
+        if (paraulesClau.length > 0) {
+          const filtrats = allMestres.filter(nom => {
+            return paraulesClau.some(paraula => nom.toLowerCase().includes(paraula));
+          });
+          if (filtrats.length > 0) {
+            mestresAAlbergar = filtrats;
+          } else {
+            mestresAAlbergar = [];
+          }
+        }
+      } else {
+        titolLlista.innerText = `Mestres carregats (${allMestres.length})`;
+      }
+
+      // Si s'aplica filtre i no queda cap mestre coincident
+      if (mestresAAlbergar.length === 0 && textCriteri) {
+        contenidorMestres.innerHTML = `
+          <div class="text-center py-6 text-amber-600 text-sm w-full font-medium">
+            Cap mestre coincideix amb els criteris escrits a dalt.
+          </div>`;
+        return;
+      }
+
+      // Crear cada xip de mestre amb el disseny original
+      mestresAAlbergar.forEach(nom => {
+        const xip = document.createElement('div');
+        xip.className = "flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 group hover:border-slate-300 transition-all";
+        
+        xip.innerHTML = `
+          <div class="flex items-center gap-1.5">
+            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+            <span class="text-xs font-semibold text-slate-700">${cap(nom)}</span>
+          </div>
+        `;
+
+        // Botó individual d'esborrar temporalment
+        const btnEsborrar = document.createElement('button');
+        btnEsborrar.className = "text-[11px] text-slate-400 hover:text-red-500 transition-colors font-medium border-l border-slate-200 pl-2";
+        btnEsborrar.innerText = "Esborrar";
+        btnEsborrar.onclick = () => {
+          allMestres = allMestres.filter(n => n !== nom);
+          renderitzar();
+        };
+
+        xip.appendChild(btnEsborrar);
+        contenidorMestres.appendChild(xip);
+      });
+    }
+
+    // Processar acció de càrrega del Sheets/Drive CSV
+    async function handleProcess() {
+      const url = inputUrl.value.trim();
+      if (!url) return;
+
+      textCarregar.innerText = 'Processant...';
+      btnCarregar.disabled = true;
+
+      try {
+        let fetchUrl = url;
+        if (url.includes('docs.google.com/spreadsheets')) {
+          fetchUrl = url.replace(/\/edit.*/, '/export?format=csv');
+        }
+
+        const response = await fetch(fetchUrl);
+        if (!response.ok) throw new Error('Error de connexió');
+
+        const text = await response.text();
+        const lines = text.split('\n');
+        const names = [];
+
+        lines.forEach((line, index) => {
+          if (index === 0) return; // Ometre capçalera del document
+          const columns = line.split(/[;,]/);
+          const name = columns[0]?.trim().replace(/^"|"$/g, '');
+          if (name) names.push(name);
+        });
+
+        if (names.length > 0) {
+          allMestres = names;
+          renderitzar();
+          alert(`S'han carregat correctament ${names.length} mestres.`);
+        } else {
+          alert("No s'ha trobat cap nom a la primera columna d'aquest fitxer.");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error en processar l'enllaç. Comprova que l'arxiu estigui configurat com a Públic ('Qualsevol persona amb l'enllaç').");
+      } finally {
+        textCarregar.innerText = 'Carregar';
+        btnCarregar.disabled = false;
+      }
+    }
+
+    // Escoltadors d'esdeveniments (Listeners)
+    btnCarregar.addEventListener('click', handleProcess);
+    
+    criterisLliures.addEventListener('input', renderitzar);
+    
+    btnBuidar.addEventListener('click', () => {
+      if (confirm("Vols esborrar tota la llista de mestres?")) {
+        allMestres = [];
+        inputUrl.value = '';
+        renderitzar();
+      }
+    });
+
+    // Engegar l'aplicació en carregar la pàgina
+    inicialitzar();
   </script>
 </body>
 </html>
