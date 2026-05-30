@@ -1,190 +1,444 @@
-<!DOCTYPE html>
-<html lang="ca">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Gestor de Suplències de l'Escola</title>
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<!DOCTYPE html><html lang='ca'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'><title>Cobrir Suplencies</title>
+<style>*, ::before, ::after {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
 
-  <style>
-    body {
-      background-color: #f8fafc;
-    }
-  </style>
-</head>
-<body>
+::backdrop {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
 
-  <div id="root"></div>
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+}
 
-  <script type="text/babel">
-    const { useState, useEffect } = React;
+::before,
+::after {
+  --tw-content: '';
+}
 
-    const cap = (nom) => nom ? nom.charAt(0).toUpperCase() + nom.slice(1).toLowerCase() : '';
+html,
+:host {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+     tab-size: 4;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
+}
 
-    function AppCobrirSuplencies() {
-      // Estats desats a la memòria local (LocalStorage)
-      const [urlDrive, setUrlDrive] = useState(() => {
-        return localStorage.getItem('suplencies_url_drive') || '';
-      });
+body {
+  margin: 0;
+  line-height: inherit;
+}
 
-      const [mestres, setMestres] = useState(() => {
-        const desat = localStorage.getItem('suplencies_mestres_v3');
-        return desat ? JSON.parse(desat) : [];
-      });
+hr {
+  height: 0;
+  color: inherit;
+  border-top-width: 1px;
+}
 
-      const [criterisText, setCriterisText] = useState(() => {
-        const desat = localStorage.getItem('suplencies_criteris_text_v3');
-        return desat ? desat : 'Escriu aquí els criteris de l\'escola...\n\nExemple:\n1. Prioritzar mestres del mateix cicle.\n2. Mirar qui té menys suplències fetes.';
-      });
+abbr:where([title]) {
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
+}
 
-      const [comptadorSuplencies, setComptadorSuplencies] = useState(() => {
-        const desat = localStorage.getItem('suplencies_comptador_v3');
-        return desat ? JSON.parse(desat) : {};
-      });
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
 
-      const [incidencia, setIncidencia] = useState({ mestreAbsent: '', hora: 'H1' });
-      const [disponibles, setDisponibles] = useState([]);
-      const [isCarregant, setIsCarregant] = useState(false);
-      const [estatConnexio, setEstatConnexio] = useState(mestres.length > 0 ? 'Dades carregades de la memòria' : 'Esperant enllaç de Drive');
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
 
-      // Desat automàtic dels canvis al navegador
-      useEffect(() => {
-        localStorage.setItem('suplencies_url_drive', urlDrive);
-      }, [urlDrive]);
+b,
+strong {
+  font-weight: bolder;
+}
 
-      useEffect(() => {
-        localStorage.setItem('suplencies_mestres_v3', JSON.stringify(mestres));
-      }, [mestres]);
+code,
+kbd,
+samp,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  font-size: 1em;
+}
 
-      useEffect(() => {
-        localStorage.setItem('suplencies_criteris_text_v3', criterisText);
-      }, [criterisText]);
+small {
+  font-size: 80%;
+}
 
-      useEffect(() => {
-        localStorage.setItem('suplencies_comptador_v3', JSON.stringify(comptadorSuplencies));
-      }, [comptadorSuplencies]);
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
 
-      // Algorisme de filtre segons la franja horària triada
-      useEffect(() => {
-        if (mestres.length === 0) {
-          setDisponibles([]);
-          return;
-        }
+sub {
+  bottom: -0.25em;
+}
 
-        let filtrats = mestres.filter(m => {
-          const estatHora = m[incidencia.hora]?.toUpperCase() || '';
-          return estatHora === 'LLIURE' || estatHora === 'GUÀRDIA' || estatHora === 'GUARDIA' || estatHora === 'SUPORT';
-        });
+sup {
+  top: -0.5em;
+}
 
-        if (incidencia.mestreAbsent) {
-          filtrats = filtrats.filter(m => m.nom.toLowerCase() !== incidencia.mestreAbsent.toLowerCase());
-        }
+table {
+  text-indent: 0;
+  border-color: inherit;
+  border-collapse: collapse;
+}
 
-        setDisponibles(filtrats);
-      }, [incidencia, mestres]);
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
 
-      // Funció clau de l'Opció B: Transforma l'enllaç humà en un enllaç directe per a codi
-      const carregarDes deDrive = async () => {
-        if (!urlDrive) {
-          alert("Por favor, enganxa primer un enllaç de Google Drive.");
-          return;
-        }
+button,
+select {
+  text-transform: none;
+}
 
-        setIsCarregant(true);
-        setEstatConnexio('Connectant amb Google Drive...');
+button,
+input:where([type='button']),
+input:where([type='reset']),
+input:where([type='submit']) {
+  -webkit-appearance: button;
+  background-color: transparent;
+  background-image: none;
+}
 
-        try {
-          let urlNeta = urlDrive.trim();
-          
-          // Si és un full de càlcul compartit normal, intentem demanar el format CSV exportable públic
-          if (urlNeta.includes('docs.google.com/spreadsheets')) {
-            urlNeta = urlNeta.replace(/\/edit.*/, '/export?format=csv');
-          } 
-          // Si és un enllaç de descàrrega de fitxer normal
-          else if (urlNeta.includes('file/d/')) {
-            const match = urlNeta.match(/file\/d\/([^/]+)/);
-            if (match && match[1]) {
-              urlNeta = `https://docs.google.com/uc?export=download&id=${match[1]}`;
-            }
-          }
+:-moz-focusring {
+  outline: auto;
+}
 
-          const resposta = await fetch(urlNeta);
-          if (!resposta.ok) throw new Error("No s'ha pogut accedir al fitxer.");
-          
-          const textDades = await resposta.text();
-          
-          // Detectem si és un CSV (Full de càlcul) o text estructurat
-          if (textDades.includes(',') || textDades.includes(';')) {
-            parsejarCSV(textDades);
-          } else {
-            throw new Error("El format del fitxer no s'ha reconegut com una taula vàlida.");
-          }
+:-moz-ui-invalid {
+  box-shadow: none;
+}
 
-        } catch (error) {
-          alert("Error de connexió: Assegura't que el fitxer està configurat com a 'Qualsevol usuari amb l'enllaç' i que és un Full de Càlcul de Google (Sheets) publicat o compartit.");
-          setEstatConnexio('Error en sincronitzar');
-          setIsCarregant(false);
-        }
-      };
+progress {
+  vertical-align: baseline;
+}
 
-      const parsejarCSV = (text) => {
-        const linies = text.split('\n');
-        const llistaMestres = [];
-        const separator = text.includes(';') ? ';' : ',';
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  height: auto;
+}
 
-        linies.forEach((linia, index) => {
-          const columnes = linia.split(separator).map(c => c.trim().replace(/^"|"$/g, ''));
-          if (index === 0 || columnes.length < 3) return; // Capçalera o buit
+[type='search'] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
+}
 
-          const nomMestre = columnes[0];
-          const cicleMestre = columnes[1];
-          const h1 = columnes[2];
-          const h2 = columnes[3];
-          const h3 = columnes[4];
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
 
-          if (nomMestre) {
-            llistaMestres.push({ nom: nomMestre, cicle: cicleMestre, H1: h1, H2: h2, H3: h3 });
-          }
-        });
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
 
-        if (llistaMestres.length === 0) {
-          alert("No s'han pogut processar les files del full de càlcul.");
-          setIsCarregant(false);
-          return;
-        }
+summary {
+  display: list-item;
+}
 
-        setMestres(llistaMestres);
-        setEstatConnexio('Sincronitzat amb èxit amb el Drive!');
-        setIsCarregant(false);
-        alert(`S'han sincronitzat directament ${llistaMestres.length} mestres des del teu Google Drive!`);
-      };
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}
 
-      const ferSuplencia = (nom) => {
-        setComptadorSuplencies(prev => ({ ...prev, [nom]: (prev[nom] || 0) + 1 }));
-        alert(`Suplència comptabilitzada per a ${cap(nom)}.`);
-      };
+fieldset {
+  margin: 0;
+  padding: 0;
+}
 
-      const reiniciarAplicacio = () => {
-        if (confirm("Vols esborrar la configuració i començar de zero?")) {
-          localStorage.clear();
-          setUrlDrive('');
-          setMestres([]);
-          setComptadorSuplencies({});
-          setEstatConnexio('Esperant enllaç de Drive');
-        }
-      };
+legend {
+  padding: 0;
+}
 
-      return (
-        <div className="min-w-screen min-h-screen bg-slate-50 p-4 md:p-6 font-sans text-slate-800">
-          <div className="max-w-6xl mx-auto space-y-6">
-            
-            {/* Capçalera amb input de Drive directe */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div className="shrink-0">
-                <h1 className="text-
+ol,
+ul, menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+dialog {
+  padding: 0;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input::-moz-placeholder, textarea::-moz-placeholder {
+  opacity: 1;
+  color: #9ca3af;
+}
+
+input::placeholder,
+textarea::placeholder {
+  opacity: 1;
+  color: #9ca3af;
+}
+
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
+:disabled {
+  cursor: default;
+}
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  vertical-align: middle;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+[hidden]:where(:not([hidden="until-found"])) {
+  display: none;
+}
+
+.mb-1\.5 { margin-bottom: 0.375rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 0.75rem; }
+.ml-2 { margin-left: 0.5rem; }
+.ml-9 { margin-left: 2.25rem; }
+.mt-0\.5 { margin-top: 0.125rem; }
+.mt-1 { margin-top: 0.25rem; }
+.mt-1\.5 { margin-top: 0.375rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 0.75rem; }
+.block { display: block; }
+.inline-block { display: inline-block; }
+.flex { display: flex; }
+.h-1\.5 { height: 0.375rem; }
+.h-10 { height: 2.5rem; }
+.h-2 { height: 0.5rem; }
+.h-36 { height: 9rem; }
+.h-4 { height: 1rem; }
+.h-6 { height: 1.5rem; }
+.h-7 { height: 1.75rem; }
+.h-8 { height: 2rem; }
+.h-full { height: 100%; }
+.h-px { height: 1px; }
+.max-h-60 { max-height: 15rem; }
+.min-h-screen { min-height: 100vh; }
+.w-1\.5 { width: 0.375rem; }
+.w-10 { width: 2.5rem; }
+.w-2 { width: 0.5rem; }
+.w-4 { width: 1rem; }
+.w-6 { width: 1.5rem; }
+.w-7 { width: 1.75rem; }
+.w-8 { width: 2rem; }
+.w-full { width: 100%; }
+.min-w-0 { min-width: 0px; }
+.flex-1 { flex: 1 1 0%; }
+.shrink-0 { flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.animate-spin { animation: spin 1s linear infinite; }
+.resize-none { resize: none; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-start { align-items: flex-start; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-0\.5 { gap: 0.125rem; }
+.gap-1\.5 { gap: 0.375rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.space-y-1\.5 > :not([hidden]) ~ :not([hidden]) { --tw-space-y-reverse: 0; margin-top: calc(0.375rem * calc(1 - var(--tw-space-y-reverse))); margin-bottom: calc(0.375rem * var(--tw-space-y-reverse)); }
+.space-y-2 > :not([hidden]) ~ :not([hidden]) { --tw-space-y-reverse: 0; margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse))); margin-bottom: calc(0.5rem * var(--tw-space-y-reverse)); }
+.space-y-3 > :not([hidden]) ~ :not([hidden]) { --tw-space-y-reverse: 0; margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse))); margin-bottom: calc(0.75rem * var(--tw-space-y-reverse)); }
+.space-y-4 > :not([hidden]) ~ :not([hidden]) { --tw-space-y-reverse: 0; margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse))); margin-bottom: calc(1rem * var(--tw-space-y-reverse)); }
+.divide-y > :not([hidden]) ~ :not([hidden]) { --tw-divide-y-reverse: 0; border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse))); border-bottom-width: calc(1px * var(--tw-divide-y-reverse)); }
+.divide-slate-100 > :not([hidden]) ~ :not([hidden]) { --tw-divide-opacity: 1; border-color: rgb(241 245 249 / var(--tw-divide-opacity, 1)); }
+.overflow-auto { overflow: auto; }
+.overflow-hidden { overflow: hidden; }
+.overflow-y-auto { overflow-y: auto; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.whitespace-pre-wrap { white-space: pre-wrap; }
+.rounded-2xl { border-radius: 1rem; }
+.rounded-full { border-radius: 9999px; }
+.rounded-lg { border-radius: 0.5rem; }
+.rounded-xl { border-radius: 0.75rem; }
+.border { border-width: 1px; }
+.border-2 { border-width: 2px; }
+.border-4 { border-width: 4px; }
+.border-b { border-bottom-width: 1px; }
+.border-b-2 { border-bottom-width: 2px; }
+.border-dashed { border-style: dashed; }
+.border-amber-200 { --tw-border-opacity: 1; border-color: rgb(253 230 138 / var(--tw-border-opacity, 1)); }
+.border-amber-400 { --tw-border-opacity: 1; border-color: rgb(251 191 36 / var(--tw-border-opacity, 1)); }
+.border-blue-200 { --tw-border-opacity: 1; border-color: rgb(191 219 254 / var(--tw-border-opacity, 1)); }
+.border-blue-500 { --tw-border-opacity: 1; border-color: rgb(59 130 246 / var(--tw-border-opacity, 1)); }
+.border-blue-600 { --tw-border-opacity: 1; border-color: rgb(37 99 235 / var(--tw-border-opacity, 1)); }
+.border-emerald-100 { --tw-border-opacity: 1; border-color: rgb(209 250 229 / var(--tw-border-opacity, 1)); }
+.border-emerald-200 { --tw-border-opacity: 1; border-color: rgb(167 243 208 / var(--tw-border-opacity, 1)); }
+.border-emerald-400 { --tw-border-opacity: 1; border-color: rgb(52 211 153 / var(--tw-border-opacity, 1)); }
+.border-red-200 { --tw-border-opacity: 1; border-color: rgb(254 202 202 / var(--tw-border-opacity, 1)); }
+.border-red-300 { --tw-border-opacity: 1; border-color: rgb(252 165 165 / var(--tw-border-opacity, 1)); }
+.border-slate-100 { --tw-border-opacity: 1; border-color: rgb(241 245 249 / var(--tw-border-opacity, 1)); }
+.border-slate-200 { --tw-border-opacity: 1; border-color: rgb(226 232 240 / var(--tw-border-opacity, 1)); }
+.border-slate-300 { --tw-border-opacity: 1; border-color: rgb(203 213 225 / var(--tw-border-opacity, 1)); }
+.border-transparent { border-color: transparent; }
+.border-white { --tw-border-opacity: 1; border-color: rgb(255 255 255 / var(--tw-border-opacity, 1)); }
+.border-t-transparent { border-top-color: transparent; }
+.bg-amber-400 { --tw-bg-opacity: 1; background-color: rgb(251 191 36 / var(--tw-bg-opacity, 1)); }
+.bg
