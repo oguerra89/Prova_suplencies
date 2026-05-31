@@ -66,23 +66,28 @@ function parseHoraris(text,franges=FRANGES_DEFAULT){
       // Format tabuladors (Google Docs exportat com a text pla)
       // Cada taula comença amb una línia de capçalera tipus "Horari tutora X  Nom Cognom  Any"
       // Buscar el nom del mestre a la primera línia
-      const primeraCells=lines[0].split("\t").map(s=>s.trim());
+      // Netejar \r (Windows line endings)
+      const linesNet=lines.map(l=>l.replace(/\r/g,""));
+      // Buscar nom del mestre a les primeres 3 línies (pot estar a la 2a línia)
       let nom=null;
-      for(const cell of primeraCells){
-        // El nom del mestre ha de tenir almenys nom i cognom
-        const match=cell.match(/^([A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+(?:\s+[A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+)+)$/);
-        if(match){nom=match[1].toUpperCase();break;}
+      for(let li=0;li<Math.min(3,linesNet.length);li++){
+        for(const cell of linesNet[li].split("\t").map(s=>s.trim())){
+          const match=cell.match(/^([A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+(?:\s+[A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+)+)$/);
+          if(match){nom=match[1].toUpperCase();break;}
+        }
+        if(nom)break;
       }
-      // Si no hi ha nom de persona a la primera línia, és l'horari del grup -> ignorar
+      // Si no hi ha nom de persona, és l'horari del grup -> ignorar
       if(!nom)continue;
+      const linesN=linesNet;
       if(m[nom])continue;
       m[nom]={};
       let headerIdx=-1;const colDia={};
-      for(let i=0;i<lines.length;i++){
-        const u=lines[i].toUpperCase();
+      for(let i=0;i<linesN.length;i++){
+        const u=linesN[i].toUpperCase();
         if(u.includes("DILLUNS")||u.includes("DIMARTS")){
           headerIdx=i;
-          lines[i].split("\t").map(s=>s.trim()).forEach((c,idx)=>{
+          linesN[i].split("\t").map(s=>s.trim()).forEach((c,idx)=>{
             const d=DIES.find(dia=>c.toUpperCase().includes(dia.toUpperCase()));
             if(d)colDia[idx]=d;
           });
@@ -90,9 +95,9 @@ function parseHoraris(text,franges=FRANGES_DEFAULT){
         }
       }
       if(headerIdx<0)continue;
-      for(let i=headerIdx+1;i<lines.length;i++){
-        if(isSorollStr(lines[i]))continue;
-        const cells=lines[i].split("\t").map(s=>s.trim());
+      for(let i=headerIdx+1;i<linesN.length;i++){
+        if(isSorollStr(linesN[i]))continue;
+        const cells=linesN[i].split("\t").map(s=>s.trim());
         const franja=canonFranja(cells[0]||"",franges);
         if(!franja)continue;
         cells.forEach((c,idx)=>{
@@ -249,9 +254,11 @@ function handleCredentialResponse(response){
 function parseJwt(token){const base64=token.split(".")[1].replace(/-/g,"+").replace(/_/g,"/");return JSON.parse(atob(base64));}
 function loginWithGoogle(){
   if(!window.google){alert("Google no carregat, torna-ho a intentar.");return;}
-  google.accounts.oauth2.initTokenClient({
+  // Usar ux_mode redirect per evitar problemes COOP amb GitHub Pages
+  const client = google.accounts.oauth2.initTokenClient({
     client_id:GOOGLE_CLIENT_ID,
     scope:"email profile https://www.googleapis.com/auth/drive.readonly",
+    ux_mode:"popup",
     callback:(tokenResponse)=>{
       if(tokenResponse.access_token){
         currentUser={...currentUser,accessToken:tokenResponse.access_token};
@@ -260,7 +267,13 @@ function loginWithGoogle(){
         render();
       }
     },
-  }).requestAccessToken();
+    error_callback:(err)=>{
+      console.error("Token error:",err);
+      // Fallback: demanar sense popup
+      window.open("https://accounts.google.com/o/oauth2/v2/auth?client_id="+GOOGLE_CLIENT_ID+"&redirect_uri="+encodeURIComponent(location.href)+"&response_type=token&scope="+encodeURIComponent("email profile https://www.googleapis.com/auth/drive.readonly"),"_self");
+    }
+  });
+  client.requestAccessToken({prompt:"consent"});
 }
 function logout(){if(window.google)google.accounts.id.disableAutoSelect();currentUser=null;setState({loggedIn:false,user:null,mestres:{},registre:[],resultatsMultiple:null,criterisText:"",criterisGuardats:false});}
 function loadUserData(){
