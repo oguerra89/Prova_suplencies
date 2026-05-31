@@ -42,27 +42,60 @@ function extractFolderId(url){const m=url.match(/\/folders\/([a-zA-Z0-9_-]+)/);i
 const SOROLL=["ESBARJO","ESPAI MIGDIA","CLAUSTRES","COMISSIONS","FORMACIÓ","PER FER","REUNIONS",":-:","16:0","17H","8:30"];
 function isSoroll(s){const u=s.toUpperCase().replace(/\s/g,"");return SOROLL.some(k=>u.includes(k.replace(/\s/g,"")));}
 function canonFranja(s,franges){
-  const t=s.replace(/\s/g,"");
-  for(const f of franges){const i=f.inici.replace(":","").replace(/^0/,"");if(t.startsWith(f.inici)||t.startsWith(i))return f.id;}
-  if(t.startsWith("9-10")||t.startsWith("9–10"))return"9h";
-  if(t.startsWith("10-11")||t.startsWith("10–11"))return"10h";
+  const t=s.trim().replace(/\s/g,"");
+  if(/^9[-\u20138]10/.test(t)||t.startsWith("9:00"))return"9h";
+  if(/^10[-\u20138]11/.test(t)||t.startsWith("10:00"))return"10h";
   if(t.startsWith("11:30")||t.startsWith("11.30"))return"11:30h";
   if(t.startsWith("14:30")||t.startsWith("14.30"))return"14:30h";
   if(t.startsWith("15:15")||t.startsWith("15.15"))return"15:15h";
+  for(const f of franges){const i=f.inici.replace(":","").replace(/^0/,"");if(t.startsWith(f.inici)||t.startsWith(i))return f.id;}
   return null;
 }
 const isTableRow=l=>l.trim().startsWith("|");
 const cleanCell=s=>s.replace(/\\\*/g,"*").replace(/\\/g,"").trim();
+function isSorollStr(s){const u=s.toUpperCase().replace(/\s/g,"");return["ESBARJO","ESPAIMIGDIA","CLAUSTRES","COMISSIONS","FORMACIO","REUNIONS"].some(k=>u.includes(k));}
 function parseHoraris(text,franges=FRANGES_DEFAULT){
   const m={};
-  const blocks=text.trim().split(/\n\s*\n/);
+  const blocks=text.trim().split(/\n{2,}/);
   for(const block of blocks){
-    const lines=block.trim().split("\n").filter(Boolean);
+    const lines=block.trim().split("\n").filter(l=>l.trim());
     if(!lines.length)continue;
+    const hasTab=lines.some(l=>l.includes("\t"));
+    if(hasTab){
+      // Format tabuladors (Google Docs exportat com a text pla)
+      const primeraCells=lines[0].split("\t").map(s=>s.trim());
+      let nom=null;
+      for(const cell of primeraCells){
+        const match=cell.match(/^([A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+(?:\s+[A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+)+)$/);
+        if(match){nom=match[1].toUpperCase();break;}
+      }
+      if(!nom)continue;
+      if(m[nom])continue;
+      m[nom]={};
+      let headerIdx=-1;const colDia={};
+      for(let i=0;i<lines.length;i++){
+        const u=lines[i].toUpperCase();
+        if(u.includes("DILLUNS")||u.includes("DIMARTS")){
+          headerIdx=i;
+          lines[i].split("\t").map(s=>s.trim()).forEach((c,idx)=>{const d=DIES.find(dia=>c.toUpperCase().includes(dia.toUpperCase()));if(d)colDia[idx]=d;});
+          break;
+        }
+      }
+      if(headerIdx<0)continue;
+      for(let i=headerIdx+1;i<lines.length;i++){
+        if(isSorollStr(lines[i]))continue;
+        const cells=lines[i].split("\t").map(s=>s.trim());
+        const franja=canonFranja(cells[0]||"",franges);
+        if(!franja)continue;
+        cells.forEach((c,idx)=>{if(colDia[idx]&&c&&c!=="-"&&!isSorollStr(c)){if(!m[nom][colDia[idx]])m[nom][colDia[idx]]={};m[nom][colDia[idx]][franja]=c;}});
+      }
+      continue;
+    }
+    // Format pipe (|)
     const tableLines=lines.filter(l=>isTableRow(l));
     if(tableLines.length>=3){
       const nomLine=lines.find(l=>!isTableRow(l)&&l.trim().length>2)||"";
-      const nomMatch=nomLine.match(/([A-ZÀÁÂÄÃÈÉÊËÌÍÎÏÒÓÔÖÕÙÚÛÜÇÑ][a-zàáâäãèéêëìíîïòóôöõùúûüçñ]+(?:\s+[A-ZÀÁÂÄÃÈÉÊËÌÍÎÏÒÓÔÖÕÙÚÛÜÇÑ][a-zàáâäãèéêëìíîïòóôöõùúûüçñ]+)+)/);
+      const nomMatch=nomLine.match(/([A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+(?:\s+[A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+)+)/);
       if(!nomMatch)continue;
       const nom=nomMatch[1].toUpperCase();
       if(m[nom])continue;
@@ -72,33 +105,12 @@ function parseHoraris(text,franges=FRANGES_DEFAULT){
       const headerCells=tableLines[headerIdx].split("|").map(cleanCell);
       const colDia={};
       headerCells.forEach((c,i)=>{const d=DIES.find(dia=>c.toUpperCase().includes(dia.toUpperCase()));if(d)colDia[i]=d;});
-      let franjaActual=null;
-      const diaActFranja={};
       for(const row of tableLines.slice(headerIdx+2)){
         if(isSoroll(row))continue;
         const cells=row.split("|").map(cleanCell);
         const franja=canonFranja(cells[0]||"",franges);
-        if(franja){
-          if(franjaActual){
-            for(const[dia,actes]of Object.entries(diaActFranja)){
-              if(!m[nom][dia])m[nom][dia]={};
-              if(actes.length===1)m[nom][dia][franjaActual]=actes[0];
-              else if(actes.length>1)m[nom][dia][franjaActual]="DOBLE:"+actes.join(" / ");
-            }
-          }
-          franjaActual=franja;
-          Object.keys(colDia).forEach(i=>{diaActFranja[colDia[i]]=[];});
-          cells.forEach((c,i)=>{if(colDia[i]&&c&&!isSoroll(c))diaActFranja[colDia[i]]=[c];});
-        } else if(franjaActual){
-          cells.forEach((c,i)=>{if(colDia[i]&&c&&!isSoroll(c)){if(!diaActFranja[colDia[i]])diaActFranja[colDia[i]]=[];diaActFranja[colDia[i]].push(c);}});
-        }
-      }
-      if(franjaActual){
-        for(const[dia,actes]of Object.entries(diaActFranja)){
-          if(!m[nom][dia])m[nom][dia]={};
-          if(actes.length===1)m[nom][dia][franjaActual]=actes[0];
-          else if(actes.length>1)m[nom][dia][franjaActual]="DOBLE:"+actes.join(" / ");
-        }
+        if(!franja)continue;
+        cells.forEach((c,i)=>{if(colDia[i]&&c&&c!=="-"&&!isSoroll(c)){if(!m[nom][colDia[i]])m[nom][colDia[i]]={};m[nom][colDia[i]][franja]=c;}});
       }
       continue;
     }
