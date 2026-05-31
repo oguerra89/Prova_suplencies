@@ -24,20 +24,91 @@ function schoolKey(s){if(!currentUser)return null;const d=currentUser.email.spli
 function sGet(k){const key=schoolKey(k);if(!key)return null;try{const v=localStorage.getItem(key);return v?JSON.parse(v):null;}catch{return null;}}
 function sSet(k,v){const key=schoolKey(k);if(!key)return;try{localStorage.setItem(key,JSON.stringify(v));}catch{}}
 
-async function listDriveFolder(fid,tok){
-  const r=await fetch("https://www.googleapis.com/drive/v3/files?q='"+fid+"'+in+parents+and+trashed=false&fields=files(id,name,mimeType)&pageSize=100",{headers:{Authorization:"Bearer "+tok}});
-  if(!r.ok)throw new Error("Error llegint carpeta: "+r.status);
-  return (await r.json()).files||[];
+async function llegirSheets(sheetsId,tok){
+  // Llegir totes les pestanyes del Sheets
+  const metaUrl="https://sheets.googleapis.com/v4/spreadsheets/"+sheetsId+"?fields=sheets.properties.title";
+  const metaR=await fetch(metaUrl,{headers:{Authorization:"Bearer "+tok}});
+  if(!metaR.ok)throw new Error("Error llegint Sheets: "+metaR.status);
+  const meta=await metaR.json();
+  const sheets=meta.sheets||[];
+  const mestres={};
+  // Llegir CONFIG primer
+  const configSheet=sheets.find(s=>s.properties.title==="CONFIG");
+  let frangesConfig=null;
+  if(configSheet){
+    const cfgData=await llegirPestanya(sheetsId,"CONFIG",tok);
+    frangesConfig=parseFrangesConfig(cfgData);
+  }
+  const franges=frangesConfig||state.franges;
+  // Llegir cada pestanya de mestre
+  for(const sheet of sheets){
+    const title=sheet.properties.title;
+    if(title==="CONFIG"||title==="PLANTILLA_MESTRE") continue;
+    const data=await llegirPestanya(sheetsId,title,tok);
+    const horari=parseSheetMestre(data,franges);
+    if(horari&&Object.keys(horari).length>0){
+      mestres[title.toUpperCase()]=horari;
+    }
+  }
+  return{mestres,franges};
 }
-async function downloadDriveFile(fid,tok,mime){
-  const url=mime==="application/vnd.google-apps.document"
-    ?"https://www.googleapis.com/drive/v3/files/"+fid+"/export?mimeType=text/plain"
-    :"https://www.googleapis.com/drive/v3/files/"+fid+"?alt=media";
+
+async function llegirPestanya(sheetsId,title,tok){
+  const url="https://sheets.googleapis.com/v4/spreadsheets/"+sheetsId+"/values/"+encodeURIComponent(title)+"!A1:G20";
   const r=await fetch(url,{headers:{Authorization:"Bearer "+tok}});
-  if(!r.ok)throw new Error("Error descarregant: "+r.status);
-  return r.text();
+  if(!r.ok) return [];
+  const data=await r.json();
+  return data.values||[];
 }
+
+function parseFrangesConfig(rows){
+  const franges=[];
+  for(let i=2;i<rows.length;i++){
+    const row=rows[i];
+    if(!row||!row[0]||row[0]==="ID") continue;
+    const fid=row[0].trim();
+    const label=row[1]?.trim()||fid;
+    const inici=row[2]?.trim()||"";
+    if(fid) franges.push({id:fid,label:label,inici:inici,fi:""});
+  }
+  return franges.length>0?franges:null;
+}
+
+function parseSheetMestre(rows,franges){
+  if(!rows||rows.length<3) return null;
+  // Fila 0: nom mestre (ignorem)
+  // Fila 1: capçalera FRANJA, Dilluns, Dimarts...
+  // Files 2+: dades
+  const DIES=["Dilluns","Dimarts","Dimecres","Dijous","Divendres"];
+  const header=rows[1]||[];
+  const colDia={};
+  header.forEach((c,i)=>{
+    const d=DIES.find(dia=>c.trim()===dia);
+    if(d) colDia[i]=d;
+  });
+  if(Object.keys(colDia).length===0) return null;
+  const horari={};
+  for(let i=2;i<rows.length;i++){
+    const row=rows[i];
+    if(!row||!row[0]) continue;
+    const fid=row[0].trim();
+    if(!fid||fid==="FRANJA") continue;
+    // Verificar que l'ID existeix a les franges
+    const franjaOk=franges.find(f=>f.id===fid);
+    if(!franjaOk) continue;
+    Object.entries(colDia).forEach(([idx,dia])=>{
+      const val=(row[parseInt(idx)]||"").trim();
+      if(val){
+        if(!horari[dia]) horari[dia]={};
+        horari[dia][fid]=val;
+      }
+    });
+  }
+  return horari;
+}
+
 function extractFolderId(url){const m=url.match(/\/folders\/([a-zA-Z0-9_-]+)/);if(m)return m[1];if(/^[a-zA-Z0-9_-]{25,}$/.test(url.trim()))return url.trim();return null;}
+function extractSheetsId(url){const m=url.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);if(m)return m[1];if(/^[a-zA-Z0-9_-]{25,}$/.test(url.trim()))return url.trim();return null;}
 
 const SOROLL=["ESBARJO","ESPAI MIGDIA","CLAUSTRES","COMISSIONS","FORMACIÓ","PER FER","REUNIONS",":-:","16:0","17H","8:30"];
 function isSoroll(s){const u=s.toUpperCase().replace(/\s/g,"");return SOROLL.some(k=>u.includes(k.replace(/\s/g,"")));}
@@ -57,7 +128,7 @@ function isSorollStr(s){const u=s.toUpperCase().replace(/\s/g,"");return["ESBARJ
 function teNomPersona(s){return/[A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+(?:\s+[A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+)+/.test(s);}
 function parseHoraris(text,franges=FRANGES_DEFAULT){
   const m={};
-  const blocks=text.trim().split(/\n{2,}/);
+  const blocks=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').trim().split(/\n{2,}/);
   for(const block of blocks){
     const lines=block.trim().split("\n").filter(l=>l.trim());
     if(!lines.length)continue;
@@ -257,7 +328,7 @@ function loginWithGoogle(){
   // Usar ux_mode redirect per evitar problemes COOP amb GitHub Pages
   const client = google.accounts.oauth2.initTokenClient({
     client_id:GOOGLE_CLIENT_ID,
-    scope:"email profile https://www.googleapis.com/auth/drive.readonly",
+    scope:"email profile https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/drive.readonly",
     ux_mode:"popup",
     callback:(tokenResponse)=>{
       if(tokenResponse.access_token){
@@ -278,7 +349,8 @@ function loginWithGoogle(){
 function logout(){if(window.google)google.accounts.id.disableAutoSelect();currentUser=null;setState({loggedIn:false,user:null,mestres:{},registre:[],resultatsMultiple:null,criterisText:"",criterisGuardats:false});}
 function loadUserData(){
   const h=sGet("horaris");const r=sGet("registre");const cr=sGet("criteris");const at=sGet("accessToken");
-  if(h?.text){state.mestres=parseHoraris(h.text,state.franges);}
+  if(h?.mestres){state.mestres=h.mestres;if(h.franges)state.franges=h.franges;}
+  else if(h?.text){state.mestres=parseHoraris(h.text,state.franges);}
   if(r?.llista)state.registre=r.llista;
   if(cr?.text){state.criterisText=cr.text;state.criterisGuardats=true;}
   if(at&&currentUser)currentUser.accessToken=at;
@@ -289,7 +361,7 @@ async function renovarToken(){
     if(!window.google){reject(new Error("Google no carregat"));return;}
     google.accounts.oauth2.initTokenClient({
       client_id:GOOGLE_CLIENT_ID,
-      scope:"email profile https://www.googleapis.com/auth/drive.readonly",
+      scope:"email profile https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/drive.readonly",
       callback:(tokenResponse)=>{
         if(tokenResponse.access_token){
           currentUser={...currentUser,accessToken:tokenResponse.access_token};
@@ -306,34 +378,26 @@ async function renovarToken(){
 
 async function importarDrive(){
   if(!currentUser?.accessToken){loginWithGoogle();return;}
-  const folderId=extractFolderId(state.driveUrl);
-  if(!folderId){setState({driveEstat:"error",driveMsg:"Enllaç no reconegut."});return;}
+  const sheetsId=extractSheetsId(state.driveUrl);
+  if(!sheetsId){setState({driveEstat:"error",driveMsg:"Enllaç no reconegut. Ha de ser un enllaç de Google Sheets."});return;}
   setState({isLoadingDrive:true,driveEstat:null,driveMsg:""});
   try{
     let token=currentUser.accessToken;
-    // Prova primer, si 401 renova automàticament
-    let files;
+    let resultat;
     try{
-      files=await listDriveFolder(folderId,token);
+      resultat=await llegirSheets(sheetsId,token);
     } catch(e){
       if(e.message.includes("401")){
         token=await renovarToken();
-        files=await listDriveFolder(folderId,token);
+        resultat=await llegirSheets(sheetsId,token);
       } else throw e;
     }
-    const supported=files.filter(f=>f.mimeType==="application/vnd.google-apps.document"||f.name?.endsWith(".txt"));
-    if(!supported.length)throw new Error("No s'han trobat documents a la carpeta.");
-    let allText="";const fitxersCarregats=[];let debugTexts=[];
-    for(const f of supported){
-      try{const text=await downloadDriveFile(f.id,token,f.mimeType);allText+="\n\n"+text;fitxersCarregats.push({nom:f.name,ok:true});debugTexts.push({nom:f.name,text:text.substring(0,500)});}
-      catch(e){fitxersCarregats.push({nom:f.name,ok:false,err:e.message});}
-    }
-    const parsed=parseHoraris(allText.trim(),state.franges);
-    const n=Object.keys(parsed).length;
-    console.log("DEBUG textos:",JSON.stringify(debugTexts));console.log("DEBUG parsed:",JSON.stringify(parsed));if(!n)throw new Error("No s'ha pogut llegir cap mestre dels documents.");
-    const mestres={...state.mestres,...parsed};
-    sSet("horaris",{text:serializeMestres(mestres)});
-    setState({mestres,fitxersCarregats,driveEstat:"ok",driveMsg:n+" mestres importats correctament!",isLoadingDrive:false});
+    const{mestres:nous,franges}=resultat;
+    const n=Object.keys(nous).length;
+    if(!n)throw new Error("No s'ha pogut llegir cap mestre del Sheets.");
+    const mestres={...nous};
+    sSet("horaris",{mestres,franges});
+    setState({mestres,franges,fitxersCarregats:Object.keys(nous).map(n=>({nom:n,ok:true})),driveEstat:"ok",driveMsg:n+" mestres importats correctament!",isLoadingDrive:false});
   }catch(e){setState({driveEstat:"error",driveMsg:e.message,isLoadingDrive:false});}
 }
 function serializeMestres(mestres){
@@ -442,12 +506,12 @@ function buildHoraris(){
   const hasToken=!!currentUser?.accessToken;
   return'<div style="padding:1rem;display:flex;flex-direction:column;gap:1rem;"><div style="background:white;border-radius:1rem;border:1px solid #e2e8f0;overflow:hidden;"><div style="padding:1rem 1.25rem;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;"><div><h2 style="font-weight:700;color:#1e293b;">Importar des de Drive</h2><p style="font-size:0.75rem;color:#94a3b8;margin-top:0.125rem;">Carpeta amb els horaris de l\'escola</p></div>'+(nomsMestres.length>0?'<span style="background:#dcfce7;color:#166534;font-size:0.7rem;font-weight:700;padding:0.25rem 0.625rem;border-radius:9999px;">'+nomsMestres.length+' mestres</span>':"")+' </div><div style="padding:1.25rem;display:flex;flex-direction:column;gap:0.875rem;">'
   +(!hasToken?'<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:0.75rem;padding:0.875rem;"><p style="font-size:0.875rem;color:#1d4ed8;font-weight:600;margin-bottom:0.5rem;">Cal permís per llegir Drive</p><p style="font-size:0.75rem;color:#3b82f6;margin-bottom:0.75rem;">Clica el botó per autoritzar l\'accés a la teva carpeta.</p><button onclick="loginWithGoogle()" style="width:100%;background:#2563eb;color:white;font-weight:700;padding:0.625rem;border-radius:0.625rem;border:none;cursor:pointer;font-size:0.875rem;">🔑 Autoritzar Google Drive</button></div>':"")
-  +'<div><label style="font-size:0.7rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:0.375rem;">URL de la carpeta</label><input id="drive-url" type="url" value="'+state.driveUrl+'" placeholder="https://drive.google.com/drive/folders/..." style="width:100%;border:1px solid #e2e8f0;border-radius:0.75rem;padding:0.625rem 0.875rem;font-size:0.875rem;color:#374151;background:#f8fafc;margin-bottom:0.5rem;"><button onclick="importarDriveAction()" '+(state.isLoadingDrive?"disabled":"")+' style="width:100%;background:'+(hasToken?"#2563eb":"#94a3b8")+';color:white;font-weight:700;padding:0.75rem;border-radius:0.75rem;border:none;cursor:'+(hasToken?"pointer":"default")+';font-size:0.875rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;">'+(state.isLoadingDrive?'<div style="width:1rem;height:1rem;border:2px solid white;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;"></div> Llegint...':"📁 Importar carpeta Drive")+'</button></div>'
+  +'<div><label style="font-size:0.7rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:0.375rem;">URL de la carpeta</label><input id="drive-url" type="url" value="'+state.driveUrl+'" placeholder="https://docs.google.com/spreadsheets/d/..." style="width:100%;border:1px solid #e2e8f0;border-radius:0.75rem;padding:0.625rem 0.875rem;font-size:0.875rem;color:#374151;background:#f8fafc;margin-bottom:0.5rem;"><button onclick="importarDriveAction()" '+(state.isLoadingDrive?"disabled":"")+' style="width:100%;background:'+(hasToken?"#2563eb":"#94a3b8")+';color:white;font-weight:700;padding:0.75rem;border-radius:0.75rem;border:none;cursor:'+(hasToken?"pointer":"default")+';font-size:0.875rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;">'+(state.isLoadingDrive?'<div style="width:1rem;height:1rem;border:2px solid white;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;"></div> Llegint...':"📁 Importar carpeta Drive")+'</button></div>'
   +(state.driveEstat==="ok"?'<p style="font-size:0.75rem;color:#16a34a;font-weight:600;">✓ '+state.driveMsg+'</p>':"")
   +(state.driveEstat==="error"?'<p style="font-size:0.75rem;color:#dc2626;">⚠ '+state.driveMsg+'</p>':"")
   +(state.fitxersCarregats.length>0?'<div style="display:flex;flex-direction:column;gap:0.375rem;">'+state.fitxersCarregats.map(f=>'<div style="display:flex;align-items:center;gap:0.5rem;border-radius:0.5rem;padding:0.5rem 0.75rem;font-size:0.75rem;background:'+(f.ok?"#f0fdf4":"#fef2f2")+';border:1px solid '+(f.ok?"#bbf7d0":"#fecaca")+';">'+(f.ok?"✅":"❌")+'<span style="color:'+(f.ok?"#374151":"#dc2626")+';font-weight:500;flex:1;">'+f.nom+'</span></div>').join("")+'</div>':"")
   +'</div></div>'
-  +'<div style="background:#fffbeb;border:1px solid #fde68a;border-radius:0.75rem;padding:0.875rem;"><p style="font-size:0.75rem;color:#92400e;line-height:1.6;"><strong>💡 Format recomanat:</strong> Google Docs (no .docx). Cada document ha de tenir el nom del mestre i una taula amb els dies de la setmana a la capçalera.</p></div>'
+  +'<div style="background:#fffbeb;border:1px solid #fde68a;border-radius:0.75rem;padding:0.875rem;"><p style="font-size:0.75rem;color:#92400e;line-height:1.6;"><strong>💡 Format:</strong> Google Sheets amb una pestanya per mestre. Columna A = ID de franja, columnes B-F = dies de la setmana. La pestanya CONFIG defineix les franges.</p></div>'
   +(nomsMestres.length>0?'<div style="background:white;border-radius:1rem;border:1px solid #e2e8f0;overflow:hidden;"><div style="padding:0.875rem 1.25rem;border-bottom:1px solid #f1f5f9;"><h3 style="font-weight:700;color:#374151;font-size:0.875rem;">Mestres carregats ('+nomsMestres.length+')</h3></div><div style="padding:1rem;display:flex;flex-wrap:wrap;gap:0.5rem;">'+nomsMestres.map(nom=>'<div style="display:flex;align-items:center;gap:0.375rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:0.75rem;padding:0.375rem 0.75rem;"><div style="width:0.375rem;height:0.375rem;border-radius:50%;background:#22c55e;"></div><span style="font-size:0.75rem;font-weight:600;color:#374151;">'+cap(nom)+'</span></div>').join("")+'</div><div style="padding:0.75rem 1.25rem;border-top:1px solid #f1f5f9;"><button onclick="esborrarHoraris()" style="font-size:0.75rem;color:#94a3b8;background:none;border:none;cursor:pointer;">Esborrar tots els horaris</button></div></div>':"")
   +'<style>@keyframes spin{to{transform:rotate(360deg)}}</style></div>';
 }
