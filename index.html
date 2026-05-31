@@ -246,18 +246,48 @@ function loadUserData(){
   if(at&&currentUser)currentUser.accessToken=at;
 }
 
+async function renovarToken(){
+  return new Promise((resolve,reject)=>{
+    if(!window.google){reject(new Error("Google no carregat"));return;}
+    google.accounts.oauth2.initTokenClient({
+      client_id:GOOGLE_CLIENT_ID,
+      scope:"email profile https://www.googleapis.com/auth/drive.readonly",
+      callback:(tokenResponse)=>{
+        if(tokenResponse.access_token){
+          currentUser={...currentUser,accessToken:tokenResponse.access_token};
+          state.user=currentUser;
+          sSet("accessToken",tokenResponse.access_token);
+          resolve(tokenResponse.access_token);
+        } else {
+          reject(new Error("No s'ha pogut renovar el token"));
+        }
+      },
+    }).requestAccessToken({prompt:""});
+  });
+}
+
 async function importarDrive(){
   if(!currentUser?.accessToken){loginWithGoogle();return;}
   const folderId=extractFolderId(state.driveUrl);
   if(!folderId){setState({driveEstat:"error",driveMsg:"Enllaç no reconegut."});return;}
   setState({isLoadingDrive:true,driveEstat:null,driveMsg:""});
   try{
-    const files=await listDriveFolder(folderId,currentUser.accessToken);
+    let token=currentUser.accessToken;
+    // Prova primer, si 401 renova automàticament
+    let files;
+    try{
+      files=await listDriveFolder(folderId,token);
+    } catch(e){
+      if(e.message.includes("401")){
+        token=await renovarToken();
+        files=await listDriveFolder(folderId,token);
+      } else throw e;
+    }
     const supported=files.filter(f=>f.mimeType==="application/vnd.google-apps.document"||f.name?.endsWith(".txt"));
     if(!supported.length)throw new Error("No s'han trobat documents a la carpeta.");
     let allText="";const fitxersCarregats=[];
     for(const f of supported){
-      try{const text=await downloadDriveFile(f.id,currentUser.accessToken,f.mimeType);allText+="\n\n"+text;fitxersCarregats.push({nom:f.name,ok:true});}
+      try{const text=await downloadDriveFile(f.id,token,f.mimeType);allText+="\n\n"+text;fitxersCarregats.push({nom:f.name,ok:true});}
       catch(e){fitxersCarregats.push({nom:f.name,ok:false,err:e.message});}
     }
     const parsed=parseHoraris(allText.trim(),state.franges);
