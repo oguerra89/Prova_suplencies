@@ -262,7 +262,7 @@ async function renovarToken(){
           reject(new Error("No s'ha pogut renovar el token"));
         }
       },
-    }).requestAccessToken({prompt:""});
+    }).requestAccessToken({prompt:"consent"});
   });
 }
 
