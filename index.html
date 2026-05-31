@@ -233,7 +233,8 @@ function tipusSuplent(act){
   if(u.startsWith("DOBLE:"))return"NO_DISPONIBLE";
   if(NO_DISP_KW.some(k=>u===normalitza(k)||u.startsWith(normalitza(k))))return"NO_DISPONIBLE";
   if(TP_KW.some(k=>u===normalitza(k)||u.startsWith(normalitza(k))))return"TP";
-  if(act.includes("+")||act.includes("*"))return"SUPORT_NATURAL";
+  // +Nom significa que el mestre TÉ CLASSE i el +Nom hi és de suport -> NO disponible
+  if(act.includes("+")||act.includes("*"))return"CLASSE";
   if(u.startsWith("SUPORT"))return"SUPORT_GENERAL";
   return"CLASSE";
 }
@@ -242,16 +243,19 @@ function cercaBase(mestres,absent,dia,franja,ocupats=new Set()){
   const au=absent.toUpperCase();
   const actAbsent=mestres[au]?.[dia]?.[franja]||"";
   if(!calSuplir(actAbsent))return[{nom:null,p:-1,motiu:"No cal — tenia "+actLabel(actAbsent)}];
-  const plusMatch=actAbsent.match(/[+*]([A-ZÀ-Úa-zàáâäãèéêëìíîïòóôöõùúûüçñ]+)/i);
-  const naturalNom=plusMatch?plusMatch[1].toUpperCase():null;
   const p1=[],p2=[],p3=[];
   for(const[nom,horari]of Object.entries(mestres)){
     if(nom===au||ocupats.has(nom))continue;
     const act=horari?.[dia]?.[franja]||"";
     const tipus=tipusSuplent(act);
-    if(naturalNom&&nom.startsWith(naturalNom)){p1.push({nom,act,p:1,motiu:"Suport natural"});continue;}
+    // P1: mestre que té "+NomAbsent" a la seva activitat (és de suport a l'aula de l'absent)
+    // Buscar si l'activitat d'aquest mestre conté +inicialNomAbsent
+    const nomCurt=au.split(" ")[0]; // primer cognom/nom
+    if((act.includes("+")&&(act.toUpperCase().includes("+"+nomCurt)||act.toUpperCase().includes("+ "+nomCurt)))){
+      p1.push({nom,act,p:1,motiu:"Suport natural — ja era a l'aula"});continue;
+    }
     if(tipus==="NO_DISPONIBLE"||tipus==="CLASSE"||tipus==="LLIURE")continue;
-    if(tipus==="SUPORT_GENERAL"||tipus==="SUPORT_NATURAL"){p2.push({nom,act,p:2,motiu:"Fa suport"});continue;}
+    if(tipus==="SUPORT_GENERAL"){p2.push({nom,act,p:2,motiu:"Fa suport en una altra aula"});continue;}
     if(tipus==="TP")p3.push({nom,act,p:3,motiu:"⚠ Trenca T.P."});
   }
   const ord=(a,b)=>a.nom.localeCompare(b.nom);
