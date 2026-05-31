@@ -310,14 +310,14 @@ async function importarDrive(){
     }
     const supported=files.filter(f=>f.mimeType==="application/vnd.google-apps.document"||f.name?.endsWith(".txt"));
     if(!supported.length)throw new Error("No s'han trobat documents a la carpeta.");
-    let allText="";const fitxersCarregats=[];
+    let allText="";const fitxersCarregats=[];let debugTexts=[];
     for(const f of supported){
-      try{const text=await downloadDriveFile(f.id,token,f.mimeType);allText+="\n\n"+text;fitxersCarregats.push({nom:f.name,ok:true});}
+      try{const text=await downloadDriveFile(f.id,token,f.mimeType);allText+="\n\n"+text;fitxersCarregats.push({nom:f.name,ok:true});debugTexts.push({nom:f.name,text:text.substring(0,500)});}
       catch(e){fitxersCarregats.push({nom:f.name,ok:false,err:e.message});}
     }
     const parsed=parseHoraris(allText.trim(),state.franges);
     const n=Object.keys(parsed).length;
-    if(!n)throw new Error("No s'ha pogut llegir cap mestre dels documents.");
+    console.log("DEBUG textos:",JSON.stringify(debugTexts));console.log("DEBUG parsed:",JSON.stringify(parsed));if(!n)throw new Error("No s'ha pogut llegir cap mestre dels documents.");
     const mestres={...state.mestres,...parsed};
     sSet("horaris",{text:serializeMestres(mestres)});
     setState({mestres,fitxersCarregats,driveEstat:"ok",driveMsg:n+" mestres importats correctament!",isLoadingDrive:false});
