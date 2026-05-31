@@ -43,8 +43,8 @@ const SOROLL=["ESBARJO","ESPAI MIGDIA","CLAUSTRES","COMISSIONS","FORMACIÓ","PER
 function isSoroll(s){const u=s.toUpperCase().replace(/\s/g,"");return SOROLL.some(k=>u.includes(k.replace(/\s/g,"")));}
 function canonFranja(s,franges){
   const t=s.trim().replace(/\s/g,"");
-  if(/^9[-\u20138]10/.test(t)||t.startsWith("9:00"))return"9h";
-  if(/^10[-\u20138]11/.test(t)||t.startsWith("10:00"))return"10h";
+  if(/^9[-\u20138]/.test(t)||t.startsWith("9:00"))return"9h";
+  if(/^10[-\u20138]/.test(t)||t.startsWith("10:00"))return"10h";
   if(t.startsWith("11:30")||t.startsWith("11.30"))return"11:30h";
   if(t.startsWith("14:30")||t.startsWith("14.30"))return"14:30h";
   if(t.startsWith("15:15")||t.startsWith("15.15"))return"15:15h";
@@ -54,6 +54,7 @@ function canonFranja(s,franges){
 const isTableRow=l=>l.trim().startsWith("|");
 const cleanCell=s=>s.replace(/\\\*/g,"*").replace(/\\/g,"").trim();
 function isSorollStr(s){const u=s.toUpperCase().replace(/\s/g,"");return["ESBARJO","ESPAIMIGDIA","CLAUSTRES","COMISSIONS","FORMACIO","REUNIONS"].some(k=>u.includes(k));}
+function teNomPersona(s){return/[A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+(?:\s+[A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+)+/.test(s);}
 function parseHoraris(text,franges=FRANGES_DEFAULT){
   const m={};
   const blocks=text.trim().split(/\n{2,}/);
@@ -63,12 +64,16 @@ function parseHoraris(text,franges=FRANGES_DEFAULT){
     const hasTab=lines.some(l=>l.includes("\t"));
     if(hasTab){
       // Format tabuladors (Google Docs exportat com a text pla)
+      // Cada taula comença amb una línia de capçalera tipus "Horari tutora X  Nom Cognom  Any"
+      // Buscar el nom del mestre a la primera línia
       const primeraCells=lines[0].split("\t").map(s=>s.trim());
       let nom=null;
       for(const cell of primeraCells){
+        // El nom del mestre ha de tenir almenys nom i cognom
         const match=cell.match(/^([A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+(?:\s+[A-Z\u00C0-\u00DC][a-z\u00E0-\u00FC]+)+)$/);
         if(match){nom=match[1].toUpperCase();break;}
       }
+      // Si no hi ha nom de persona a la primera línia, és l'horari del grup -> ignorar
       if(!nom)continue;
       if(m[nom])continue;
       m[nom]={};
@@ -77,7 +82,10 @@ function parseHoraris(text,franges=FRANGES_DEFAULT){
         const u=lines[i].toUpperCase();
         if(u.includes("DILLUNS")||u.includes("DIMARTS")){
           headerIdx=i;
-          lines[i].split("\t").map(s=>s.trim()).forEach((c,idx)=>{const d=DIES.find(dia=>c.toUpperCase().includes(dia.toUpperCase()));if(d)colDia[idx]=d;});
+          lines[i].split("\t").map(s=>s.trim()).forEach((c,idx)=>{
+            const d=DIES.find(dia=>c.toUpperCase().includes(dia.toUpperCase()));
+            if(d)colDia[idx]=d;
+          });
           break;
         }
       }
@@ -87,7 +95,12 @@ function parseHoraris(text,franges=FRANGES_DEFAULT){
         const cells=lines[i].split("\t").map(s=>s.trim());
         const franja=canonFranja(cells[0]||"",franges);
         if(!franja)continue;
-        cells.forEach((c,idx)=>{if(colDia[idx]&&c&&c!=="-"&&!isSorollStr(c)){if(!m[nom][colDia[idx]])m[nom][colDia[idx]]={};m[nom][colDia[idx]][franja]=c;}});
+        cells.forEach((c,idx)=>{
+          if(colDia[idx]&&c&&c!=="-"&&!isSorollStr(c)){
+            if(!m[nom][colDia[idx]])m[nom][colDia[idx]]={};
+            m[nom][colDia[idx]][franja]=c;
+          }
+        });
       }
       continue;
     }
